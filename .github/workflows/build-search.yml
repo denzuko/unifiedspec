@@ -1,7 +1,5 @@
 # SPDX-License-Identifier: BSD-2-Clause
 # unifiedspec — build Pagefind search index and commit to main
-# Pure static HTML site on GitHub Pages. No Hugo build step.
-# Pagefind crawls the HTML files and emits pagefind/ directory.
 
 name: build-search
 
@@ -11,6 +9,7 @@ on:
     paths:
       - '*.html'
       - '.github/workflows/build-search.yml'
+  workflow_dispatch:
 
 jobs:
   index:
