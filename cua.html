@@ -301,6 +301,8 @@ body{padding-left:6px}
     <a class="nav-link" href="#htmx-cua"><span class="nav-dot" style="background:var(--oi-orange)" aria-hidden="true"></span>HTMX interaction</a>
 
     <a class="nav-link" href="#advancement"><span class="nav-dot" style="background:var(--oi-green)" aria-hidden="true"></span>Advancement</a>
+    <a class="nav-link" href="#content-guidelines"><span class="nav-dot" style="background:var(--sol-cyan)" aria-hidden="true"></span>Content guidelines</a>
+    <a class="nav-link" href="#tooltip"><span class="nav-dot" style="background:var(--sol-cyan)" aria-hidden="true"></span>Tooltip</a>
     <a class="nav-link" href="#conformance"><span class="nav-dot" style="background:var(--oi-green)" aria-hidden="true"></span>Conformance</a>
     <a class="nav-link" href="#agents"><span class="nav-dot" style="background:var(--oi-pink)" aria-hidden="true"></span>Agent / util tier</a>
   </div>
@@ -377,17 +379,7 @@ body{padding-left:6px}
       <tr><td class="key">Engagement (formerly suitability for individualisation)</td><td>Tag-bar command vocabulary is extensible per application. Branding layer (--bg-titlebar, --primary) is overridable. Font-size is rem-based, respecting user system preferences.</td><td>Usage rules, token layer, font-size rem</td></tr>
     </tbody>
   </table>
-  <div class="demo mb-6" style="background:var(--bg-tag);border-color:var(--border-tag)">
-    <div class="text-mono text-xs text-upper fg-faint mb-3" style="letter-spacing:.12em">If you want to&hellip;</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-2)">
-      <div class="text-mono text-base"><span class="fg-primary">&rarr;</span> <a href="#mouse">Understand click behaviour</a></div>
-      <div class="text-mono text-base"><span class="fg-primary">&rarr;</span> <a href="#keyboard">Find a keyboard shortcut</a></div>
-      <div class="text-mono text-base"><span class="fg-primary">&rarr;</span> <a href="#tagbar">Build a tag bar</a></div>
-      <div class="text-mono text-base"><span class="fg-primary">&rarr;</span> <a href="#commands">Look up a command name</a></div>
-      <div class="text-mono text-base"><span class="fg-primary">&rarr;</span> <a href="#focus">Understand HTMX focus rules</a></div>
-      <div class="text-mono text-base"><span class="fg-primary">&rarr;</span> <a href="#conformance">Check conformance</a></div>
-    </div>
-  </div>
+  
 
   <div class="decision" style="border-color:var(--sol-cyan)">
     <div class="decision-head" style="color:var(--sol-cyan)">Decision 1 &mdash; Mouse model: Acme-inspired B1/B2 <span class="badge badge-ok" style="font-size:0.625rem;vertical-align:middle;margin-left:0.5rem">ADR-001 &middot; decided &middot; 2026-Q2</span></div>
@@ -1096,7 +1088,7 @@ document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<sp
 
 
   <div class="ssub">HTMX fragment type vocabulary</div>
-  <p class="prose">HTMX responses return HTML fragments. The Unified system defines four fragment types via <code style="font-family:var(--font-mono);font-size:0.75rem">data-fragment-type</code> attribute. This vocabulary enables agents to classify and process fragments correctly without parsing content.</p>
+  <p class="prose">HTMX responses return HTML fragments. The Unified system defines four fragment types via the <code style="font-family:var(--font-mono);font-size:0.75rem">data-fragment-type</code> attribute on the outermost element of each response fragment. Servers <strong>MUST</strong> annotate every fragment with its type. Clients <strong>MUST NOT</strong> infer fragment type from content structure alone. Agents processing HTMX responses <strong>MUST</strong> use this attribute to classify fragments before acting on them.</p>
   <table class="spec-table">
     <thead><tr><th>data-fragment-type</th><th>Description</th><th>Primary hx-swap</th><th>May include OOB</th></tr></thead>
     <tbody>
@@ -1198,6 +1190,21 @@ document.<span class="tfn">querySelectorAll</span>(<span class="tst">'.acme-win 
     Create one at &lt;<span class="fg-syn-kw">a</span> <span class="fg-syn-var">href</span>=<span class="fg-syn-str">"/zones/new"</span>&gt;/zones/new&lt;/<span class="fg-syn-kw">a</span>&gt;.
   &lt;/<span class="fg-syn-kw">span</span>&gt;
 &lt;/<span class="fg-syn-kw">div</span>&gt;</div>
+
+
+  <div class="ssub">Path conventions by deployment context</div>
+  <p class="prose">Tag-bar paths are identifiers, not filesystem paths — the rendering environment maps them to resources. The convention differs by deployment context.</p>
+  <table class="spec-table">
+    <thead><tr><th>Context</th><th>Path convention</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td class="key">HTMX web app</td><td>URL path segments. Matches server routing.</td><td><code style="font-family:var(--font-mono);font-size:0.75rem">/zones/nfs</code></td></tr>
+      <tr><td class="key">Plan&#160;9 / 9front</td><td>9P namespace path. System resources under <code style="font-family:var(--font-mono);font-size:0.75rem">/sys</code>. User resources under <code style="font-family:var(--font-mono);font-size:0.75rem">/usr</code>. Services under <code style="font-family:var(--font-mono);font-size:0.75rem">/net</code> and <code style="font-family:var(--font-mono);font-size:0.75rem">/srv</code>.</td><td><code style="font-family:var(--font-mono);font-size:0.75rem">/net/tcp/stats</code></td></tr>
+      <tr><td class="key">Static HTML document</td><td>Document section identifier. Matches <code style="font-family:var(--font-mono);font-size:0.75rem">id</code> attribute or logical document path.</td><td><code style="font-family:var(--font-mono);font-size:0.75rem">/sys/unified/cua</code></td></tr>
+      <tr><td class="key">Agent / util tier</td><td>Semantic resource name. The agent resolves it to the appropriate backing store.</td><td><code style="font-family:var(--font-mono);font-size:0.75rem">/report/q2-2026</code></td></tr>
+    </tbody>
+  </table>
+  <p class="prose">XDG base directory conventions (<code style="font-family:var(--font-mono);font-size:0.75rem">$XDG_DATA_HOME</code>, <code style="font-family:var(--font-mono);font-size:0.75rem">$XDG_CONFIG_HOME</code>) apply only to native Linux/BSD desktop deployments of applications built against this system. They do not apply to HTMX web applications or Plan&#160;9 deployments. Browser-based implementations use URL routing exclusively.</p>
+
   <div class="ssub">What agents get</div>
   <table class="spec-table">
     <thead><tr><th>Concern</th><th>Specification</th></tr></thead>
@@ -1228,6 +1235,78 @@ document.<span class="tfn">querySelectorAll</span>(<span class="tst">'.acme-win 
 &lt;/<span class="tkw">form</span>&gt;</div>
 </section>
 
+
+
+<section class="section" id="content-guidelines" data-pagefind-meta="url[id]">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Content guidelines</h2>
+  <p class="prose">These guidelines apply to UI text only: button labels, tag-bar command names, badge text, input placeholders, error messages, and empty state descriptions. Long-form prose (documentation, reports, generated content) follows the domain convention of the consuming application.</p>
+
+  <div class="ssub">UI text rules</div>
+  <table class="spec-table">
+    <thead><tr><th>Rule</th><th>Correct</th><th>Incorrect</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Sentence case</td><td>Save configuration</td><td>Save Configuration / SAVE CONFIG</td></tr>
+      <tr><td class="key">Verb + noun for actions</td><td>Create zone / Export report</td><td>Zone creation / Report</td></tr>
+      <tr><td class="key">Present tense for status</td><td>Saving&#8230; / Saved</td><td>Save was successful</td></tr>
+      <tr><td class="key">Active voice</td><td>Zone not found</td><td>The zone could not be found</td></tr>
+      <tr><td class="key">Specific errors</td><td>svc:/network/nfs entered maintenance state</td><td>An error occurred</td></tr>
+      <tr><td class="key">No ellipsis in labels</td><td>Search / Look</td><td>Search&#8230; / Look&#8230;</td></tr>
+      <tr><td class="key">No terminal punctuation on labels</td><td>Save configuration</td><td>Save configuration.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ssub">Placeholder text</div>
+  <p class="prose">Placeholders must describe the expected input format, not repeat the label. They disappear on focus — they are not a substitute for a visible label.</p>
+  <table class="spec-table">
+    <thead><tr><th>Label</th><th>Correct placeholder</th><th>Incorrect placeholder</th></tr></thead>
+    <tbody>
+      <tr><td>Hostname</td><td>klaxon.dapla.net</td><td>Enter hostname / Hostname</td></tr>
+      <tr><td>Zone name</td><td>zone-nfs</td><td>Enter zone name</td></tr>
+      <tr><td>Search</td><td>&#47;sys&#47;unified&#47;</td><td>Search&#8230;</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ssub">Agentic output register</div>
+  <p class="prose">When an agentic workforce generates content for insertion into Unified-system interfaces, a different register applies. This is not a style guide for human writers — it is a prompt contract for AI-generated surface text.</p>
+  <table class="spec-table">
+    <thead><tr><th>Surface</th><th>Register</th><th>Source of truth</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Tag-bar path</td><td>Filesystem path or URL convention. No spaces. Lowercase.</td><td>Application routing layer</td></tr>
+      <tr><td class="key">Tag-bar command</td><td>Title-cased single word from command registry. No agent-invented commands.</td><td>CUA command registry</td></tr>
+      <tr><td class="key">Badge text</td><td>One or two words, sentence case, present tense: <code style="font-family:var(--font-mono);font-size:0.75rem">saving</code>, <code style="font-family:var(--font-mono);font-size:0.75rem">saved</code>, <code style="font-family:var(--font-mono);font-size:0.75rem">draft</code>.</td><td>Semantic token state</td></tr>
+      <tr><td class="key">Error messages</td><td>Specific, actionable, present tense. Name the resource and the condition. No stack traces in UI text.</td><td>Server error payload</td></tr>
+      <tr><td class="key">Empty state explanation</td><td>State what is empty, present tense: <code style="font-family:var(--font-mono);font-size:0.75rem">No zones configured.</code></td><td>Application data layer</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<section class="section" id="tooltip" data-pagefind-meta="url[id]">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Tooltip</h2>
+  <p class="prose">A tooltip is a plain-text label that appears on hover or keyboard focus to supplement an affordance. It is never the sole means of communicating an action or state.</p>
+
+  <table class="spec-table">
+    <thead><tr><th>Rule</th><th>Specification</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Content</td><td>Plain text only. No HTML, no icons, no formatted content. Maximum 80 characters.</td></tr>
+      <tr><td class="key">Trigger</td><td>Appears after 500ms hover or on <span class="kbd">Tab</span> focus. Disappears immediately on pointer leave or blur.</td></tr>
+      <tr><td class="key">Not sole affordance</td><td>Every element with a tooltip MUST also communicate its function through visible text or a defined ARIA label. A tooltip on an icon-only button is not sufficient — the button MUST have <code style="font-family:var(--font-mono);font-size:0.75rem">aria-label</code>.</td></tr>
+      <tr><td class="key">Implementation</td><td>Use the native <code style="font-family:var(--font-mono);font-size:0.75rem">title</code> attribute for simple cases. For interactive tooltips, use <code style="font-family:var(--font-mono);font-size:0.75rem">role="tooltip"</code> with <code style="font-family:var(--font-mono);font-size:0.75rem">aria-describedby</code>.</td></tr>
+      <tr><td class="key">Disabled state</td><td>Tooltips on disabled elements SHOULD explain why the element is disabled: <code style="font-family:var(--font-mono);font-size:0.75rem">title="Put requires a saved path"</code>.</td></tr>
+      <tr><td class="key">No animation</td><td>Tooltips appear and disappear instantaneously. No fade, no slide.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="code-block">
+<span class="fg-syn-cmt">&lt;!-- Native title — sufficient for simple supplementary text --&gt;</span>
+&lt;<span class="fg-syn-kw">button</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"tag-cmd"</span>
+        <span class="fg-syn-var">title</span>=<span class="fg-syn-str">"Alt+G — fetch content from server"</span>&gt;Get&lt;/<span class="fg-syn-kw">button</span>&gt;
+
+<span class="fg-syn-cmt">&lt;!-- Accessible tooltip for complex cases --&gt;</span>
+&lt;<span class="fg-syn-kw">button</span> <span class="fg-syn-var">aria-describedby</span>=<span class="fg-syn-str">"tip-put"</span>&gt;<span class="fg-syn-kw">&lt;u&gt;P&lt;/u&gt;</span>ut&lt;/<span class="fg-syn-kw">button</span>&gt;
+&lt;<span class="fg-syn-kw">span</span> <span class="fg-syn-var">role</span>=<span class="fg-syn-str">"tooltip"</span> <span class="fg-syn-var">id</span>=<span class="fg-syn-str">"tip-put"</span>
+      <span class="fg-syn-var">style</span>=<span class="fg-syn-str">"position:absolute;clip:rect(0 0 0 0)"</span>&gt;Save window content to server (Alt+P)&lt;/<span class="fg-syn-kw">span</span>&gt;</div>
+</section>
 
 <section class="section" id="conformance" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Conformance criteria</h2>

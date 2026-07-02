@@ -846,6 +846,8 @@ body{padding-left:6px}
     <a class="nav-link" href="#disclosure"><span class="nav-dot" style="background:var(--sol-cyan)" aria-hidden="true"></span>Disclosure</a>
     <a class="nav-link" href="#readonly"><span class="nav-dot" style="background:var(--sol-base1)" aria-hidden="true"></span>Readonly</a>
     <a class="nav-link" href="#dataviz"><span class="nav-dot" style="background:var(--oi-orange)" aria-hidden="true"></span>Data visualisation</a>
+    <a class="nav-link" href="#anatomy-table"><span class="nav-dot" style="background:var(--oi-orange)" aria-hidden="true"></span>Table anatomy</a>
+    <a class="nav-link" href="#sf-symbol-xref"><span class="nav-dot" style="background:var(--fg-faint)" aria-hidden="true"></span>Icon reference</a>
     <a class="nav-link" href="#htmx"><span class="nav-dot" style="background:var(--oi-green)" aria-hidden="true"></span>HTMX patterns</a>
     <a class="nav-link" href="#usage"><span class="nav-dot" style="background:var(--sol-green)" aria-hidden="true"></span>Usage rules</a>
   </div>
@@ -1314,6 +1316,97 @@ body{padding-left:6px}
       </tbody>
     </table>
   </div>
+</section>
+
+
+<section class="section" id="anatomy-table" data-pagefind-meta="url[id]">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Table anatomy</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">Table rows carry five states. State is communicated through background color change — always with a text or icon redundant signal. Color alone is never sufficient per C-05.</p>
+
+  <div class="demo mb-5">
+    <table class="data-table" style="width:100%">
+      <thead>
+        <tr><th>State</th><th>Token / class</th><th>Use when</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Default</td><td><code class="text-mono fg-primary">tr</code> (no modifier)</td><td>Normal row, no active condition</td></tr>
+        <tr style="background:var(--bg-sel)"><td>Selected</td><td><code class="text-mono fg-primary">bg-sel</code></td><td>Row is user-selected. Always pair with checkbox or checkmark icon.</td></tr>
+        <tr style="background:color-mix(in srgb,var(--success) 8%,transparent)"><td><span class="badge badge-success" style="font-size:0.625rem">ok</span> Success</td><td><code class="text-mono fg-primary">color-mix(success 8%)</code></td><td>Row represents a healthy or passing condition.</td></tr>
+        <tr style="background:color-mix(in srgb,var(--warning) 8%,transparent)"><td><span class="badge badge-warn" style="font-size:0.625rem">warn</span> Warning</td><td><code class="text-mono fg-primary">color-mix(warning 8%)</code></td><td>Row requires attention but is not failed.</td></tr>
+        <tr style="background:color-mix(in srgb,var(--danger) 8%,transparent)"><td><span class="badge badge-crit" style="font-size:0.625rem">fault</span> Error</td><td><code class="text-mono fg-primary">color-mix(danger 8%)</code></td><td>Row is in an error or fault condition.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ssub">Stat card</div>
+  <p class="text-base line-loose fg-body max-prose mb-5">A stat card displays a single metric with optional context. Required parts: value, label. Optional: delta indicator, sparkline area.</p>
+  <div class="demo mb-5">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px">
+      <div style="background:var(--bg-surface);padding:var(--sp-5);border:1px solid var(--border-lt)">
+        <div style="font-family:var(--font-mono);font-size:2.25rem;font-weight:700;color:var(--fg-head);line-height:1">42</div>
+        <div style="font-family:var(--font-mono);font-size:0.625rem;text-transform:uppercase;letter-spacing:.1em;color:var(--fg-faint);margin-top:var(--sp-2)">Active zones</div>
+      </div>
+      <div style="background:var(--bg-surface);padding:var(--sp-5);border:1px solid var(--border-lt)">
+        <div style="font-family:var(--font-mono);font-size:2.25rem;font-weight:700;color:var(--success);line-height:1">99.8<span style="font-size:1rem">%</span></div>
+        <div style="font-family:var(--font-mono);font-size:0.625rem;text-transform:uppercase;letter-spacing:.1em;color:var(--fg-faint);margin-top:var(--sp-2)">Uptime 30d</div>
+      </div>
+      <div style="background:var(--bg-surface);padding:var(--sp-5);border:1px solid var(--border-lt)">
+        <div style="font-family:var(--font-mono);font-size:2.25rem;font-weight:700;color:var(--danger);line-height:1">3</div>
+        <div style="font-family:var(--font-mono);font-size:0.625rem;text-transform:uppercase;letter-spacing:.1em;color:var(--fg-faint);margin-top:var(--sp-2)">Faults</div>
+        <div style="font-family:var(--font-mono);font-size:0.625rem;color:var(--danger);margin-top:4px">&#9650; +2 since yesterday</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ssub">Badge anatomy</div>
+  <p class="text-base line-loose fg-body max-prose mb-5">Required parts: text label, semantic border + background tint. The text label is the primary signal — background color is redundant encoding only.</p>
+  <div class="demo mb-5" style="display:flex;gap:var(--sp-3);align-items:center;flex-wrap:wrap">
+    <span class="badge badge-ok">stable</span>
+    <span class="badge badge-warn">unsaved</span>
+    <span class="badge badge-crit">fault</span>
+    <span class="badge badge-info">loading</span>
+    <span class="badge" style="background:color-mix(in srgb,var(--special) 12%,transparent);border-color:color-mix(in srgb,var(--special) 30%,transparent);color:var(--special)">beta</span>
+    <span class="badge" style="background:color-mix(in srgb,var(--fg-faint) 8%,transparent);border-color:color-mix(in srgb,var(--fg-faint) 20%,transparent);color:var(--fg-faint)">draft</span>
+  </div>
+  <table class="data-table" style="margin-bottom:var(--sp-5)">
+    <thead><tr><th>Part</th><th>Required</th><th>Specification</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Text label</td><td>Required</td><td>1&#8211;2 words, sentence case, present tense. This is the primary signal.</td></tr>
+      <tr><td class="key">Border</td><td>Required</td><td><code class="text-mono fg-primary">1px solid color-mix(semantic 30%)</code>. Never 0.</td></tr>
+      <tr><td class="key">Background tint</td><td>Required</td><td><code class="text-mono fg-primary">color-mix(semantic 8&#8211;12%)</code>. Redundant color signal alongside border.</td></tr>
+      <tr><td class="key">Border radius</td><td>Required</td><td>0px. Badges are rectilinear chrome per Plan&#160;9 convention.</td></tr>
+      <tr><td class="key">Icon</td><td>Forbidden</td><td>Badges do not contain icons. If an icon is needed, use an alert or a tagged list item.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<section class="section" id="sf-symbol-xref" data-pagefind-meta="url[id]">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Platform icon reference</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">The Unified system uses Unicode glyphs throughout. This table maps each glyph to its SF Symbol equivalent (for Apple platform implementations) and its Material Symbols name (for reference). This section is <strong>informational only</strong> &#8212; the normative requirement is Unicode; platform icon libraries are optional supplements.</p>
+
+  <table class="data-table" style="margin-bottom:var(--sp-5)">
+    <thead><tr><th>Unicode</th><th>Glyph</th><th>Semantic use</th><th>SF Symbol</th><th>Material Symbols</th></tr></thead>
+    <tbody>
+      <tr><td class="key">U+25B6</td><td style="font-size:1.25rem">&#9654;</td><td>Play / run / execute</td><td>play.fill</td><td>play_arrow</td></tr>
+      <tr><td class="key">U+25A0</td><td style="font-size:1.25rem">&#9632;</td><td>Stop / terminate</td><td>stop.fill</td><td>stop</td></tr>
+      <tr><td class="key">U+25B2</td><td style="font-size:1.25rem">&#9650;</td><td>Ascending / increase / alert</td><td>chevron.up</td><td>arrow_upward</td></tr>
+      <tr><td class="key">U+25BC</td><td style="font-size:1.25rem">&#9660;</td><td>Descending / decrease / expand</td><td>chevron.down</td><td>arrow_downward</td></tr>
+      <tr><td class="key">U+2192</td><td style="font-size:1.25rem">&#8594;</td><td>Navigate / proceed / link</td><td>arrow.right</td><td>arrow_forward</td></tr>
+      <tr><td class="key">U+2190</td><td style="font-size:1.25rem">&#8592;</td><td>Back / previous</td><td>arrow.left</td><td>arrow_back</td></tr>
+      <tr><td class="key">U+2713</td><td style="font-size:1.25rem">&#10003;</td><td>Success / confirmed / complete</td><td>checkmark</td><td>check</td></tr>
+      <tr><td class="key">U+2715</td><td style="font-size:1.25rem">&#10005;</td><td>Error / remove / close</td><td>xmark</td><td>close</td></tr>
+      <tr><td class="key">U+2022</td><td style="font-size:1.25rem">&#8226;</td><td>List item / status indicator</td><td>circle.fill</td><td>circle</td></tr>
+      <tr><td class="key">U+2026</td><td style="font-size:1.25rem">&#8230;</td><td>Loading / truncated / more</td><td>ellipsis</td><td>more_horiz</td></tr>
+      <tr><td class="key">U+2699</td><td style="font-size:1.25rem">&#9881;</td><td>Settings / configuration</td><td>gearshape</td><td>settings</td></tr>
+      <tr><td class="key">U+26A0</td><td style="font-size:1.25rem">&#9888;</td><td>Warning / caution</td><td>exclamationmark.triangle</td><td>warning</td></tr>
+      <tr><td class="key">U+2139</td><td style="font-size:1.25rem">&#8505;</td><td>Information</td><td>info.circle</td><td>info</td></tr>
+      <tr><td class="key">U+2B50</td><td style="font-size:1.25rem">&#11088;</td><td>Favourite / bookmark</td><td>star.fill</td><td>star</td></tr>
+      <tr><td class="key">U+1F50D</td><td style="font-size:1.25rem">&#128269;</td><td>Search / look</td><td>magnifyingglass</td><td>search</td></tr>
+      <tr><td class="key">U+2295</td><td style="font-size:1.25rem">&#8853;</td><td>Add / create / new</td><td>plus.circle</td><td>add_circle</td></tr>
+    </tbody>
+  </table>
+  <p class="text-base line-loose fg-body max-prose">On Plan&#160;9 and 9front, the system font (usually Lucida Grande or a bitmap terminus variant) covers the BMP Unicode range above. Where a glyph is absent from the system font, the implementer may load a supplementary font; the semantic assignment in this table remains the authoritative mapping.</p>
 </section>
 
 <section class="section" id="htmx" data-pagefind-meta="url[id]">
