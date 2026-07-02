@@ -842,7 +842,7 @@ select.inp {
 </nav>
 
 <!-- MAIN -->
-<main class="bg-base overflow-y" id="main-content" data-pagefind-body>
+<main class="bg-base overflow-y" id="main-content" data-pagefind-body style="scroll-margin-top:70px">
   <!-- Content tag bar — Acme idiom for main column -->
   <div class="tag-bar sticky top-0 z-5 border-b">
     <strong class="fg-body">/sys/unified/styleguide</strong>
@@ -1634,5 +1634,6 @@ const obs = new IntersectionObserver(entries => {
 }, { rootMargin: '-38px 0px -55% 0px', threshold: 0 });
 document.querySelectorAll('section[id]').forEach(s => obs.observe(s));
 </script>
+<script src="/unifiedspec/pagefind/pagefind-highlight.js"></script>
 </body>
 </html>
