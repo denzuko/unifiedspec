@@ -229,8 +229,8 @@ a{color:var(--primary)}
 </head>
 <body>
 
-<a href="#main-content" class="skip-link">Skip to main content</a>
-<div class="cde-bar">
+<a href="#main-content" class="skip-link" data-pagefind-ignore>Skip to main content</a>
+<div class="cde-bar" data-pagefind-ignore">
   <div class="cde-logo">
     <span style="display:flex;gap:3px">
       <span style="width:7px;height:7px;border-radius:50%;background:#e69f00"></span>
@@ -251,7 +251,7 @@ a{color:var(--primary)}
 </div>
 
 <div class="page-wrap">
-<nav class="sidebar" aria-label="CUA specification navigation">
+<nav class="sidebar" data-pagefind-ignore aria-label="CUA specification navigation">
   <div class="sb-brand">
     <div style="font-family:var(--font-mono);font-size:0.6250rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.5);margin-bottom:var(--sp-2)">CUA Spec</div>
     <div style="font-family:var(--font-ui);font-size:1.2500rem;font-weight:700;color:#fff">Unified</div>
@@ -293,12 +293,12 @@ a{color:var(--primary)}
   </div>
 </nav>
 
-<main class="main" id="main-content">
+<main class="main" id="main-content" data-pagefind-body>
   <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Common User Access &#8212; Unified CUA Specification v1.0</h1>
   <!-- Aria-live regions — always present, visually hidden -->
   <div id="live-status" aria-live="polite"   aria-atomic="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"></div>
   <div id="live-error"  aria-live="assertive" aria-atomic="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"></div>
-  <div class="ctag">
+  <div class="ctag" data-pagefind-ignore>
     <strong>/sys/unified/cua</strong>
     <span class="tag-cmd">Get</span><span class="tag-cmd">Look</span>
     <span style="flex:1"></span>

@@ -767,8 +767,8 @@ select.inp {
 <body>
 
 <!-- CDE BAR — sticky application frame -->
-<a href="#main-content" class="skip-link">Skip to main content</a>
-<div class="cde-bar sticky top-0 z-30" style="grid-column:1/-1">
+<a href="#main-content" class="skip-link" data-pagefind-ignore>Skip to main content</a>
+<div class="cde-bar" data-pagefind-ignore sticky top-0 z-30" style="grid-column:1/-1">
   <div class="cde-logo">
     <span style="display:flex;gap:3px">
       <span style="width:7px;height:7px;border-radius:50%;background:#e69f00"></span>
@@ -795,7 +795,7 @@ select.inp {
 <div class="grid grid-sidebar min-h-screen">
 
 <!-- SIDEBAR -->
-<nav class="page-sidebar" aria-label="Styleguide navigation">
+<nav class="page-sidebar" data-pagefind-ignore aria-label="Styleguide navigation">
   <div class="worm-global"></div>
   <div class="sb-brand">
     <div class="text-mono text-xs fg-on-dark mb-2" style="opacity:.5;text-transform:uppercase;letter-spacing:.14em">Design System</div>
@@ -842,7 +842,7 @@ select.inp {
 </nav>
 
 <!-- MAIN -->
-<main class="bg-base overflow-y" id="main-content">
+<main class="bg-base overflow-y" id="main-content" data-pagefind-body>
   <!-- Content tag bar — Acme idiom for main column -->
   <div class="tag-bar sticky top-0 z-5 border-b">
     <strong class="fg-body">/sys/unified/styleguide</strong>

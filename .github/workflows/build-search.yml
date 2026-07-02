@@ -1,0 +1,36 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# unifiedspec — build Pagefind search index and commit to main
+# Pure static HTML site on GitHub Pages. No Hugo build step.
+# Pagefind crawls the HTML files and emits pagefind/ directory.
+
+name: build-search
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '*.html'
+      - '.github/workflows/build-search.yml'
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Index with Pagefind
+        run: npx --yes pagefind --site . --output-path ./pagefind
+
+      - name: Commit search index
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pagefind/
+          git diff --cached --quiet && echo "No index changes" || \
+            git commit -m "chore(search): rebuild Pagefind index [skip ci]"
+          git push
