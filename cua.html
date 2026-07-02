@@ -56,15 +56,7 @@ a{color:var(--primary)}
 *:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
 
 
-/* Skip to main */
-.skip-link {
-  position: absolute; top: -40px; left: 0; z-index: 100;
-  background: var(--bg-titlebar); color: var(--fg-on-dark);
-  padding: var(--sp-3) var(--sp-5);
-  font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 700;
-  text-decoration: none;
-}
-.skip-link:focus-visible { top: 0; outline: 2px solid #fff; outline-offset: 2px; }
+
 /* CDE bar */
 .cde-bar{background:var(--bg-titlebar);border-bottom:2px solid var(--border-titlebar);display:flex;align-items:stretch;height:38px;position:sticky;top:0;z-index:30}
 .cde-logo{background:var(--sun-orange);border-right:1px solid rgba(0,0,0,.2);padding:0 var(--sp-5);display:flex;align-items:center;font-family:var(--font-mono);font-size:0.75rem;font-weight:700;color:#fff;gap:var(--sp-3);white-space:nowrap}
@@ -78,7 +70,7 @@ a{color:var(--primary)}
 /* Layout */
 .page-wrap{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 38px)}
 .sidebar{background:var(--bg-tag);border-right:1px solid var(--border-tag);overflow-y:auto;position:sticky;top:38px;height:calc(100vh - 38px)}
-.sidebar::after{content:'';position:fixed;left:0;top:38px;bottom:0;width:5px;background:linear-gradient(to bottom,var(--worm) 0%,var(--worm) 28%,var(--worm-track) 28%);z-index:20;pointer-events:none}
+.sidebar::after{content:'';position:absolute;left:0;top:38px;bottom:0;width:5px;background:linear-gradient(to bottom,var(--worm) 0%,var(--worm) 28%,var(--worm-track) 28%);z-index:20;pointer-events:none}
 .sb-brand{background:var(--bg-titlebar);padding:var(--sp-5) var(--sp-5) var(--sp-4);border-bottom:2px solid var(--border-titlebar)}
 .nav-group{padding:var(--sp-3) 0;border-bottom:1px solid var(--border-lt)}
 .nav-lbl{font-family:var(--font-mono);font-size:0.6250rem;text-transform:uppercase;letter-spacing:.12em;color:var(--fg-faint);padding:0 var(--sp-4) var(--sp-2) var(--sp-6)}
@@ -225,9 +217,28 @@ a{color:var(--primary)}
   .inp               { min-height: 44px; padding: var(--sp-3) var(--sp-4); }
   .cde-btn, .cdecb   { width: 44px; height: 44px; font-size: 14px; }
 }
+
+/* spec status strip */
+.spec-status-strip{position:fixed;top:0;left:0;width:6px;height:100vh;z-index:40;pointer-events:none}
+body[data-status="draft"]   .spec-status-strip{background:var(--oi-orange)}
+body[data-status="stable"]  .spec-status-strip{background:var(--oi-blue)}
+body[data-status="adopted"] .spec-status-strip{background:var(--oi-green)}
+.spec-status-badge{display:inline-block;font-family:var(--font-mono);font-size:0.625rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;margin-left:12px;vertical-align:middle}
+body[data-status="draft"]   .spec-status-badge{background:var(--oi-orange);color:var(--sol-base03)}
+body[data-status="stable"]  .spec-status-badge{background:var(--oi-blue);color:#fff}
+body[data-status="adopted"] .spec-status-badge{background:var(--oi-green);color:#fff}
+/* skip link — visually hidden, no top:-40px flash */
+.skip-link{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;text-decoration:none}
+.skip-link:focus-visible{position:fixed!important;top:44px;left:6px;z-index:200;width:auto;height:auto;padding:8px 16px;clip:auto;white-space:normal;background:var(--bg-titlebar);color:var(--fg-on-dark);font-family:var(--font-mono);font-size:0.8125rem;font-weight:700;outline:2px solid #fff;outline-offset:2px}
+/* status strip body offset */
+body{padding-left:6px}
+@media print{.spec-status-strip{display:none}body{padding-left:0}}
+@media(pointer:coarse){.card{padding:20px}.nav-link{min-height:44px}}
 </style>
 </head>
-<body>
+<body data-status="draft">
+  <div class="spec-status-strip" aria-hidden="true"></div>
+
 
 <a href="#main-content" class="skip-link" data-pagefind-ignore>Skip to main content</a>
 <div class="cde-bar" data-pagefind-ignore">
@@ -243,6 +254,7 @@ a{color:var(--primary)}
   <div class="cde-title">Common User Access &mdash; Specification v1.0</div>
   <div class="cde-meta">
     <span style="font-family:var(--font-mono);font-size:0.6250rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em">Not IBM CUA &mdash; Acme/CDE/POSIX heritage</span>
+    <span class="spec-status-badge" title="Specification status: draft. Edition 1.0, 2026.">draft</span>
   </div>
   <div class="cde-theme">
     <button id="btn-light" class="active" onclick="setTheme('light','btn-light')">&#9728; Light</button>
@@ -302,7 +314,7 @@ a{color:var(--primary)}
     <strong>/sys/unified/cua</strong>
     <span class="tag-cmd">Get</span><span class="tag-cmd">Look</span>
     <span style="flex:1"></span>
-    <span style="color:var(--fg-faint)">Mouse: B1/B2+ctx &middot; Keys: CDE-style &middot; Focus: Acme &middot; Revert not Undo</span>
+    <span style="color:var(--fg-faint)">Edition 1.0 &#183; 2026 &#183; ADR-001&#8211;003 &#183; draft</span>
   </div>
   <div class="cb">
 

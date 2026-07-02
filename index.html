@@ -37,8 +37,7 @@ html{font-size:16px}
 body{background:var(--bg);color:var(--fg-body);font-family:var(--font-ui);line-height:1.6}
 a{color:var(--primary);text-decoration:none}a:hover{text-decoration:underline}
 *:focus{outline:none}*:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
-.skip-link{position:absolute;top:-40px;left:0;z-index:100;background:var(--bg-titlebar);color:var(--fg-on-dark);padding:12px 24px;font-family:var(--font-mono);font-size:0.8125rem;font-weight:700;text-decoration:none}
-.skip-link:focus-visible{top:0}
+
 .cde-bar{background:var(--bg-titlebar);border-bottom:2px solid var(--border-titlebar);display:flex;align-items:stretch;height:44px;position:sticky;top:0;z-index:30}
 .cde-logo{background:var(--sun-orange);border-right:1px solid rgba(0,0,0,.2);padding:0 24px;display:flex;align-items:center;font-family:var(--font-mono);font-size:0.75rem;font-weight:700;color:#fff;gap:10px;white-space:nowrap}
 .logo-dots{display:flex;gap:4px}.logo-dots span{width:8px;height:8px;border-radius:50%}
@@ -157,8 +156,29 @@ mark { background: var(--bg-sel) !important; color: var(--fg-head) !important; }
 .cards-artifacts{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:48px}
 .cards-artifacts .card{background:var(--bg)}
 @media(max-width:767px){.cards-primary,.cards-artifacts{grid-template-columns:1fr}}
+
+/* spec status strip */
+.spec-status-strip{position:fixed;top:0;left:0;width:6px;height:100vh;z-index:40;pointer-events:none}
+body[data-status="draft"]   .spec-status-strip{background:var(--oi-orange)}
+body[data-status="stable"]  .spec-status-strip{background:var(--oi-blue)}
+body[data-status="adopted"] .spec-status-strip{background:var(--oi-green)}
+.spec-status-badge{display:inline-block;font-family:var(--font-mono);font-size:0.625rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;margin-left:12px;vertical-align:middle}
+body[data-status="draft"]   .spec-status-badge{background:var(--oi-orange);color:var(--sol-base03)}
+body[data-status="stable"]  .spec-status-badge{background:var(--oi-blue);color:#fff}
+body[data-status="adopted"] .spec-status-badge{background:var(--oi-green);color:#fff}
+/* skip link — visually hidden, no top:-40px flash */
+.skip-link{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;text-decoration:none}
+.skip-link:focus-visible{position:fixed!important;top:44px;left:6px;z-index:200;width:auto;height:auto;padding:8px 16px;clip:auto;white-space:normal;background:var(--bg-titlebar);color:var(--fg-on-dark);font-family:var(--font-mono);font-size:0.8125rem;font-weight:700;outline:2px solid #fff;outline-offset:2px}
+/* status strip body offset */
+body{padding-left:6px}
+@media print{.spec-status-strip{display:none}body{padding-left:0}}
+@media(pointer:coarse){.card{padding:20px}.nav-link{min-height:44px}}
 </style></head>
-<body>
+<body data-status="draft">
+  <div class="spec-status-strip" aria-hidden="true"></div>
+  <div id="live-status" aria-live="polite" aria-atomic="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"></div>
+  <div id="live-error" aria-live="assertive" aria-atomic="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"></div>
+
 <a href="#main-content" class="skip-link" data-pagefind-ignore>Skip to main content</a>
 <div class="cde-bar" data-pagefind-ignore">
   <div class="cde-logo">
@@ -169,7 +189,7 @@ mark { background: var(--bg-sel) !important; color: var(--fg-head) !important; }
   </div>
   <div class="cde-title">
     unifiedspec.org
-    <span class="cde-badge" style="margin-left:12px">beta</span>
+    <span class="cde-badge" style="margin-left:12px">beta</span><span class="spec-status-badge" title="Specification status: draft. Edition 1.0, 2026.">draft</span>
   </div>
   <div class="cde-theme">
     <button id="bl" class="active" onclick="setTheme('light','bl')">&#9728;</button>
@@ -177,6 +197,11 @@ mark { background: var(--bg-sel) !important; color: var(--fg-head) !important; }
   </div>
 </div>
 
+<div style="background:var(--bg-tag);border-bottom:1px solid var(--border-tag);padding:3px 24px 3px 28px;font-family:var(--font-mono);font-size:0.75rem;color:var(--fg-muted);display:flex;align-items:center;gap:16px;position:sticky;top:44px;z-index:5" data-pagefind-ignore>
+  <strong style="color:var(--fg-body)">/sys/unified</strong>
+  <span style="flex:1"></span>
+  <span style="color:var(--fg-faint)">Edition 1.0 &#183; 2026 &#183; Da Planet Security</span>
+</div>
 <main id="main-content" data-pagefind-body style="scroll-margin-top:44px">
   <div class="hero">
     <div class="hero-tag">unifiedspec.org &#183; beta</div>
@@ -191,12 +216,6 @@ mark { background: var(--bg-sel) !important; color: var(--fg-head) !important; }
     </div>
   </div>
 
-  <div class="status-bar">
-    <span class="status-dot"></span>
-    <strong style="color:var(--fg-body)">Beta</strong>
-    <span>Specification under active development. Not yet at unifiedspec.org &#8212; preview via GitHub Pages.</span>
-    <span style="margin-left:auto">Da Planet Security &#183; 2026</span>
-  </div>
 
 
   <div class="search-wrap" id="search">
