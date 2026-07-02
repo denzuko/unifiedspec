@@ -1,0 +1,91 @@
+/* Unified Design System -- tokens.css
+ * Standalone CSS custom properties for @import.
+ * Generated from styleguide.html. Do not edit directly.
+ * Source: https://github.com/denzuko/unifiedspec
+ * License: BSD-2-Clause
+ */
+:root {
+  /* Solarized — Ethan Schoonover 2011, CIELAB-calibrated */
+  --sol-base03: #002b36; --sol-base02: #073642; --sol-base01: #586e75;
+  --sol-base00: #657b83; --sol-base0:  #839496; --sol-base1:  #93a1a1;
+  --sol-base2:  #eee8d5; --sol-base3:  #fdf6e3;
+  --sol-yellow: #b58900; --sol-orange: #cb4b16; --sol-red:    #dc322f;
+  --sol-magenta:#d33682; --sol-violet: #6c71c4; --sol-blue:   #268bd2;
+  --sol-cyan:   #2aa198; --sol-green:  #859900;
+
+  /* Okabe-Ito — CVD-safe, 2002 */
+  --oi-blue:       #0072b2; --oi-skyblue:   #56b4e9;
+  --oi-green:      #009e73; --oi-orange:    #e69f00;
+  --oi-vermillion: #d55e00; --oi-pink:      #cc79a7;
+  --oi-yellow:     #f0e442;
+
+  /* Plan 9 / Acme */
+  --p9-body: #ffffea; --p9-tag:    #eaffff;
+  --p9-sel:  #9eeeee; --p9-scroll: #aaaaaa;
+
+  /* Solaris / CDE */
+  --cde-teal:   #008080; --cde-teal-dk: #005555;
+  --sun-orange: #d04000;
+  --motif-gray: #c0c0c0; --motif-lt:    #e8e8e8;
+
+  /* ── LAYER 1: SEMANTIC TOKENS — LIGHT ──────────────────────────────────── */
+  /*
+   * Body text contrast ratios:
+   *   Light: fg-body = base01 (#586e75) — 4.99:1 on base3  ✓ WCAG AA
+   *   Dark:  fg-body = base1  (#93a1a1) — 5.61:1 on base03 ✓ WCAG AA
+   */
+
+  /* Backgrounds */
+  --bg:          var(--sol-base3);   /* content area */
+  --bg-surface:  var(--sol-base2);   /* panels, sidebar, demo blocks */
+  --bg-tag:      #eafaff;            /* Acme tag bar — P9 + Solarized blend */
+  --bg-titlebar: var(--cde-teal);    /* CDE app frame */
+  --bg-sel:      var(--p9-sel);      /* selection, focus fill */
+  --bg-code:     var(--sol-base02);  /* code block surface */
+
+  /* Foreground — CORRECTED dark mode progression */
+  --fg-head:    var(--sol-base03);   /* 13.92:1 on base3  | swaps to base2 in dark */
+  --fg-body:    var(--sol-base01);   /* 4.99:1 light, 5.61:1 dark */
+  --fg-muted:   var(--sol-base00);   /* 4.13:1 light */
+  --fg-faint:   var(--sol-base1);    /* decorative/disabled only */
+  --fg-on-dark: var(--sol-base3);    /* text on dark surfaces */
+  --fg-code:    var(--sol-base0);    /* code text on base02 */
+
+  /* Borders — Plan 9 weight: 1px is the default, structural */
+  --border:    #999999;
+  --border-lt: #cccccc;
+  --border-tag:#b8d8d8;
+  --border-titlebar: var(--cde-teal-dk);
+
+  /* Semantic accent — Okabe-Ito */
+  --primary:   var(--oi-blue);
+  --success:   var(--oi-green);
+  --warning:   var(--oi-orange);
+  --danger:    var(--oi-vermillion);
+  --info:      var(--oi-skyblue);
+  --special:   var(--oi-pink);
+
+  /* Syntax — Solarized token assignments */
+  --syn-kw:    var(--sol-green);
+  --syn-str:   var(--sol-cyan);
+  --syn-num:   var(--sol-magenta);
+  --syn-cmt:   var(--sol-base01);
+  --syn-fn:    var(--sol-blue);
+  --syn-var:   var(--sol-yellow);
+  --syn-type:  var(--sol-orange);
+
+  /* Worm — Plan 9 positional scrollbar */
+  --worm:       var(--p9-scroll);
+  --worm-track: #e0e0e0;
+
+  /* Typography */
+  --font-ui:   'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'Inconsolata', 'Courier New', monospace;
+
+  /* Spacing — 4px base (Plan 9 dense convention) */
+  --sp-1: 4px;  --sp-2: 8px;   --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px;  --sp-7: 48px; --sp-8: 64px;
+
+  /* Radius — split register */
+  --r-0: 0px; --r-1: 2px; --r-2: 4px; --r-3: 6px;
+}
