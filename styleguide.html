@@ -861,7 +861,7 @@ body{padding-left:6px}
   </div>
   <div class="p-7 max-wide">
 
-<section class="section" id="synthesis">
+<section class="section" id="synthesis" data-pagefind-meta="url[id]">
   <div class="mb-8 pb-7 border-b-lt">
 
     <!-- Quick-reference entry point -->
@@ -915,7 +915,7 @@ body{padding-left:6px}
     </details>
   </div>
 </section>
-<section class="section" id="tokens">
+<section class="section" id="tokens" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Design tokens</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">Semantic tokens are the only layer markup should reference &mdash; via utility classes. The dark-mode fix is documented in the source column.</p>
   <div class="overflow-x">
@@ -938,7 +938,7 @@ body{padding-left:6px}
   </div>
 </section>
 
-<section class="section" id="utilities">
+<section class="section" id="utilities" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Utilities</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">Classes compose at the call site. No component wrappers, no semantic class names. This is the Bell Labs practice &mdash; small, orthogonal tools combined by the programmer.</p>
 
@@ -1031,7 +1031,7 @@ body{padding-left:6px}
   </div>
 </section>
 
-<section class="section" id="spacing">
+<section class="section" id="spacing" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Spacing &amp; radius</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">4px base unit. Eight steps. Radius is a split register: 0px for chrome (Plan 9), 2&ndash;6px for content (usability).</p>
   <div class="mb-6">
@@ -1053,7 +1053,7 @@ body{padding-left:6px}
   </div>
 </section>
 
-<section class="section" id="typography">
+<section class="section" id="typography" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Typography</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">Two font registers. <strong>Titillium Web</strong> for headings, labels, UI text, and prose. <strong>Inconsolata</strong> for code, tag bars, paths, token names, and any monospaced output. Use <code class="text-mono fg-primary">text-ui</code> and <code class="text-mono fg-primary">text-mono</code> to switch registers.</p>
   <div class="mb-5">
@@ -1080,7 +1080,7 @@ body{padding-left:6px}
   </div>
 </section>
 
-<section class="section" id="acme">
+<section class="section" id="acme" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Acme patterns &mdash; tag bar &amp; body</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">An <strong>acme-win</strong> (named for Rob Pike's Acme text editor, Plan&#160;9, 1992) is the fundamental content window: a tag bar for identity and commands, a body for content, and a left-edge worm strip as scroll position indicator. These three parts always compose together. Most pages and views lead with this pattern. The three classes: <code class="text-mono fg-primary">.acme-win</code>, <code class="text-mono fg-primary">.tag-bar</code>, <code class="text-mono fg-primary">.acme-body</code>. Everything else composes from utilities.</p>
 
@@ -1139,7 +1139,7 @@ body{padding-left:6px}
 &lt;/<span class="fg-syn-kw">div</span>&gt;</div>
 </section>
 
-<section class="section" id="ghost">
+<section class="section" id="ghost" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Ghost inputs</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">Ghost inputs are the Plan 9 register &mdash; tag-bar-style inline text entry. Two affordance signals prevent misreading as static text: the left-edge pip (3px, --primary, 50% opacity at rest) and the permanent bottom accent line. Hover tints the background; focus makes the pip fully opaque and fills with --bg-sel.</p>
 
@@ -1174,7 +1174,7 @@ body{padding-left:6px}
 <span class="fg-syn-cmt">/* focus: background: --bg-sel (Acme sel cyan)            */</span></div>
 </section>
 
-<section class="section" id="buttons">
+<section class="section" id="buttons" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Buttons</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">Three registers: solid Okabe-Ito semantic, Motif 3D (CDE contexts), ghost/borderless (Plan 9/Acme tag bars). No hover animations &mdash; brightness shift only.</p>
   <div class="bg-surface border-lt p-5 mb-4">
@@ -1217,7 +1217,7 @@ body{padding-left:6px}
 &lt;<span class="fg-syn-kw">button</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"btn btn-motif"</span>&gt;Put&lt;/<span class="fg-syn-kw">button</span>&gt;</div>
 </section>
 
-<section class="section" id="inputs">
+<section class="section" id="inputs" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Inputs</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">Standard inputs for forms and data entry. Use <code class="text-mono fg-primary">.inp</code> for all types; add <code class="text-mono fg-primary">.state-ok</code> or <code class="text-mono fg-primary">.state-err</code> for validation state.</p>
   <div class="bg-surface border-lt p-5 mb-4">
@@ -1244,7 +1244,7 @@ body{padding-left:6px}
 <span class="fg-syn-cmt">&lt;!-- Server returns input with class="inp state-ok" or "inp state-err" --&gt;</span></div>
 </section>
 
-<section class="section" id="badges">
+<section class="section" id="badges" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Badges</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">Monospace, uppercase, 0px radius. Use <code class="text-mono fg-primary">color-mix()</code> internally so dark-mode contrast rebalances automatically. Semantic color assignments are CVD-safe.</p>
   <div class="flex gap-3 flex-wrap py-5 mb-4">
@@ -1264,7 +1264,7 @@ body{padding-left:6px}
   </div>
 </section>
 
-<section class="section" id="cards">
+<section class="section" id="cards" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Cards</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">Cards use a dark header bar and a light body area. The header carries the window identity &#8212; a path, a service name, a status. Stat cards carry a colored top border keyed to their semantic state.</p>
   <div class="grid grid-3 gap-4 mb-5">
@@ -1280,7 +1280,7 @@ body{padding-left:6px}
   </div>
 </section>
 
-<section class="section" id="alerts">
+<section class="section" id="alerts" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Alerts</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">Left-border accent, semantic colors. Background tint provides redundant coding alongside the border &#8212; color is never the sole signal. <code class="text-mono fg-primary">color-mix()</code> handles dark-mode opacity automatically.</p>
   <div class="alert alert-info mb-4"><div class="alert-head">System information</div><div class="alert-body">Unified v2: utility-first, Acme-primary, two fonts, no animations. Dark mode fg-body fixed to base1 (5.61:1).</div></div>
@@ -1289,7 +1289,7 @@ body{padding-left:6px}
   <div class="alert alert-danger mb-4"><div class="alert-head">Token violation</div><div class="alert-body">A raw palette constant was used directly. All references must pass through utility classes backed by semantic tokens.</div></div>
 </section>
 
-<section class="section" id="code">
+<section class="section" id="code" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Code</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">Dark background, monospace, left edge strip. Add <code class="text-mono fg-primary">.code-block</code> for preformatted blocks. Use <code class="text-mono fg-primary">fg-syn-*</code> utilities for inline syntax highlighting.</p>
   <div class="code-block mb-4">
@@ -1313,7 +1313,7 @@ body{padding-left:6px}
 }</div>
 </section>
 
-<section class="section" id="tables">
+<section class="section" id="tables" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Tables</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">Dark thead, zebra-stripe rows, hover fill. Add <code class="text-mono fg-primary">.overflow-x</code> on the wrapper for tables wider than their container.</p>
   <div class="overflow-x mb-5">
@@ -1330,7 +1330,7 @@ body{padding-left:6px}
   </div>
 </section>
 
-<section class="section" id="htmx">
+<section class="section" id="htmx" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>HTMX patterns</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">The Acme model maps cleanly onto HTMX. Tag-bar commands (<code class="text-mono fg-primary">Get</code>, <code class="text-mono fg-primary">Put</code>, <code class="text-mono fg-primary">Look</code>) become <code class="text-mono fg-primary">hx-get</code>, <code class="text-mono fg-primary">hx-post</code>, <code class="text-mono fg-primary">hx-trigger</code>. The body is the swap target. No JS beyond what HTMX provides.</p>
 
@@ -1388,7 +1388,7 @@ body{padding-left:6px}
 &lt;/<span class="fg-syn-kw">article</span>&gt;</div>
 </section>
 
-<section class="section" id="usage">
+<section class="section" id="usage" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Usage rules</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">These resolve ambiguity. They encode decisions already made so they don't have to be made again.</p>
   <div class="grid grid-2 gap-4 mb-6">
@@ -1418,7 +1418,7 @@ body{padding-left:6px}
 </section>
 
 
-<section class="section" id="breakpoints">
+<section class="section" id="breakpoints" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Breakpoints</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">Three breakpoints, desktop/tablet first. These tokens appear in <code class="text-mono fg-primary">@media (min-width)</code> queries only &#8212; they are not part of the token cascade and must not be used as values in component CSS.</p>
   <div style="margin-bottom:var(--sp-5)">
@@ -1439,7 +1439,7 @@ body{padding-left:6px}
 }</div>
 </section>
 
-<section class="section" id="skeleton">
+<section class="section" id="skeleton" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Skeleton &amp; loading states</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">No animation &#8212; structural placeholders using <code class="text-mono fg-primary">bg-surface</code> tones. For HTMX requests: show loading badge at 500ms. For operations expected to exceed 2s: show skeleton structure so the layout does not shift on content arrival.</p>
 
@@ -1478,7 +1478,7 @@ body{padding-left:6px}
 <span class="fg-syn-cmt">&lt;!-- Server sets aria-busy="false" in response fragment --&gt;</span></div>
 </section>
 
-<section class="section" id="disclosure">
+<section class="section" id="disclosure" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Expanded / collapsed state</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">Disclosure pattern for collapsible sections. No animation &#8212; state change is instantaneous. <code class="text-mono fg-primary">aria-expanded</code> drives the visual indicator and the screen reader announcement. <code class="text-mono fg-primary">hidden</code> attribute on the body hides content from both visual and accessibility tree.</p>
 
@@ -1516,7 +1516,7 @@ body{padding-left:6px}
 &lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"disclosure-body"</span> <span class="fg-syn-var">id</span>=<span class="fg-syn-str">"section-body"</span> <span class="fg-syn-var">hidden</span>&gt;...&lt;/<span class="fg-syn-kw">div</span>&gt;</div>
 </section>
 
-<section class="section" id="readonly">
+<section class="section" id="readonly" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Readonly state</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">A field that is populated but not currently editable. Distinct from disabled (which implies permanently unavailable). Readonly: border softens to <code class="text-mono fg-primary">--border-lt</code>, background shifts to <code class="text-mono fg-primary">--bg-surface</code>, text is <code class="text-mono fg-primary">--fg-muted</code>, cursor is <code class="text-mono fg-primary">default</code>, no focus ring.</p>
   <div class="demo">
@@ -1528,7 +1528,7 @@ body{padding-left:6px}
   </div>
 </section>
 
-<section class="section" id="dataviz">
+<section class="section" id="dataviz" data-pagefind-meta="url[id]">
   <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Data visualisation colors</h2>
   <p class="text-base line-loose fg-body max-prose mb-5">Three scales: categorical (Okabe-Ito 7 colors, already defined), sequential (single-hue ramps from Solarized base tones), and diverging (two-hue around a neutral midpoint). All CVD-checked. Use categorical for nominal data, sequential for ordered/continuous, diverging for delta/variance data.</p>
 
@@ -1581,6 +1581,12 @@ body{padding-left:6px}
     </tbody>
   </table>
 </section>
+
+  <footer style="border-top:1px solid var(--border-lt);padding-top:24px;margin-top:64px;font-family:var(--font-mono);font-size:0.6875rem;color:var(--fg-faint);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+    <span>Unified Design System &#8212;
+      <a href="https://github.com/denzuko/unifiedspec" style="color:var(--fg-faint)">github.com/denzuko/unifiedspec</a></span>
+    <span>&#169; 2026 Da Planet Security &#183; BSD-2-Clause</span>
+  </footer>
   </div><!-- /content body -->
 </main>
 </div><!-- /grid -->

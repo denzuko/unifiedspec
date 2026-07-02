@@ -300,6 +300,7 @@ body{padding-left:6px}
     <div class="nav-lbl">HTMX</div>
     <a class="nav-link" href="#htmx-cua"><span class="nav-dot" style="background:var(--oi-orange)" aria-hidden="true"></span>HTMX interaction</a>
 
+    <a class="nav-link" href="#advancement"><span class="nav-dot" style="background:var(--oi-green)" aria-hidden="true"></span>Advancement</a>
     <a class="nav-link" href="#conformance"><span class="nav-dot" style="background:var(--oi-green)" aria-hidden="true"></span>Conformance</a>
     <a class="nav-link" href="#agents"><span class="nav-dot" style="background:var(--oi-pink)" aria-hidden="true"></span>Agent / util tier</a>
   </div>
@@ -318,7 +319,7 @@ body{padding-left:6px}
   </div>
   <div class="cb">
 
-<section class="section" id="principles">
+<section class="section" id="principles" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Principles</h2>
   <p class="prose">This document specifies how users interact with applications built on the Unified Design System: what mouse buttons do, what keyboard shortcuts are defined, how the tag-bar command model works, and what an implementation must do to claim conformance. Read it alongside the style guide, which covers visual components. The conformance criteria (C-01&ndash;C-15) at the end of this document are the checkable summary of everything in between.</p><p class="prose">This is not IBM's 1987 CUA. It inherits from three sources: Plan&nbsp;9/Acme's interaction model, CDE's keyboard convention, and POSIX accessibility requirements. Where these conflict, the order of precedence is: accessibility &gt; Acme &gt; CDE.</p>
 
@@ -342,7 +343,7 @@ body{padding-left:6px}
   </div>
 </section>
 
-<section class="section" id="decisions">
+<section class="section" id="decisions" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Design decisions</h2>
 
   <div class="ssub">Stakeholder register &#8212; IEEE&#160;42010</div>
@@ -417,7 +418,7 @@ body{padding-left:6px}
   </div>
 </section>
 
-<section class="section" id="mouse">
+<section class="section" id="mouse" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Mouse model</h2>
   <p class="prose">Two-button model. Middle click is supported but never required. The context menu (right click) is the bridge between the Acme tag-bar model and the platform convention users expect.</p>
 
@@ -464,7 +465,7 @@ body{padding-left:6px}
   </div>
 </section>
 
-<section class="section" id="keyboard">
+<section class="section" id="keyboard" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Keyboard model</h2>
   <p class="prose">CDE-style keyboard navigation: standard POSIX traversal as baseline, <code style="font-family:var(--font-mono);font-size:0.75rem">Alt+key</code> mnemonics derived from tag-bar command names. No modal layers. No application-global shortcuts that conflict with browser defaults.</p>
 
@@ -546,7 +547,7 @@ body{padding-left:6px}
   </div>
 </section>
 
-<section class="section" id="context">
+<section class="section" id="context" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Context menu</h2>
   <p class="prose">The context menu (right-click / B2) is the bridge between Acme's tag-bar model and platform convention. It must contain only actions that are also available elsewhere &mdash; in the tag bar, by keyboard, or by direct manipulation. The context menu is never the sole access point for an action.</p>
 
@@ -607,7 +608,7 @@ body{padding-left:6px}
   </table>
 </section>
 
-<section class="section" id="tagbar">
+<section class="section" id="tagbar" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Tag-bar grammar</h2>
   <p class="prose">The tag bar is the primary command surface. It contains the window's identity (path or title), universal commands, and application-specific commands. Its grammar is fixed &mdash; parseable left-to-right.</p>
 
@@ -699,7 +700,7 @@ body{padding-left:6px}
   </div>
 </section>
 
-<section class="section" id="commands">
+<section class="section" id="commands" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Command registry</h2>
   <p class="prose">Reserved command names and their defined semantics. Applications may add commands but must not redefine reserved ones. Command names are Title-cased single words. Multi-word commands are concatenated (<code style="font-family:var(--font-mono);font-size:0.75rem">Newcol</code>, <code style="font-family:var(--font-mono);font-size:0.75rem">Putall</code>).</p>
 
@@ -753,7 +754,7 @@ body{padding-left:6px}
 &lt;/<span class="tkw">div</span>&gt;</div>
 </section>
 
-<section class="section" id="focus">
+<section class="section" id="focus" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Focus model</h2>
   <p class="prose">Focus is managed by the user, not the application. The system never moves focus programmatically except in two permitted cases: initial page load, and modal open/close. The Acme model and WCAG 2.4.3 SC 2.4.3 arrive at the same requirement independently: focus moves only when the user initiates it. An implementation satisfying the Acme focus model satisfies the WCAG criterion without additional work.</p>
 
@@ -796,7 +797,7 @@ document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<sp
 });</div>
 </section>
 
-<section class="section" id="selection">
+<section class="section" id="selection" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Selection model</h2>
   <p class="prose">Text selection is the primary operand for tag-bar commands. <code style="font-family:var(--font-mono);font-size:0.75rem">Look</code>, pipe commands, and application-specific commands operate on the current selection. If there is no selection, they operate on the entire window body or prompt for input.</p>
 
@@ -837,7 +838,7 @@ document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<sp
 }</div>
 </section>
 
-<section class="section" id="worm">
+<section class="section" id="worm" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Worm strip</h2>
   <p class="prose">The worm strip is a left-edge positional scrollbar &mdash; a Plan 9 Acme primitive. In the Unified system it has two roles: decorative (sidebar global worm, tag-bar leading strip) and interactive (acme-win body left edge). Interactive worm strips respond to click-to-scroll.</p>
 
@@ -906,7 +907,7 @@ document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<sp
 );</div>
 </section>
 
-<section class="section" id="affordances">
+<section class="section" id="affordances" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Interactive signals</h2>
   <p class="prose">Every interactive element must communicate its state at rest, without relying on hover or memory. This is Principle 3 applied to affordances.</p>
 
@@ -978,7 +979,7 @@ document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<sp
   </table>
 </section>
 
-<section class="section" id="feedback">
+<section class="section" id="feedback" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>System feedback</h2>
   <p class="prose">Feedback is immediate and in-place. No toast notifications, no overlaying popups, no page-level banners. Feedback appears adjacent to the element that caused it, or in the tag bar meta area. Errors are specific and actionable.</p>
 
@@ -1076,7 +1077,7 @@ document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<sp
   </div>
 </section>
 
-<section class="section" id="htmx-cua">
+<section class="section" id="htmx-cua" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>HTMX interaction</h2>
   <p class="prose">HTMX implements the tag-bar command model over HTTP. The mapping is direct: tag-bar verbs become HTTP verbs, acme-win bodies are swap targets, OOB swaps handle meta and aria-live regions. No JS beyond HTMX and the minimal worm/confirmation helpers.</p>
 
@@ -1171,7 +1172,7 @@ document.<span class="tfn">querySelectorAll</span>(<span class="tst">'.acme-win 
   });</div>
 </section>
 
-<section class="section" id="agents">
+<section class="section" id="agents" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Agent / util tier</h2>
   <p class="prose">Agents and utilities are second-class consumers of the design system. They receive semantic HTML with correct token-class attributes. They do not need interactive affordances, focus management, or HTMX. What they need: readable structure, correct heading hierarchy, meaningful class names they can parse, and no JavaScript dependencies for content access.</p>
 
@@ -1228,7 +1229,7 @@ document.<span class="tfn">querySelectorAll</span>(<span class="tst">'.acme-win 
 </section>
 
 
-<section class="section" id="conformance">
+<section class="section" id="conformance" data-pagefind-meta="url[id]">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Conformance criteria</h2>
   <p class="prose">An implementation conforms to the Unified CUA v1.0 if and only if it satisfies all required criteria below. Recommended criteria improve quality but are not required for conformance. This checklist is the answer to &#8220;does this implementation conform?&#8221;</p>
 
@@ -1266,6 +1267,26 @@ document.<span class="tfn">querySelectorAll</span>(<span class="tst">'.acme-win 
     </tbody>
   </table>
 </section>
+<section class="section" id="advancement">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Advancement criteria</h2>
+  <p class="prose">This specification is at status <strong>draft</strong>. It advances to <strong>stable</strong> when all three conditions are met:</p>
+  <table class="spec-table" style="margin-bottom:var(--sp-5)">
+    <thead><tr><th>#</th><th>Condition</th><th>Who determines</th></tr></thead>
+    <tbody>
+      <tr><td class="key">A-01</td><td>At least one external conforming implementation exists and has been verified against C-01&#8211;C-15.</td><td>Review body</td></tr>
+      <tr><td class="key">A-02</td><td>The specification has been ratified by the DPS standards review body.</td><td>Review body</td></tr>
+      <tr><td class="key">A-03</td><td>A 60-day public comment period has closed with no unresolved blocking objections.</td><td>Review body</td></tr>
+    </tbody>
+  </table>
+  <p class="prose">Until A-01&#8211;A-03 are met, implementations may target this draft but should expect minor normative changes. Errata are issued against the draft without advancing the edition. The <code style="font-family:var(--font-mono);font-size:0.75rem">data-status</code> attribute changes from <code style="font-family:var(--font-mono);font-size:0.75rem">draft</code> to <code style="font-family:var(--font-mono);font-size:0.75rem">stable</code> when all three conditions are confirmed.</p>
+</section>
+
+
+  <footer style="border-top:1px solid var(--border-lt);padding-top:24px;margin-top:64px;font-family:var(--font-mono);font-size:0.6875rem;color:var(--fg-faint);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+    <span>Unified Design System &#8212;
+      <a href="https://github.com/denzuko/unifiedspec" style="color:var(--fg-faint)">github.com/denzuko/unifiedspec</a></span>
+    <span>&#169; 2026 Da Planet Security &#183; BSD-2-Clause</span>
+  </footer>
   </div><!-- /cb -->
 </main>
 </div><!-- /page-wrap -->
