@@ -15,7 +15,7 @@ A design language synthesised from four workstation traditions:
 
 | File | Description |
 |------|-------------|
-| [`styleguide.html`](https://denzuko.github.io/unifiedspec/styleguide.html) | Design system & style guide v2.1 |
+| [`styleguide.html`](https://denzuko.github.io/unifiedspec/styleguide.html) | Design system & style guide v1.0 |
 | [`cua.html`](https://denzuko.github.io/unifiedspec/cua.html) | Common User Access specification v1.0 |
 | [`tokens.json`](tokens.json) | Design tokens — W3C DTCG format |
 | [`tokens.schema.json`](tokens.schema.json) | JSON Schema for token validation |
