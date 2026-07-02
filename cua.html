@@ -320,7 +320,7 @@ body{padding-left:6px}
 
 <section class="section" id="principles">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Principles</h2>
-  <p class="prose">This is the Unified CUA &mdash; Common User Access specification for applications built against the Unified Design System. It is not IBM's 1987 CUA. It inherits from three sources: Plan&nbsp;9/Acme's interaction model, CDE's keyboard convention, and POSIX accessibility requirements. Where these conflict, the order of precedence is: accessibility &gt; Acme &gt; CDE.</p>
+  <p class="prose">This document specifies how users interact with applications built on the Unified Design System: what mouse buttons do, what keyboard shortcuts are defined, how the tag-bar command model works, and what an implementation must do to claim conformance. Read it alongside the style guide, which covers visual components. The conformance criteria (C-01&ndash;C-15) at the end of this document are the checkable summary of everything in between.</p><p class="prose">This is not IBM's 1987 CUA. It inherits from three sources: Plan&nbsp;9/Acme's interaction model, CDE's keyboard convention, and POSIX accessibility requirements. Where these conflict, the order of precedence is: accessibility &gt; Acme &gt; CDE.</p>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin-bottom:var(--sp-6)">
     <div class="decision">
@@ -376,6 +376,18 @@ body{padding-left:6px}
       <tr><td class="key">Engagement (formerly suitability for individualisation)</td><td>Tag-bar command vocabulary is extensible per application. Branding layer (--bg-titlebar, --primary) is overridable. Font-size is rem-based, respecting user system preferences.</td><td>Usage rules, token layer, font-size rem</td></tr>
     </tbody>
   </table>
+  <div class="demo mb-6" style="background:var(--bg-tag);border-color:var(--border-tag)">
+    <div class="text-mono text-xs text-upper fg-faint mb-3" style="letter-spacing:.12em">If you want to&hellip;</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-2)">
+      <div class="text-mono text-base"><span class="fg-primary">&rarr;</span> <a href="#mouse">Understand click behaviour</a></div>
+      <div class="text-mono text-base"><span class="fg-primary">&rarr;</span> <a href="#keyboard">Find a keyboard shortcut</a></div>
+      <div class="text-mono text-base"><span class="fg-primary">&rarr;</span> <a href="#tagbar">Build a tag bar</a></div>
+      <div class="text-mono text-base"><span class="fg-primary">&rarr;</span> <a href="#commands">Look up a command name</a></div>
+      <div class="text-mono text-base"><span class="fg-primary">&rarr;</span> <a href="#focus">Understand HTMX focus rules</a></div>
+      <div class="text-mono text-base"><span class="fg-primary">&rarr;</span> <a href="#conformance">Check conformance</a></div>
+    </div>
+  </div>
+
   <div class="decision" style="border-color:var(--sol-cyan)">
     <div class="decision-head" style="color:var(--sol-cyan)">Decision 1 &mdash; Mouse model: Acme-inspired B1/B2 <span class="badge badge-ok" style="font-size:0.625rem;vertical-align:middle;margin-left:0.5rem">ADR-001 &middot; decided &middot; 2026-Q2</span></div>
     <div class="decision-body">
@@ -743,7 +755,7 @@ body{padding-left:6px}
 
 <section class="section" id="focus">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Focus model</h2>
-  <p class="prose">Focus is managed by the user, not the application. The system never moves focus programmatically except in two permitted cases: initial page load, and modal open/close. This is both the Acme model and WCAG 2.4.3 compliance.</p>
+  <p class="prose">Focus is managed by the user, not the application. The system never moves focus programmatically except in two permitted cases: initial page load, and modal open/close. The Acme model and WCAG 2.4.3 SC 2.4.3 arrive at the same requirement independently: focus moves only when the user initiates it. An implementation satisfying the Acme focus model satisfies the WCAG criterion without additional work.</p>
 
   <div class="ssub">Permitted focus movements</div>
   <table class="spec-table">
@@ -1189,7 +1201,7 @@ document.<span class="tfn">querySelectorAll</span>(<span class="tst">'.acme-win 
   <table class="spec-table">
     <thead><tr><th>Concern</th><th>Specification</th></tr></thead>
     <tbody>
-      <tr><td class="key">Heading hierarchy</td><td>Correct H1 &rarr; H6 nesting. Never skip levels. Page title = H1. Section = H2. Subsection = H3. This is both SEO and agent parsing convention.</td></tr>
+      <tr><td class="key">Heading hierarchy</td><td>Correct H1 &rarr; H6 nesting. Never skip levels. Page title = H1. Section = H2. Subsection = H3. Correct heading hierarchy serves both machine consumers (search indexers, agents parsing document structure) and human navigation (screen reader heading lists, document outline tools). The same structure satisfies both without compromise.</td></tr>
       <tr><td class="key">Semantic HTML</td><td>Use <code style="font-family:var(--font-mono)">nav</code>, <code style="font-family:var(--font-mono)">main</code>, <code style="font-family:var(--font-mono)">article</code>, <code style="font-family:var(--font-mono)">section</code>, <code style="font-family:var(--font-mono)">aside</code>. Never use div where a semantic element exists. Tables for tabular data only.</td></tr>
       <tr><td class="key">Token class naming</td><td>Class names are utilities and describe function (<code style="font-family:var(--font-mono)">fg-body</code>, <code style="font-family:var(--font-mono)">badge-danger</code>). An agent can infer the meaning. Avoid opaque class names that only make sense in context.</td></tr>
       <tr><td class="key">No JS required</td><td>Static documents must be fully readable with JS disabled. HTMX applications degrade to standard form submission (use <code style="font-family:var(--font-mono)">action</code> and <code style="font-family:var(--font-mono)">method</code> on all forms; HTMX enhances them progressively).</td></tr>
