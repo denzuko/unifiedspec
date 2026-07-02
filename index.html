@@ -138,6 +138,25 @@ footer{border-top:1px solid var(--border-lt);padding-top:24px;font-family:var(--
   line-height: 1.6 !important;
 }
 mark { background: var(--bg-sel) !important; color: var(--fg-head) !important; }
+
+.card-action{display:inline-flex;align-items:center;gap:6px;margin-top:auto;
+  font-family:var(--font-mono);font-size:0.6875rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;
+  color:var(--primary);padding-top:8px;border-top:1px solid var(--border-lt)}
+.card-action::after{content:'\2192';font-size:0.875rem}
+.card-type{font-family:var(--font-mono);font-size:0.625rem;text-transform:uppercase;
+  letter-spacing:.1em;padding:2px 8px;border:1px solid;margin-bottom:8px;
+  display:inline-block}
+.card-type-spec{color:var(--primary);
+  background:color-mix(in srgb,var(--primary) 8%,transparent);
+  border-color:color-mix(in srgb,var(--primary) 25%,transparent)}
+.card-type-artifact{color:var(--fg-faint);
+  background:color-mix(in srgb,var(--fg-faint) 8%,transparent);
+  border-color:color-mix(in srgb,var(--fg-faint) 25%,transparent)}
+.cards-primary{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:2px}
+.cards-artifacts{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:48px}
+.cards-artifacts .card{background:var(--bg)}
+@media(max-width:767px){.cards-primary,.cards-artifacts{grid-template-columns:1fr}}
 </style></head>
 <body>
 <a href="#main-content" class="skip-link" data-pagefind-ignore>Skip to main content</a>
@@ -186,30 +205,36 @@ mark { background: var(--bg-sel) !important; color: var(--fg-head) !important; }
   </div>
 
   <div class="section-head">Specification documents</div>
-  <div class="grid" style="margin-bottom:48px">
+  <div class="cards-primary">
     <a href="styleguide.html" class="card">
-      <div class="card-icon">&#9632;</div>
+      <div class="card-type card-type-spec">Specification</div>
       <div class="card-name">Design System &amp; Style Guide</div>
-      <div class="card-desc">Token architecture, utility classes, component library, typography, spacing, color system, dark mode, accessibility. The visual language of the Unified system.</div>
-      <div class="card-meta">styleguide.html &#183; v1.0</div>
+      <div class="card-desc">Token architecture, utility classes, component library, typography, spacing, colour system, dark mode, data visualisation, disclosure, skeleton, and readonly patterns.</div>
+      <div class="card-meta">styleguide.html &#183; v1.0 &#183; 20 sections</div>
+      <div class="card-action">Read specification</div>
     </a>
     <a href="cua.html" class="card">
-      <div class="card-icon">&#9654;</div>
-      <div class="card-name">Common User Access Specification</div>
-      <div class="card-desc">Mouse model (B1/B2), keyboard bindings (CDE/Acme), tag-bar grammar, command registry, focus model, conformance criteria. The interaction language of the Unified system.</div>
-      <div class="card-meta">cua.html &#183; CUA v1.0 &#183; ADR-001–003</div>
+      <div class="card-type card-type-spec">Specification</div>
+      <div class="card-name">Common User Access</div>
+      <div class="card-desc">Mouse model, keyboard bindings, tag-bar grammar, command registry, focus model, component anatomies, conformance criteria C-01&#8211;C-15.</div>
+      <div class="card-meta">cua.html &#183; CUA v1.0 &#183; ADR-001&#8211;003</div>
+      <div class="card-action">Read specification</div>
     </a>
+  </div>
+  <div class="cards-artifacts">
     <a href="tokens.json" class="card">
-      <div class="card-icon">{ }</div>
+      <div class="card-type card-type-artifact">Machine-readable</div>
       <div class="card-name">Design Tokens</div>
-      <div class="card-desc">W3C DTCG format. Layer 0 raw palette constants (Solarized, Okabe-Ito, Plan&#160;9, CDE) and Layer 1 semantic tokens with $type, $value, $description for every token.</div>
-      <div class="card-meta">tokens.json &#183; DTCG &#183; 15KB</div>
+      <div class="card-desc">W3C DTCG format. Two-layer architecture: raw palette constants and semantic tokens. Consume with any DTCG-compatible tool or directly in CSS.</div>
+      <div class="card-meta">tokens.json &#183; DTCG &#183; 15&#8202;KB</div>
+      <div class="card-action">View JSON</div>
     </a>
     <a href="tokens.schema.json" class="card">
-      <div class="card-icon">&#10003;</div>
+      <div class="card-type card-type-artifact">Machine-readable</div>
       <div class="card-name">Token Schema</div>
-      <div class="card-desc">JSON Schema (draft-07) validating tokens.json against W3C DTCG type constraints. Use with ajv or any JSON Schema validator to verify token files.</div>
+      <div class="card-desc">JSON Schema draft-07. Validates tokens.json against W3C DTCG type constraints. Pass to ajv or any JSON Schema validator.</div>
       <div class="card-meta">tokens.schema.json &#183; JSON Schema draft-07</div>
+      <div class="card-action">View schema</div>
     </a>
   </div>
 
