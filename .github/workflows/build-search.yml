@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-2-Clause
-# unifiedspec — build Pagefind search index and commit to main
+# unifiedspec -- build Pagefind search index and commit to main
 # Pure static HTML site on GitHub Pages. No Hugo build step.
 # pagefind/ is in .gitignore for local use; -f forces add in CI.
 
@@ -27,26 +27,34 @@ jobs:
       - name: Index with Pagefind
         run: npx --yes pagefind --site . --output-path ./pagefind
 
-
       - name: Extract tokens.css
         run: |
-          python3 -c "
-import re
-with open('styleguide.html') as f:
-    html = f.read()
-m = re.search(r':root\\s*\\{([^}]+)\\}', html, re.DOTALL)
-if m:
-    css = '/* Unified Design System tokens.css\n' +           ' * Standalone CSS custom properties. Generated from styleguide.html.\n' +           ' * Source: https://github.com/denzuko/unifiedspec\n' +           ' * License: BSD-2-Clause\n */\n:root {\n' + m.group(1) + '}\n'
-    with open('tokens.css', 'w') as f:
-        f.write(css)
-    print('tokens.css written')
-"
+          python3 << 'PY'
+          import re
+          with open('styleguide.html') as f:
+              html = f.read()
+          m = re.search(r':root\s*\{([^}]+)\}', html, re.DOTALL)
+          if m:
+              header = (
+                  '/* Unified Design System -- tokens.css\n'
+                  ' * Standalone CSS custom properties for @import.\n'
+                  ' * Generated from styleguide.html. Do not edit directly.\n'
+                  ' * Source: https://github.com/denzuko/unifiedspec\n'
+                  ' * License: BSD-2-Clause\n'
+                  ' */\n'
+              )
+              with open('tokens.css', 'w') as f:
+                  f.write(header + ':root {' + m.group(1) + '}\n')
+              print('tokens.css written')
+          else:
+              print('WARNING: :root block not found in styleguide.html')
+          PY
 
       - name: Commit search index
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f pagefind/ tokens.css
-          git diff --cached --quiet && echo "No index changes" || \
+          git diff --cached --quiet && echo "No changes" || \
             git commit -m "chore(search): rebuild Pagefind index [skip ci]"
           git push
