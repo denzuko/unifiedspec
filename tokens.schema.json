@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://unifiedspec.org/tokens.schema.json",
+  "title": "Unified Design System Token Schema",
+  "description": "JSON Schema for Unified Design System tokens.json. Validates W3C DTCG format compliance.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "$metadata",
+    "palette",
+    "semantic"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "$metadata": {
+      "type": "object",
+      "required": [
+        "name",
+        "version"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "description": {
+          "type": "string"
+        },
+        "authors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "license": {
+          "type": "string"
+        }
+      }
+    },
+    "palette": {
+      "$ref": "#/definitions/tokenGroup"
+    },
+    "semantic": {
+      "$ref": "#/definitions/tokenGroup"
+    }
+  },
+  "definitions": {
+    "tokenGroup": {
+      "type": "object",
+      "patternProperties": {
+        "^(?!\\$)": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/token"
+            },
+            {
+              "$ref": "#/definitions/tokenGroup"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "token": {
+      "type": "object",
+      "required": [
+        "$type",
+        "$value"
+      ],
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "dimension",
+            "fontFamily",
+            "fontWeight",
+            "duration",
+            "cubicBezier",
+            "shadow",
+            "border",
+            "gradient",
+            "typography",
+            "strokeStyle",
+            "transition"
+          ]
+        },
+        "$value": {},
+        "$description": {
+          "type": "string"
+        },
+        "$extensions": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

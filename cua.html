@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unified CUA Specification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inconsolata:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sol-base03:#002b36;--sol-base02:#073642;--sol-base01:#586e75;
+  --sol-base00:#657b83;--sol-base0:#839496;--sol-base1:#93a1a1;
+  --sol-base2:#eee8d5;--sol-base3:#fdf6e3;
+  --sol-cyan:#2aa198;--sol-blue:#268bd2;--sol-green:#859900;
+  --sol-magenta:#d33682;--sol-yellow:#b58900;--sol-orange:#cb4b16;
+  --oi-blue:#0072b2;--oi-skyblue:#56b4e9;--oi-green:#009e73;
+  --oi-orange:#e69f00;--oi-vermillion:#d55e00;--oi-pink:#cc79a7;
+  --p9-tag:#eaffff;--p9-sel:#9eeeee;--p9-scroll:#aaaaaa;
+  --cde-teal:#008080;--cde-teal-dk:#005555;--sun-orange:#d04000;
+  --motif-gray:#c0c0c0;--motif-lt:#e8e8e8;
+
+  --bg:var(--sol-base3);--bg-surface:var(--sol-base2);
+  --bg-tag:#eafaff;--bg-titlebar:var(--cde-teal);
+  --bg-sel:var(--p9-sel);--bg-code:var(--sol-base02);
+  --fg-head:var(--sol-base03);--fg-body:var(--sol-base01);
+  --fg-muted:var(--sol-base00);--fg-faint:var(--sol-base1);
+  --fg-on-dark:var(--sol-base3);--fg-code:var(--sol-base0);
+  --border:#999;--border-lt:#cccccc;--border-tag:#b8d8d8;
+  --border-titlebar:var(--cde-teal-dk);
+  --primary:var(--oi-blue);--success:var(--oi-green);
+  --warning:var(--oi-orange);--danger:var(--oi-vermillion);
+  --worm:var(--p9-scroll);--worm-track:#e0e0e0;
+  --font-ui:'Titillium Web','Helvetica Neue',Arial,sans-serif;
+  --font-mono:'Inconsolata','Courier New',monospace;
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;
+  --sp-5:24px;--sp-6:32px;--sp-7:48px;--sp-8:64px;
+}
+[data-theme="dark"] {
+  --bg:var(--sol-base03);--bg-surface:var(--sol-base02);
+  --bg-tag:#052030;--bg-titlebar:#005060;--bg-sel:#1a4050;
+  --bg-code:#011018;
+  --fg-head:var(--sol-base2);--fg-body:var(--sol-base1);
+  --fg-muted:var(--sol-base0);--fg-faint:var(--sol-base01);
+  --fg-on-dark:var(--sol-base3);--fg-code:var(--sol-base0);
+  --border:var(--sol-base02);--border-lt:#0d3040;
+  --border-tag:#0a3040;--border-titlebar:#003344;
+  --primary:var(--oi-skyblue);--success:#00c896;
+  --danger:#f07050;--worm:#3a5a6a;--worm-track:#031820;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:1.0000remrem}
+body{background:var(--bg-surface);color:var(--fg-body);font-family:var(--font-ui);line-height:1.6}
+a{color:var(--primary)}
+*:focus{outline:none}
+*:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+
+
+/* Skip to main */
+.skip-link {
+  position: absolute; top: -40px; left: 0; z-index: 100;
+  background: var(--bg-titlebar); color: var(--fg-on-dark);
+  padding: var(--sp-3) var(--sp-5);
+  font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 700;
+  text-decoration: none;
+}
+.skip-link:focus-visible { top: 0; outline: 2px solid #fff; outline-offset: 2px; }
+/* CDE bar */
+.cde-bar{background:var(--bg-titlebar);border-bottom:2px solid var(--border-titlebar);display:flex;align-items:stretch;height:38px;position:sticky;top:0;z-index:30}
+.cde-logo{background:var(--sun-orange);border-right:1px solid rgba(0,0,0,.2);padding:0 var(--sp-5);display:flex;align-items:center;font-family:var(--font-mono);font-size:0.7500remrem;font-weight:700;color:#fff;gap:var(--sp-3);white-space:nowrap}
+.cde-title{padding:0 var(--sp-5);flex:1;display:flex;align-items:center;font-family:var(--font-ui);font-size:0.8750remrem;font-weight:600;color:rgba(255,255,255,.95);letter-spacing:.03em}
+.cde-meta{padding:0 var(--sp-4);display:flex;align-items:center;border-left:1px solid rgba(255,255,255,.1)}
+.cde-theme{display:flex;align-items:center;gap:4px;padding:0 var(--sp-4);border-left:1px solid rgba(255,255,255,.1)}
+.cde-theme button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);font-family:var(--font-mono);font-size:0.6875remrem;padding:3px var(--sp-3);cursor:pointer}
+.cde-theme button:hover{background:rgba(255,255,255,.22)}
+.cde-theme button.active{background:rgba(255,255,255,.28);color:#fff;font-weight:700}
+
+/* Layout */
+.page-wrap{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 38px)}
+.sidebar{background:var(--bg-tag);border-right:1px solid var(--border-tag);overflow-y:auto;position:sticky;top:38px;height:calc(100vh - 38px)}
+.sidebar::after{content:'';position:fixed;left:0;top:38px;bottom:0;width:5px;background:linear-gradient(to bottom,var(--worm) 0%,var(--worm) 28%,var(--worm-track) 28%);z-index:20;pointer-events:none}
+.sb-brand{background:var(--bg-titlebar);padding:var(--sp-5) var(--sp-5) var(--sp-4);border-bottom:2px solid var(--border-titlebar)}
+.nav-group{padding:var(--sp-3) 0;border-bottom:1px solid var(--border-lt)}
+.nav-lbl{font-family:var(--font-mono);font-size:0.6250remrem;text-transform:uppercase;letter-spacing:.12em;color:var(--fg-faint);padding:0 var(--sp-4) var(--sp-2) var(--sp-6)}
+.nav-link{display:flex;align-items:center;gap:var(--sp-3);padding:4px var(--sp-4) 4px var(--sp-6);font-family:var(--font-mono);font-size:0.7500remrem;color:var(--fg-muted);text-decoration:none;border-left:2px solid transparent}
+.nav-link:hover{background:color-mix(in srgb,var(--primary) 7%,transparent);color:var(--fg-body);text-decoration:none}
+.nav-link.active{color:var(--primary);border-left-color:var(--primary);background:color-mix(in srgb,var(--primary) 9%,transparent);font-weight:700}
+.nav-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* Main */
+.main{background:var(--bg);overflow-y:auto}
+.ctag{background:var(--bg-tag);border-bottom:1px solid var(--border-tag);padding:4px var(--sp-6) 4px var(--sp-7);font-family:var(--font-mono);font-size:0.7500remrem;color:var(--fg-muted);display:flex;align-items:center;gap:var(--sp-4);position:sticky;top:0;z-index:5}
+.ctag strong{color:var(--fg-body)}
+.ctag .tag-cmd{cursor:pointer;padding:1px var(--sp-2)}
+.ctag .tag-cmd:hover{background:var(--bg-sel);color:var(--fg-head)}
+.cb{padding:var(--sp-7) var(--sp-7);max-width:900px}
+
+/* Sections */
+.section{margin-bottom:var(--sp-8);scroll-margin-top:calc(38px + var(--sp-7))}
+.sec-title{display:flex;align-items:center;gap:var(--sp-3);font-family:var(--font-mono);font-size:0.6875remrem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--fg-muted);padding-bottom:var(--sp-3);border-bottom:1px solid var(--border);margin-bottom:var(--sp-6)}
+.sec-title-bar{width:16px;height:3px;background:var(--primary);flex-shrink:0}
+.ssub{font-family:var(--font-ui);font-size:0.9375remrem;font-weight:600;color:var(--fg-head);margin:var(--sp-6) 0 var(--sp-4)}
+.prose{font-family:var(--font-ui);font-size:0.8750remrem;line-height:1.75;color:var(--fg-body);max-width:66ch;margin-bottom:var(--sp-5)}
+.lsm{font-family:var(--font-mono);font-size:0.6250remrem;text-transform:uppercase;letter-spacing:.12em;color:var(--fg-faint);margin-bottom:var(--sp-3)}
+.demo{background:var(--bg-surface);border:1px solid var(--border-lt);padding:var(--sp-5);margin-bottom:var(--sp-5)}
+
+/* Tag bar */
+.tag-bar{background:var(--bg-tag);border-bottom:1px solid var(--border-tag);padding:3px var(--sp-5) 3px 14px;font-family:var(--font-mono);font-size:0.7500remrem;color:var(--fg-body);display:flex;align-items:center;gap:var(--sp-3);position:relative}
+.tag-bar::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--worm);border-right:1px solid var(--border-lt)}
+.tag-path{font-weight:700}
+.tag-cmd{color:var(--fg-faint);cursor:pointer;padding:0 2px}
+.tag-cmd:hover{background:var(--bg-sel);color:var(--fg-head)}
+.acme-win{border:1px solid var(--border);margin-bottom:var(--sp-5)}
+.acme-body{background:var(--bg);padding:var(--sp-5) var(--sp-5) var(--sp-5) var(--sp-7);font-family:var(--font-mono);font-size:0.8125remrem;line-height:1.7;color:var(--fg-body);position:relative}
+.acme-body::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--worm-track);border-right:1px solid var(--border-lt)}
+
+/* Code block */
+.code-block{background:var(--bg-code);padding:var(--sp-5) var(--sp-5) var(--sp-5) var(--sp-7);font-family:var(--font-mono);font-size:0.8125remrem;line-height:1.7;color:var(--fg-code);overflow-x:auto;position:relative;border:1px solid rgba(0,0,0,.2);margin-bottom:var(--sp-5)}
+.code-block::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--worm)}
+.tkw{color:var(--sol-green)}.tst{color:var(--sol-cyan)}.tnu{color:var(--sol-magenta)}
+.tcm{color:var(--sol-base01);font-style:italic}.tfn{color:var(--sol-blue)}
+.tva{color:var(--sol-yellow)}.tty{color:var(--sol-orange)}
+
+/* Spec table */
+.spec-table{width:100%;border-collapse:collapse;font-size:0.8125remrem;margin-bottom:var(--sp-5)}
+.spec-table th{background:var(--bg-titlebar);color:var(--fg-on-dark);padding:var(--sp-3) var(--sp-4);text-align:left;font-family:var(--font-mono);font-size:0.6875remrem;text-transform:uppercase;letter-spacing:.08em}
+.spec-table td{padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--border-lt);color:var(--fg-body);vertical-align:top}
+.spec-table tr:nth-child(even) td{background:var(--bg-surface)}
+.spec-table tr:hover td{background:var(--bg-sel)}
+.spec-table .key{font-family:var(--font-mono);font-size:0.7500remrem;color:var(--primary)}
+.spec-table .note{font-size:0.7500remrem;color:var(--fg-muted);margin-top:3px}
+
+/* Key badge */
+.kbd{display:inline-block;font-family:var(--font-mono);font-size:0.6875remrem;font-weight:700;padding:1px 6px;border:1px solid var(--border);background:var(--bg-surface);color:var(--fg-head);border-radius:2px;border-bottom-width:2px;white-space:nowrap}
+[data-theme="dark"] .kbd{background:var(--bg-surface);border-color:var(--border-lt)}
+
+/* Decision block */
+.decision{border-left:3px solid var(--primary);padding:var(--sp-4) var(--sp-5);margin-bottom:var(--sp-4);background:color-mix(in srgb,var(--primary) 6%,transparent)}
+.decision-head{font-family:var(--font-mono);font-size:0.6875remrem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--primary);margin-bottom:var(--sp-2)}
+.decision-body{font-size:0.8750remrem;color:var(--fg-body);line-height:1.7}
+
+/* Do/don't */
+.rule-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin-bottom:var(--sp-5)}
+.rule-do{border:1px solid var(--success);padding:var(--sp-4)}
+.rule-dont{border:1px solid var(--danger);padding:var(--sp-4)}
+.rule-lbl{font-family:var(--font-mono);font-size:0.6875remrem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:var(--sp-3)}
+.rule-do .rule-lbl{color:var(--success)}
+.rule-dont .rule-lbl{color:var(--danger)}
+[data-theme="dark"] .rule-do .rule-lbl{color:#3dddaa}
+[data-theme="dark"] .rule-dont .rule-lbl{color:#f07060}
+.rule-body{font-size:0.8125remrem;color:var(--fg-body);line-height:1.7}
+
+/* Context menu demo */
+.ctx-menu{background:var(--bg);border:1px solid var(--border);min-width:180px;display:inline-block}
+.ctx-item{padding:var(--sp-2) var(--sp-5) var(--sp-2) var(--sp-4);font-family:var(--font-mono);font-size:0.8125remrem;color:var(--fg-body);display:flex;justify-content:space-between;align-items:center;gap:var(--sp-5);cursor:pointer;border-bottom:1px solid var(--border-lt)}
+.ctx-item:last-child{border-bottom:none}
+.ctx-item:hover{background:var(--bg-sel);color:var(--fg-head)}
+.ctx-item.ctx-disabled{color:var(--fg-faint);cursor:default}
+.ctx-item.ctx-disabled:hover{background:transparent;color:var(--fg-faint)}
+.ctx-sep{border-bottom:1px solid var(--border);margin:0}
+.ctx-accel{font-size:0.6875remrem;color:var(--fg-faint);font-family:var(--font-mono)}
+.ctx-item:hover .ctx-accel{color:var(--fg-muted)}
+
+/* Interactive worm demo */
+.worm-demo{display:flex;gap:var(--sp-5);align-items:stretch}
+.worm-strip-demo{width:8px;background:var(--worm-track);border-right:1px solid var(--border-lt);position:relative;cursor:pointer;flex-shrink:0}
+.worm-thumb{position:absolute;left:0;right:0;background:var(--worm)}
+
+/* Badge */
+.badge{display:inline-block;padding:2px var(--sp-3);font-family:var(--font-mono);font-size:0.6875remrem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:1px solid}
+.badge-ok{background:color-mix(in srgb,var(--success) 12%,transparent);border-color:color-mix(in srgb,var(--success) 35%,transparent);color:var(--success)}
+.badge-info{background:color-mix(in srgb,var(--primary) 12%,transparent);border-color:color-mix(in srgb,var(--primary) 35%,transparent);color:var(--primary)}
+.badge-warn{background:color-mix(in srgb,var(--warning) 12%,transparent);border-color:color-mix(in srgb,var(--warning) 35%,transparent);color:var(--warning)}
+.badge-crit{background:color-mix(in srgb,var(--danger) 12%,transparent);border-color:color-mix(in srgb,var(--danger) 35%,transparent);color:var(--danger)}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--worm-track)}
+::-webkit-scrollbar-thumb{background:var(--worm)}
+
+/* ── FORCED COLORS (Windows High Contrast / Apple Increase Contrast) ──────
+   Overrides Solarized palette with OS-mandated system colors.
+   Required for federal procurement and WCAG 1.4.11.               */
+@media (forced-colors: active) {
+  :root {
+    --bg:          Canvas;
+    --bg-surface:  Canvas;
+    --bg-tag:      Canvas;
+    --bg-sel:      Highlight;
+    --fg-head:     CanvasText;
+    --fg-body:     CanvasText;
+    --fg-muted:    CanvasText;
+    --fg-faint:    GrayText;
+    --fg-on-dark:  CanvasText;
+    --border:      ButtonText;
+    --border-lt:   ButtonText;
+    --border-tag:  ButtonText;
+    --primary:     Highlight;
+    --success:     CanvasText;
+    --warning:     CanvasText;
+    --danger:      CanvasText;
+    --worm:        ButtonText;
+    --worm-track:  Canvas;
+  }
+  .cde-bar, .sb-brand, .tag-bar, .acme-win,
+  .card-head, .chdr, .badge, .alert,
+  .btn, .inp, .inp-ghost, .data-table th,
+  .dtbl th, .spec-table th { forced-color-adjust: none; }
+  .skip-link:focus-visible { outline: 3px solid Highlight; }
+  *:focus-visible { outline: 2px solid Highlight; outline-offset: 2px; }
+}
+
+/* ── POINTER: COARSE (tablet / touch contexts) ─────────────────────────────
+   Desktop/tablet first. Coarse pointer = touch. Increase hit targets to 44px.
+   Tag-bar commands, worm strip, nav links, buttons all benefit.    */
+@media (pointer: coarse) {
+  .tag-cmd           { padding: var(--sp-3) var(--sp-4); min-height: 44px;
+                       display: inline-flex; align-items: center; }
+  .ctag .tag-cmd     { min-height: 38px; padding: var(--sp-2) var(--sp-4); }
+  .nav-link          { padding-top: var(--sp-3); padding-bottom: var(--sp-3); min-height: 44px; }
+  .worm-strip-demo   { width: 16px; min-width: 16px; }
+  .worm-global       { width: 10px; }
+  .sidebar::after    { width: 10px; }
+  .btn               { min-height: 44px; padding: var(--sp-3) var(--sp-5); }
+  .inp               { min-height: 44px; padding: var(--sp-3) var(--sp-4); }
+  .cde-btn, .cdecb   { width: 44px; height: 44px; font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="cde-bar">
+  <div class="cde-logo">
+    <span style="display:flex;gap:3px">
+      <span style="width:7px;height:7px;border-radius:50%;background:#e69f00"></span>
+      <span style="width:7px;height:7px;border-radius:50%;background:#56b4e9"></span>
+      <span style="width:7px;height:7px;border-radius:50%;background:#009e73"></span>
+      <span style="width:7px;height:7px;border-radius:50%;background:#d55e00"></span>
+    </span>
+    UNIFIED
+  </div>
+  <div class="cde-title">Common User Access &mdash; Specification v1.0</div>
+  <div class="cde-meta">
+    <span style="font-family:var(--font-mono);font-size:0.6250remrem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em">Not IBM CUA &mdash; Acme/CDE/POSIX heritage</span>
+  </div>
+  <div class="cde-theme">
+    <button id="btn-light" class="active" onclick="setTheme('light','btn-light')">&#9728; Light</button>
+    <button id="btn-dark"  onclick="setTheme('dark','btn-dark')">&#9773; Dark</button>
+  </div>
+</div>
+
+<div class="page-wrap">
+<nav class="sidebar" aria-label="CUA specification navigation">
+  <div class="sb-brand">
+    <div style="font-family:var(--font-mono);font-size:0.6250remrem;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.5);margin-bottom:var(--sp-2)">CUA Spec</div>
+    <div style="font-family:var(--font-ui);font-size:1.2500remrem;font-weight:700;color:#fff">Unified</div>
+    <div style="font-family:var(--font-mono);font-size:0.6875remrem;color:rgba(255,255,255,.42);margin-top:3px">v1.0 &mdash; 2026</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-lbl">Foundations</div>
+    <a class="nav-link active" href="#principles"><span class="nav-dot" style="background:var(--oi-blue)" aria-hidden="true"></span>Principles</a>
+    <a class="nav-link" href="#decisions"><span class="nav-dot" style="background:var(--oi-orange)" aria-hidden="true"></span>Design decisions</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-lbl">Input models</div>
+    <a class="nav-link" href="#mouse"><span class="nav-dot" style="background:var(--p9-scroll)" aria-hidden="true"></span>Mouse model</a>
+    <a class="nav-link" href="#keyboard"><span class="nav-dot" style="background:var(--cde-teal)" aria-hidden="true"></span>Keyboard</a>
+    <a class="nav-link" href="#context"><span class="nav-dot" style="background:var(--oi-pink)" aria-hidden="true"></span>Context menu</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-lbl">Tag-bar system</div>
+    <a class="nav-link" href="#tagbar"><span class="nav-dot" style="background:var(--sol-cyan)" aria-hidden="true"></span>Tag-bar grammar</a>
+    <a class="nav-link" href="#commands"><span class="nav-dot" style="background:var(--sol-green)" aria-hidden="true"></span>Command registry</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-lbl">Focus &amp; state</div>
+    <a class="nav-link" href="#focus"><span class="nav-dot" style="background:var(--oi-vermillion)" aria-hidden="true"></span>Focus model</a>
+    <a class="nav-link" href="#selection"><span class="nav-dot" style="background:var(--sol-yellow)" aria-hidden="true"></span>Selection model</a>
+    <a class="nav-link" href="#worm"><span class="nav-dot" style="background:var(--p9-scroll)" aria-hidden="true"></span>Worm strip</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-lbl">Affordances</div>
+    <a class="nav-link" href="#affordances"><span class="nav-dot" style="background:var(--oi-blue)" aria-hidden="true"></span>Interactive signals</a>
+    <a class="nav-link" href="#feedback"><span class="nav-dot" style="background:var(--oi-green)" aria-hidden="true"></span>System feedback</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-lbl">HTMX</div>
+    <a class="nav-link" href="#htmx-cua"><span class="nav-dot" style="background:var(--oi-orange)" aria-hidden="true"></span>HTMX interaction</a>
+
+    <a class="nav-link" href="#conformance"><span class="nav-dot" style="background:var(--oi-green)" aria-hidden="true"></span>Conformance</a>
+    <a class="nav-link" href="#agents"><span class="nav-dot" style="background:var(--oi-pink)" aria-hidden="true"></span>Agent / util tier</a>
+  </div>
+</nav>
+
+<main class="main" id="main-content">
+  <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Common User Access &#8212; Unified CUA Specification v1.0</h1>
+  <!-- Aria-live regions — always present, visually hidden -->
+  <div id="live-status" aria-live="polite"   aria-atomic="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"></div>
+  <div id="live-error"  aria-live="assertive" aria-atomic="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"></div>
+  <div class="ctag">
+    <strong>/sys/unified/cua</strong>
+    <span class="tag-cmd">Get</span><span class="tag-cmd">Look</span>
+    <span style="flex:1"></span>
+    <span style="color:var(--fg-faint)">Mouse: B1/B2+ctx &middot; Keys: CDE-style &middot; Focus: Acme &middot; Revert not Undo</span>
+  </div>
+  <div class="cb">
+
+<section class="section" id="principles">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Principles</h2>
+  <p class="prose">This is the Unified CUA &mdash; Common User Access specification for applications built against the Unified Design System. It is not IBM's 1987 CUA. It inherits from three sources: Plan&nbsp;9/Acme's interaction model, CDE's keyboard convention, and POSIX accessibility requirements. Where these conflict, the order of precedence is: accessibility &gt; Acme &gt; CDE.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin-bottom:var(--sp-6)">
+    <div class="decision">
+      <div class="decision-head">Principle 1 &mdash; Text is the interface</div>
+      <div class="decision-body">Every action available by mouse must be expressible as visible text in the tag bar. If you can't type it, it shouldn't exist only as a gesture. Commands are not hidden in menus &mdash; they live in the tag bar where they can be seen, clicked, or keybound.</div>
+    </div>
+    <div class="decision">
+      <div class="decision-head">Principle 2 &mdash; User initiates</div>
+      <div class="decision-body">The system never moves focus without explicit user action. After an HTMX swap, after a validation response, after any server-side event: focus stays where it was. The user decides what happens next. This is the Acme model and also WCAG 2.4.3.</div>
+    </div>
+    <div class="decision">
+      <div class="decision-head">Principle 3 &mdash; No mode confusion</div>
+      <div class="decision-body">There are no hidden modes. What is clickable looks clickable. What is editable signals its editability (pip + underline). What is disabled shows as disabled. The system state is always legible from the screen without memory or inference.</div>
+    </div>
+    <div class="decision">
+      <div class="decision-head">Principle 4 &mdash; No animations</div>
+      <div class="decision-body">State changes are instantaneous. No transitions, no fades, no slides. The heritage is terminal &mdash; terminals redraw. The only exception is <code style="font-family:var(--font-mono);font-size:0.7500remrem">prefers-reduced-motion</code>-guarded motion that serves a genuine spatial orientation purpose (e.g., a modal appearing). Even then, default off.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="decisions">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Design decisions</h2>
+
+  <div class="ssub">Stakeholder register &#8212; IEEE&#160;42010</div>
+  <p class="prose">Architecture descriptions must identify who has concerns about the system. These stakeholders informed every decision in this specification.</p>
+  <table class="spec-table">
+    <thead><tr><th>Stakeholder</th><th>Primary concerns</th><th>Represented by</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Practitioner-developer</td><td>Coherence, productivity, no framework lock-in, HTMX compatibility</td><td>Decision 1 (mouse), Decision 2 (keyboard), utility-first CSS</td></tr>
+      <tr><td class="key">DPS contractor</td><td>Legible token architecture, conformance criteria, component predictability</td><td>Token layer, conformance section, component anatomies</td></tr>
+      <tr><td class="key">RT4 TWG member</td><td>Accessible output, print quality, agent-consumable HTML</td><td>A11y pass, @media print, agent/util tier section</td></tr>
+      <tr><td class="key">Agentic workforce</td><td>Semantic HTML structure, data-* attributes, typed HTMX fragments, command vocabulary</td><td>Agent section, MIME fragment types, command registry</td></tr>
+      <tr><td class="key">Screen reader user</td><td>ARIA landmarks, focus model, skip links, label association</td><td>Decision 3 (focus), a11y pass, aria-live regions</td></tr>
+      <tr><td class="key">Print / export consumer</td><td>Chrome-free output, correct heading hierarchy, readable type scale</td><td>@media print, h1 requirement, font-size rem conversion</td></tr>
+      <tr><td class="key">Plan&#160;9 / 9front developer</td><td>Heritage fidelity, Acme window model, worm strip, tag-bar grammar</td><td>Acme primitives, tag-bar grammar, worm specification</td></tr>
+    </tbody>
+  </table>
+  <p class="prose">These are the three architectural decisions that define the system. They are fixed. Derived specifications (keyboard bindings, context menu contents, focus rules) follow from them.</p>
+
+
+  <div class="ssub">ISO 9241-110 correspondence</div>
+  <p class="prose">ISO 9241-110 defines seven interaction design principles. The Unified CUA satisfies all seven. This table makes the correspondence explicit &#8212; the system was designed from heritage rationale, not from the standard, but converges with it independently.</p>
+  <table class="spec-table">
+    <thead><tr><th>ISO 9241-110 principle</th><th>Unified CUA expression</th><th>Where specified</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Suitability for the task</td><td>Tag-bar commands map directly to HTTP verbs; the interface grammar fits server-rendered HTMX without impedance mismatch.</td><td>Tag-bar grammar, command registry</td></tr>
+      <tr><td class="key">Self-descriptiveness</td><td>Principle 1: text is the interface. Every action is visible text. No hidden modes, no hover-only affordances.</td><td>Principle 1, affordances table</td></tr>
+      <tr><td class="key">Conformity with user expectations</td><td>CDE-style keyboard (Tab, Enter, Escape, Alt+key) matches conventions users already know. Reserved shortcuts are never overridden.</td><td>Keyboard model, reserved shortcuts table</td></tr>
+      <tr><td class="key">Learnability</td><td>Tag-bar commands are visible and consistent across all windows. Alt+key mnemonics are derivable from command names. Context menu accelerators are always shown.</td><td>Tag-bar grammar, context menu rules</td></tr>
+      <tr><td class="key">Controllability</td><td>Principle 2: user initiates. Focus is never moved without explicit action. HTMX swaps never auto-focus. Revert is always available.</td><td>Decision 3, focus model</td></tr>
+      <tr><td class="key">Error tolerance</td><td>Revert command recovers from unwanted changes. Inline confirmation (not modal dialogs) for destructive actions. Aria-live regions announce errors without interrupting flow.</td><td>Command registry, feedback section</td></tr>
+      <tr><td class="key">Engagement (formerly suitability for individualisation)</td><td>Tag-bar command vocabulary is extensible per application. Branding layer (--bg-titlebar, --primary) is overridable. Font-size is rem-based, respecting user system preferences.</td><td>Usage rules, token layer, font-size rem</td></tr>
+    </tbody>
+  </table>
+  <div class="decision" style="border-color:var(--sol-cyan)">
+    <div class="decision-head" style="color:var(--sol-cyan)">Decision 1 &mdash; Mouse model: Acme-inspired B1/B2 <span class="badge badge-ok" style="font-size:0.625rem;vertical-align:middle;margin-left:0.5rem">ADR-001 &middot; decided &middot; 2026-Q2</span></div>
+    <div class="decision-body">
+      <strong>Button 1 (left click):</strong> Select text, position cursor, activate focused element.<br>
+      <strong>Button 2 (right click):</strong> Open context menu at pointer position.<br>
+      <strong>Middle click:</strong> Execute tag-bar command under pointer if present; paste primary selection in text fields. Never required &mdash; always optional.<br><br>
+      Full Acme B2-execute and B3-search are not implemented. Tag-bar commands replace B2-execute. <code style="font-family:var(--font-mono);font-size:0.7500remrem">Look</code> replaces B3-search. Chording is not defined.
+    </div>
+  </div>
+
+  <div class="decision" style="border-color:var(--cde-teal)">
+    <div class="decision-head" style="color:var(--cde-teal)">Decision 2 &mdash; Keyboard: CDE-style with Acme mnemonics <span class="badge badge-ok" style="font-size:0.625rem;vertical-align:middle;margin-left:0.5rem">ADR-002 &middot; decided &middot; 2026-Q2</span></div>
+    <div class="decision-body">
+      Standard POSIX traversal (Tab/Shift+Tab, Enter, Escape, Space) as the baseline.<br>
+      <code style="font-family:var(--font-mono);font-size:0.7500remrem">Alt+key</code> mnemonics derived from tag-bar command names, not from IBM menu structure.<br>
+      No modal layers. No vi-style normal/insert split. Keyboard and mouse are always equivalent &mdash; neither is primary.
+    </div>
+  </div>
+
+  <div class="decision" style="border-color:var(--oi-orange)">
+    <div class="decision-head" style="color:var(--oi-orange)">Decision 3 &mdash; Focus model: Acme (user-initiated only) <span class="badge badge-ok" style="font-size:0.625rem;vertical-align:middle;margin-left:0.5rem">ADR-003 &middot; decided &middot; 2026-Q2</span></div>
+    <div class="decision-body">
+      Focus is never moved programmatically except by explicit user action or initial page load.<br>
+      HTMX swaps never auto-focus the swapped content.<br>
+      Modals (if used) set focus to the first interactive element on open, and return focus to the trigger on close. This is the only server-permitted focus movement.
+    </div>
+  </div>
+</section>
+
+<section class="section" id="mouse">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Mouse model</h2>
+  <p class="prose">Two-button model. Middle click is supported but never required. The context menu (right click) is the bridge between the Acme tag-bar model and the platform convention users expect.</p>
+
+  <div class="ssub">Button assignments</div>
+  <table class="spec-table">
+    <thead><tr><th>Button</th><th>Action</th><th>In tag bar</th><th>In text field</th><th>In worm strip</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="key">B1<br>Left</td>
+        <td>Select / activate. Click = position cursor. Drag = extend selection. Double-click = select word. Triple-click = select line.</td>
+        <td>Activate tag-bar command. Click path = navigate if href present.</td>
+        <td>Position insertion point. Drag = select text.</td>
+        <td>Scroll window to proportional position of click within strip height.</td>
+      </tr>
+      <tr>
+        <td class="key">B2<br>Right</td>
+        <td>Open context menu at pointer position. Menu contents depend on target element and current selection.</td>
+        <td>Context menu: Copy path, Look (search for path), application-specific commands.</td>
+        <td>Context menu: Copy, Cut, Paste, Look, separator, field-specific commands.</td>
+        <td>Context menu: Scroll to top, Scroll to bottom.</td>
+      </tr>
+      <tr>
+        <td class="key">B3<br>Middle</td>
+        <td>Optional and platform-dependent. This convention originates in Plan&#160;9 (B2+B3 chord to paste the snarf buffer) and was adopted by X11 as middle-click paste of the PRIMARY selection. It is not available on macOS or Windows, is compositor-dependent on Wayland, and is not implementable via browser clipboard APIs. Never require this behavior &#8212; keyboard equivalents (Ctrl+V, Alt+R) must always coexist.</td>
+        <td>Execute command token under pointer (Acme B2 behavior, optional).</td>
+        <td>Paste primary selection (X11 convention, platform-dependent).</td>
+        <td>Not defined.</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <div class="ssub">Drag and drop &#8212; permitted extension</div>
+  <p class="prose">Drag and drop is <strong>not specified by the Unified CUA</strong> and is not a force multiplier across the system&#8217;s use cases: Plan&#160;9 has no DnD concept (everything is addressable by path via the plumber), agents do not drag DOM elements, and static documents have no state to reorder. HTMX does not natively support <code style="font-family:var(--font-mono);font-size:0.75rem">hx-trigger=&quot;drop&quot;</code>, requiring JS beyond the system baseline.</p>
+  <p class="prose">Implementers <em>may</em> add DnD to specific surfaces (a sortable table, a file upload target) where it provides genuine value. Two requirements apply: (1)&#160;a command-based equivalent must always coexist &#8212; drag-to-reorder&#160;=&#160;<code style="font-family:var(--font-mono);font-size:0.75rem">Move</code>&#160;+ target path; drag-to-upload&#160;=&#160;<code style="font-family:var(--font-mono);font-size:0.75rem">Put</code> with file as body; (2)&#160;visual feedback during drag must use border change and background tint only &#8212; no animation, consistent with the no-motion principle.</p>
+  <div class="ssub">Click targets and hit areas</div>
+  <p class="prose">Every interactive element must have a minimum hit area of 24&times;24px. Tag-bar commands are inline text &mdash; their hit area extends to the surrounding whitespace (4px each side, 2px top/bottom). The worm strip minimum interactive width is 8px even if rendered at 5px (CSS <code style="font-family:var(--font-mono);font-size:0.7500remrem">padding</code> or transparent border on the parent achieves this).</p>
+
+  <div class="rule-grid">
+    <div class="rule-do"><div class="rule-lbl">&#10003; Do</div><div class="rule-body">Make tag-bar command tokens visually distinct from path text. Color: <code style="font-family:var(--font-mono)">fg-faint</code>. Hover: <code style="font-family:var(--font-mono)">bg-sel</code> fill. The visual change is the affordance.</div></div>
+    <div class="rule-dont"><div class="rule-lbl">&#10007; Don't</div><div class="rule-body">Use hover-only tooltips as the sole indication that something is clickable. Tooltips are supplementary. The visual state of the element must communicate clickability.</div></div>
+    <div class="rule-do"><div class="rule-lbl">&#10003; Do</div><div class="rule-body">Implement worm strip click-to-scroll. One event listener on the strip element, calculate <code style="font-family:var(--font-mono)">clickY / stripHeight</code>, multiply by <code style="font-family:var(--font-mono)">scrollHeight</code>, set <code style="font-family:var(--font-mono)">scrollTop</code>.</div></div>
+    <div class="rule-dont"><div class="rule-lbl">&#10007; Don't</div><div class="rule-body">Implement hover-to-show controls. If an action is available, its trigger must be visible at rest. Hover-reveal violates Principle 3 (no mode confusion).</div></div>
+  </div>
+</section>
+
+<section class="section" id="keyboard">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Keyboard model</h2>
+  <p class="prose">CDE-style keyboard navigation: standard POSIX traversal as baseline, <code style="font-family:var(--font-mono);font-size:0.7500remrem">Alt+key</code> mnemonics derived from tag-bar command names. No modal layers. No application-global shortcuts that conflict with browser defaults.</p>
+
+  <div class="ssub">Universal bindings &mdash; all contexts</div>
+  <table class="spec-table">
+    <thead><tr><th>Key</th><th>Action</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><span class="kbd">Tab</span></td><td>Move focus to next interactive element in document order.</td><td>Standard POSIX. Never suppress or reorder tab flow without a documented reason.</td></tr>
+      <tr><td><span class="kbd">Shift</span>+<span class="kbd">Tab</span></td><td>Move focus to previous interactive element.</td><td>Standard POSIX.</td></tr>
+      <tr><td><span class="kbd">Enter</span></td><td>Activate focused element (button, link, tag-bar command, select option).</td><td>On multi-line textarea: insert newline. On single-line input: submit associated form or trigger hx-trigger if defined.</td></tr>
+      <tr><td><span class="kbd">Space</span></td><td>Activate focused button or checkbox. Scroll page if no interactive focus.</td><td>Standard POSIX. Do not intercept Space in text inputs.</td></tr>
+      <tr><td><span class="kbd">Escape</span></td><td>Dismiss context menu, close modal if open, cancel current input if field has a cancel affordance.</td><td>Never navigate away or lose unsaved data on Escape without confirmation.</td></tr>
+      <tr><td><span class="kbd">F10</span></td><td>Move focus to tag-bar of current acme-win (if present). First command token receives focus.</td><td>CDE convention: F10 = menu bar. We map to tag bar as the equivalent.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ssub">Alt+ mnemonic bindings &mdash; tag-bar commands</div>
+  <p class="prose">Mnemonics derive from tag-bar command names, not from IBM's menu structure. The underlined letter is the mnemonic key. Applications may define additional Alt+ bindings for application-specific commands; they must not conflict with the reserved set below.</p>
+  <table class="spec-table">
+    <thead><tr><th>Key</th><th>Command</th><th>Equivalent to</th><th>Available when</th></tr></thead>
+    <tbody>
+      <tr><td><span class="kbd">Alt</span>+<span class="kbd">G</span></td><td><strong><u>G</u></strong>et</td><td>Tag-bar Get command</td><td>Tag bar present with Get command</td></tr>
+      <tr><td><span class="kbd">Alt</span>+<span class="kbd">P</span></td><td><strong><u>P</u></strong>ut</td><td>Tag-bar Put command</td><td>Tag bar present with Put command</td></tr>
+      <tr><td><span class="kbd">Alt</span>+<span class="kbd">L</span></td><td><strong><u>L</u></strong>ook</td><td>Tag-bar Look command</td><td>Always (searches current selection or prompts)</td></tr>
+      <tr><td><span class="kbd">Alt</span>+<span class="kbd">K</span></td><td><strong><u>K</u></strong>ill</td><td>Tag-bar Kill command</td><td>Tag bar present with Kill command</td></tr>
+      <tr><td><span class="kbd">Alt</span>+<span class="kbd">R</span></td><td><strong><u>R</u></strong>evert</td><td>Tag-bar Revert command</td><td>Tag bar present with Revert command</td></tr>
+      <tr><td><span class="kbd">Alt</span>+<span class="kbd">N</span></td><td><strong><u>N</u></strong>ewcol</td><td>Tag-bar Newcol command</td><td>Column layout present</td></tr>
+      <tr><td><span class="kbd">Alt</span>+<span class="kbd">D</span></td><td><strong><u>D</u></strong>ump</td><td>Tag-bar Dump command</td><td>Tag bar present with Dump command</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ssub">Text editing bindings &mdash; input fields only</div>
+  <table class="spec-table">
+    <thead><tr><th>Key</th><th>Action</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><span class="kbd">Ctrl</span>+<span class="kbd">A</span></td><td>Select all text in field.</td><td>Standard. Do not override at application level.</td></tr>
+      <tr><td><span class="kbd">Ctrl</span>+<span class="kbd">C</span></td><td>Copy selection to clipboard.</td><td>Standard.</td></tr>
+      <tr><td><span class="kbd">Ctrl</span>+<span class="kbd">X</span></td><td>Cut selection to clipboard.</td><td>Standard.</td></tr>
+      <tr><td><span class="kbd">Ctrl</span>+<span class="kbd">V</span></td><td>Paste from clipboard.</td><td>Standard.</td></tr>
+      <tr><td><span class="kbd">Ctrl</span>+<span class="kbd">Z</span></td><td>Undo last edit in field.</td><td>Browser-native. Do not suppress.</td></tr>
+      <tr><td><span class="kbd">&#8592;</span> <span class="kbd">&#8594;</span></td><td>Move cursor by character.</td><td>Standard.</td></tr>
+      <tr><td><span class="kbd">Ctrl</span>+<span class="kbd">&#8592;</span> <span class="kbd">Ctrl</span>+<span class="kbd">&#8594;</span></td><td>Move cursor by word.</td><td>Standard.</td></tr>
+      <tr><td><span class="kbd">Home</span> / <span class="kbd">End</span></td><td>Move to start/end of line.</td><td>Standard.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ssub">Focus ring specification</div>
+  <p class="prose">Focus rings are always visible when navigating by keyboard (<code style="font-family:var(--font-mono);font-size:0.7500remrem">:focus-visible</code>). They use <code style="font-family:var(--font-mono);font-size:0.7500remrem">outline: 2px solid var(--primary)</code> with <code style="font-family:var(--font-mono);font-size:0.7500remrem">outline-offset: 2px</code>. No custom focus styles that reduce visibility. Focus rings on CDE titlebar controls use white outline (<code style="font-family:var(--font-mono);font-size:0.7500remrem">outline-color: rgba(255,255,255,.8)</code>) since they sit on a dark surface.</p>
+
+  <div class="demo">
+    <div style="display:flex;gap:var(--sp-5);align-items:center;flex-wrap:wrap">
+      <button style="background:var(--primary);color:#fff;padding:7px var(--sp-5);border:none;font-family:var(--font-ui);font-size:0.8750remrem;font-weight:600;outline:2px solid var(--primary);outline-offset:2px;cursor:pointer">Keyboard focus</button>
+      <input style="background:var(--bg);border:1.5px solid var(--primary);padding:7px var(--sp-4);font-family:var(--font-mono);font-size:0.8125remrem;color:var(--fg-body);outline:2px solid var(--primary);outline-offset:2px;box-shadow:0 0 0 2px color-mix(in srgb,var(--primary) 20%,transparent);width:200px" placeholder="Input focused" value="Focused" aria-label="Focused input demonstration">
+      <span class="tag-cmd" style="background:var(--bg-sel);color:var(--fg-head);outline:2px solid var(--primary);outline-offset:2px">Look</span>
+    </div>
+    <div style="margin-top:var(--sp-3);font-family:var(--font-mono);font-size:0.6875remrem;color:var(--fg-faint)">Focus ring: 2px solid --primary, offset 2px. Input also shows bg-sel fill and primary border.</div>
+  </div>
+
+
+  <div class="ssub">Divergence from GNOME HIG keyboard conventions</div>
+  <p class="prose">The Unified CUA derives keyboard bindings from Acme and CDE heritage, not from GNOME. The following conflicts exist and are intentional. Implementers deploying in GNOME desktop environments should be aware of them.</p>
+  <table class="spec-table">
+    <thead><tr><th>Key</th><th>GNOME HIG meaning</th><th>Unified CUA meaning</th><th>Resolution</th></tr></thead>
+    <tbody>
+      <tr><td><span class="kbd">F10</span></td><td>Opens the primary or secondary app menu</td><td>Focus tag-bar of current acme-win</td><td>Unified wins. Tag-bar <em>is</em> the primary menu surface in this system.</td></tr>
+      <tr><td><span class="kbd">Ctrl+G</span></td><td>Find next search result</td><td>No conflict &#8212; we use <span class="kbd">Alt+G</span> for Get</td><td>No conflict. Different modifier.</td></tr>
+      <tr><td><span class="kbd">Ctrl+R</span></td><td>Reload current view</td><td>Reserved browser shortcut &#8212; not used</td><td>Ctrl+R is in the reserved list. Our Revert uses <span class="kbd">Alt+R</span>.</td></tr>
+      <tr><td><span class="kbd">F9</span></td><td>Toggle utility pane visibility</td><td>Not defined in Unified CUA</td><td>Implementers may adopt F9 for sidebar toggle where a sidebar is present.</td></tr>
+      <tr><td><span class="kbd">Ctrl+,</span></td><td>Open preferences window</td><td>Not defined in Unified CUA</td><td>Implementers may adopt Ctrl+, for application settings if applicable.</td></tr>
+    </tbody>
+  </table>
+  <div class="ssub">Reserved &mdash; do not override</div>
+  <p class="prose">These browser and platform shortcuts must never be intercepted by application code:</p>
+  <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap;margin-bottom:var(--sp-5)">
+    <span class="kbd">Ctrl+T</span> <span class="kbd">Ctrl+W</span> <span class="kbd">Ctrl+N</span>
+    <span class="kbd">Ctrl+R</span> <span class="kbd">Ctrl+F</span> <span class="kbd">Ctrl+P</span>
+    <span class="kbd">Ctrl+S</span> <span class="kbd">Alt+F4</span> <span class="kbd">Alt+Left</span>
+    <span class="kbd">Alt+Right</span> <span class="kbd">F5</span> <span class="kbd">F11</span> <span class="kbd">F12</span>
+  </div>
+</section>
+
+<section class="section" id="context">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Context menu</h2>
+  <p class="prose">The context menu (right-click / B2) is the bridge between Acme's tag-bar model and platform convention. It must contain only actions that are also available elsewhere &mdash; in the tag bar, by keyboard, or by direct manipulation. The context menu is never the sole access point for an action.</p>
+
+  <div class="ssub">Menu structure</div>
+  <p class="prose">Four layers, in order. Each layer is separated by a visual divider. Omit layers that have no applicable items &mdash; never show empty groups.</p>
+
+  <div style="display:flex;gap:var(--sp-6);align-items:flex-start;flex-wrap:wrap;margin-bottom:var(--sp-5)">
+    <div>
+      <div class="lsm" style="margin-bottom:var(--sp-3)">Text / selection context</div>
+      <div class="ctx-menu">
+        <div class="ctx-item"><span>Copy</span><span class="ctx-accel">Ctrl+C</span></div>
+        <div class="ctx-item"><span>Cut</span><span class="ctx-accel">Ctrl+X</span></div>
+        <div class="ctx-item"><span>Paste</span><span class="ctx-accel">Ctrl+V</span></div>
+        <div class="ctx-sep"></div>
+        <div class="ctx-item"><span><u>L</u>ook</span><span class="ctx-accel">Alt+L</span></div>
+        <div class="ctx-sep"></div>
+        <div class="ctx-item"><span><u>G</u>et</span><span class="ctx-accel">Alt+G</span></div>
+        <div class="ctx-item"><span><u>P</u>ut</span><span class="ctx-accel">Alt+P</span></div>
+        <div class="ctx-sep"></div>
+        <div class="ctx-item ctx-disabled"><span>Application action</span><span class="ctx-accel">Alt+?</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="lsm" style="margin-bottom:var(--sp-3)">Tag bar / path context</div>
+      <div class="ctx-menu">
+        <div class="ctx-item"><span>Copy path</span><span class="ctx-accel">Ctrl+C</span></div>
+        <div class="ctx-sep"></div>
+        <div class="ctx-item"><span><u>L</u>ook</span><span class="ctx-accel">Alt+L</span></div>
+        <div class="ctx-sep"></div>
+        <div class="ctx-item"><span><u>G</u>et</span><span class="ctx-accel">Alt+G</span></div>
+        <div class="ctx-item"><span><u>P</u>ut</span><span class="ctx-accel">Alt+P</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="lsm" style="margin-bottom:var(--sp-3)">Empty / no selection</div>
+      <div class="ctx-menu">
+        <div class="ctx-item ctx-disabled"><span>Copy</span><span class="ctx-accel">Ctrl+C</span></div>
+        <div class="ctx-item ctx-disabled"><span>Cut</span><span class="ctx-accel">Ctrl+X</span></div>
+        <div class="ctx-item"><span>Paste</span><span class="ctx-accel">Ctrl+V</span></div>
+        <div class="ctx-sep"></div>
+        <div class="ctx-item"><span>Select all</span><span class="ctx-accel">Ctrl+A</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ssub">Context menu rules</div>
+  <table class="spec-table">
+    <thead><tr><th>Rule</th><th>Specification</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Layer order</td><td>1. Clipboard operations (Copy, Cut, Paste). 2. Look (search/plumb). 3. Tag-bar universal commands (Get, Put, Kill, Undo). 4. Application-specific commands. Each layer separated by <code style="font-family:var(--font-mono);font-size:0.7500remrem">&lt;hr class="ctx-sep"&gt;</code>. Omit empty layers entirely.</td></tr>
+      <tr><td class="key">Disabled items</td><td>Show with <code style="font-family:var(--font-mono)">fg-faint</code> color and <code style="font-family:var(--font-mono)">cursor: default</code>. Do not hide disabled items &mdash; their presence tells the user the action exists but isn't available now. Reason for disabled state shown as tooltip on hover.</td></tr>
+      <tr><td class="key">Accelerators</td><td>Always show <code style="font-family:var(--font-mono)">Alt+key</code> accelerator for any item that has one. Right-aligned, <code style="font-family:var(--font-mono)">fg-faint</code>. This is how users discover keyboard shortcuts.</td></tr>
+      <tr><td class="key">Underline</td><td>Underline the mnemonic letter in each item label. Use <code style="font-family:var(--font-mono)">&lt;u&gt;</code>, not CSS text-decoration-line. This is the CDE convention for Alt+key activation of menu items.</td></tr>
+      <tr><td class="key">Keyboard access</td><td>When context menu is open: arrow keys navigate items, Enter activates, Escape closes and returns focus to trigger element. Alt+letter activates matching item immediately.</td></tr>
+      <tr><td class="key">Position</td><td>Open at pointer position. Adjust if menu would overflow viewport: flip horizontally if too close to right edge, flip vertically if too close to bottom. Never allow menu to extend outside viewport.</td></tr>
+      <tr><td class="key">Dismiss</td><td>Click outside, Escape, or item activation closes the menu. Focus returns to the element that received the right-click.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section" id="tagbar">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Tag-bar grammar</h2>
+  <p class="prose">The tag bar is the primary command surface. It contains the window's identity (path or title), universal commands, and application-specific commands. Its grammar is fixed &mdash; parseable left-to-right.</p>
+
+  <div class="ssub">Grammar definition</div>
+  <div class="code-block">
+<span class="tcm">tag-bar     := worm-strip path SP* [cmd SP*]* [pipe-cmd SP*]* [flex] [meta]</span>
+<span class="tcm">path        := identifier for this window's content — filesystem path, URL, or name</span>
+<span class="tcm">cmd         := bare word, Title-cased, activates a registered command on this window</span>
+<span class="tcm">pipe-cmd    := '|' bare-word, pipes current selection through a shell filter</span>
+<span class="tcm">flex        := space that expands to fill remaining width (CSS flex:1)</span>
+<span class="tcm">meta        := right-aligned status text — modification state, last-saved, etc.</span>
+
+<span class="tcm">Examples:</span>
+<span class="tst">/etc/liquidsoap/radio.liq</span>  <span class="tkw">Put</span>  <span class="tkw">Undo</span>  <span class="tkw">|fmt</span>  <span style="flex:1"></span>  <span class="tnu">unsaved</span>
+<span class="tst">/net/tcp/stats</span>              <span class="tkw">Get</span>  <span class="tkw">Kill</span>
+<span class="tst">/search</span>                     <span class="tkw">Look</span>  [ghost-input]  <span class="tkw">Clear</span>
+<span class="tst">Zonestat</span>                    <span class="tkw">Refresh</span>  <span class="tkw">Export</span>  <span class="tkw">Kill</span></div>
+
+  <div class="ssub">Tag-bar rendering rules</div>
+  <table class="spec-table">
+    <thead><tr><th>Element</th><th>Style</th><th>Behaviour</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="key">Worm strip</td>
+        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">::before</code> pseudo, 5px wide, <code style="font-family:var(--font-mono)">var(--worm)</code> fill</td>
+        <td>Decorative in the tag bar itself. Interactive on the window body's left edge. See Worm Strip section.</td>
+      </tr>
+      <tr>
+        <td class="key">Path</td>
+        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">font-weight:700</code>, <code style="font-family:var(--font-mono)">fg-body</code></td>
+        <td>Not interactive unless the application defines path-click navigation. If clickable, apply standard link underline on hover. Never make path interactive without a visible affordance.</td>
+      </tr>
+      <tr>
+        <td class="key">Command token</td>
+        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">fg-faint</code> at rest, <code style="font-family:var(--font-mono)">bg-sel</code> on hover, <code style="font-family:var(--font-mono)">fg-head</code> on hover</td>
+        <td>Click activates. Keyboard: F10 focuses tag bar, Tab moves between tokens, Enter activates. Right-click opens context menu with Look and Get/Put.</td>
+      </tr>
+      <tr>
+        <td class="key">Pipe command</td>
+        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">fg-faint</code>, pipe character in <code style="font-family:var(--font-mono)">fg-faint</code></td>
+        <td>Pipes current window selection through the named filter. If no selection, applies to entire window content. Server-side: receives text via POST body, returns replacement text.</td>
+      </tr>
+      <tr>
+        <td class="key">Ghost input in tag bar</td>
+        <td><code style="font-family:var(--font-mono)">inp-ghost-wrap + inp-ghost</code></td>
+        <td>Placed after command tokens. Receives focus when user types after focusing the tag bar. Triggers hx-get on keyup with debounce. See Ghost Input section in design system.</td>
+      </tr>
+      <tr>
+        <td class="key">Meta / status</td>
+        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">fg-faint</code>, right-aligned via <code style="font-family:var(--font-mono)">margin-left:auto</code></td>
+        <td>Read-only. Communicates modification state, last-updated time, record count. Use a badge for state (modified, saving, error). Use plain text for counts and timestamps.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="ssub">Live examples</div>
+  <div class="acme-win">
+    <div class="tag-bar">
+      <span class="tag-path">/etc/liquidsoap/radio.liq</span>
+      <span class="tag-cmd">Put</span>
+      <span class="tag-cmd">Undo</span>
+      <span class="tag-cmd">|fmt</span>
+      <span style="flex:1"></span>
+      <span style="font-family:var(--font-mono);font-size:0.6875remrem;color:var(--fg-faint)"><span class="badge badge-warn" style="padding:1px 6px">unsaved</span></span>
+    </div>
+    <div class="acme-body" style="padding:var(--sp-4) var(--sp-5) var(--sp-4) var(--sp-7);min-height:40px;color:var(--fg-muted);font-size:0.8125remrem">Window body &mdash; content swapped here by HTMX or static render.</div>
+  </div>
+  <div class="acme-win">
+    <div class="tag-bar">
+      <span class="tag-path">/net/tcp/stats</span>
+      <span class="tag-cmd" title="Alt+G">Get</span>
+      <span class="tag-cmd">Kill</span>
+      <span style="flex:1"></span>
+      <span style="font-family:var(--font-mono);font-size:0.6875remrem;color:var(--fg-faint)">every 5s</span>
+    </div>
+    <div class="acme-body" style="padding:var(--sp-4) var(--sp-5) var(--sp-4) var(--sp-7);min-height:40px;font-size:0.8125remrem"><span class="tkw">established</span> <span class="tnu">42</span> &nbsp; <span class="tkw">time_wait</span> <span class="tnu">7</span> &nbsp; <span class="tkw">listen</span> <span class="tnu">3</span></div>
+  </div>
+  <div class="acme-win">
+    <div class="tag-bar">
+      <span class="tag-path">/search</span>
+      <span class="tag-cmd">Look</span>
+      <div style="flex:1;margin-left:var(--sp-3);position:relative">
+        <div style="position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--primary);opacity:.5;pointer-events:none"></div>
+        <input style="background:transparent;border:none;border-bottom:1.5px solid var(--primary);padding:2px 2px 3px var(--sp-4);font-family:var(--font-mono);font-size:0.7500remrem;color:var(--fg-body);outline:none;width:100%" placeholder="Look&hellip;" aria-label="Ghost input demonstration">
+      </div>
+      <span class="tag-cmd">Clear</span>
+    </div>
+    <div class="acme-body" style="padding:var(--sp-4) var(--sp-5) var(--sp-4) var(--sp-7);min-height:40px;color:var(--fg-muted);font-size:0.8125remrem">Search results appear here.</div>
+  </div>
+</section>
+
+<section class="section" id="commands">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Command registry</h2>
+  <p class="prose">Reserved command names and their defined semantics. Applications may add commands but must not redefine reserved ones. Command names are Title-cased single words. Multi-word commands are concatenated (<code style="font-family:var(--font-mono);font-size:0.7500remrem">Newcol</code>, <code style="font-family:var(--font-mono);font-size:0.7500remrem">Putall</code>).</p>
+
+  <table class="spec-table">
+    <thead><tr><th>Command</th><th>Key</th><th>Semantics</th><th>HTTP verb (HTMX)</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Get</td><td><span class="kbd">Alt+G</span></td><td>Fetch / refresh content of this window from its source. Idempotent. Does not modify state. Replaces body content.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-get</code></td></tr>
+      <tr><td class="key">Put</td><td><span class="kbd">Alt+P</span></td><td>Save / write current window content to its source. May modify state. Server returns updated content or acknowledgement.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-post / hx-put</code></td></tr>
+      <tr><td class="key">Look</td><td><span class="kbd">Alt+L</span></td><td>Search for current selection (or prompt if no selection). Opens search results in place or in a new window. Read-only.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-get</code> with <code style="font-family:var(--font-mono);font-size:0.7500remrem">q=</code></td></tr>
+      <tr><td class="key">Kill</td><td><span class="kbd">Alt+K</span></td><td>Stop a running process or live-update associated with this window. Does not close the window. Server terminates polling or SSE stream.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-delete</code></td></tr>
+      <tr><td class="key">Undo</td><td><span class="kbd">Alt+U</span></td><td>Revert window content to last-saved state. Server returns original content. Does not affect clipboard or browser history.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-get</code> (re-fetches)</td></tr>
+      <tr><td class="key">Dump</td><td><span class="kbd">Alt+D</span></td><td>Export / download window content as a file. Opens browser download dialog or triggers server-side export job.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-get</code> with <code style="font-family:var(--font-mono);font-size:0.7500remrem">Accept: text/plain</code></td></tr>
+      <tr><td class="key">Newcol</td><td><span class="kbd">Alt+N</span></td><td>Open a new column / panel in a column-layout view. Only valid in column-layout contexts.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-post</code> new panel fragment</td></tr>
+      <tr><td class="key">Putall</td><td>&mdash;</td><td>Save all modified windows in the current view. Batch Put.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-post</code> batch endpoint</td></tr>
+      <tr><td class="key">Del</td><td>&mdash;</td><td>Close / remove this window from the layout. Does not delete the underlying resource. Opposite of Get.</td><td>Client-side only: remove DOM element</td></tr>
+      <tr><td class="key">Exit</td><td>&mdash;</td><td>Terminate the application session. Prompts if unsaved changes exist.</td><td>Navigation: <code style="font-family:var(--font-mono);font-size:0.7500remrem">window.location</code></td></tr>
+    </tbody>
+  </table>
+
+  <div class="ssub">Pipe commands</div>
+  <table class="spec-table">
+    <thead><tr><th>Command</th><th>Semantics</th><th>Server contract</th></tr></thead>
+    <tbody>
+      <tr><td class="key">|fmt</td><td>Format selection (or entire body) according to content type. Returns reformatted text.</td><td>POST with body = selected text (or full content), Content-Type = application/x-pipe. Returns formatted text.</td></tr>
+      <tr><td class="key">|sort</td><td>Sort lines of selection alphabetically.</td><td>Same contract as |fmt.</td></tr>
+      <tr><td class="key">|uniq</td><td>Remove duplicate lines from selection.</td><td>Same contract as |fmt.</td></tr>
+      <tr><td class="key">|wc</td><td>Word/line count of selection. Returns count string appended to tag-bar meta area.</td><td>POST, returns count as plain text for OOB insertion into meta span.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ssub">Application command registration</div>
+  <div class="code-block">
+<span class="tcm">/* Adding an application-specific command to a tag bar */</span>
+<span class="tcm">/* Rules:
+ *   1. Must not conflict with reserved command names above
+ *   2. Must have a corresponding Alt+key if it's a primary action
+ *   3. Title-cased, single word or CamelCase compound
+ *   4. Must be available via context menu B2 and keyboard equivalent
+ */</span>
+&lt;<span class="tkw">div</span> <span class="tva">class</span>=<span class="tst">"tag-bar"</span>&gt;
+  &lt;<span class="tkw">span</span> <span class="tva">class</span>=<span class="tst">"tag-path"</span>&gt;Zonestat&lt;/<span class="tkw">span</span>&gt;
+  &lt;<span class="tkw">button</span> <span class="tva">class</span>=<span class="tst">"tag-cmd"</span>
+    <span class="tva">hx-get</span>=<span class="tst">"/zones/refresh"</span>
+    <span class="tva">hx-target</span>=<span class="tst">"#zone-body"</span>
+    <span class="tva">accesskey</span>=<span class="tst">"r"</span>&gt;<span class="tkw">&lt;u&gt;R&lt;/u&gt;</span>efresh&lt;/<span class="tkw">button</span>&gt;  <span class="tcm">/* note: accesskey uses Alt+Shift on Windows, Ctrl+Option on Mac */</span>
+  &lt;<span class="tkw">button</span> <span class="tva">class</span>=<span class="tst">"tag-cmd"</span>
+    <span class="tva">hx-get</span>=<span class="tst">"/zones/export"</span>
+    <span class="tva">accesskey</span>=<span class="tst">"e"</span>&gt;<span class="tkw">&lt;u&gt;E&lt;/u&gt;</span>xport&lt;/<span class="tkw">button</span>&gt;
+  &lt;<span class="tkw">button</span> <span class="tva">class</span>=<span class="tst">"tag-cmd"</span>
+    <span class="tva">hx-delete</span>=<span class="tst">"/zones/poll"</span>&gt;Kill&lt;/<span class="tkw">button</span>&gt;
+&lt;/<span class="tkw">div</span>&gt;</div>
+</section>
+
+<section class="section" id="focus">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Focus model</h2>
+  <p class="prose">Focus is managed by the user, not the application. The system never moves focus programmatically except in two permitted cases: initial page load, and modal open/close. This is both the Acme model and WCAG 2.4.3 compliance.</p>
+
+  <div class="ssub">Permitted focus movements</div>
+  <table class="spec-table">
+    <thead><tr><th>Event</th><th>Focus behaviour</th><th>Rationale</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Initial page load</td><td>Focus may be set to the primary interactive element (first input in a form, or the main content area's first tag-bar command).</td><td>Standard browser behaviour. Users expect it.</td></tr>
+      <tr><td class="key">Modal opens</td><td>Focus moves to the modal's first focusable element. Focus is trapped within the modal until it closes.</td><td>WCAG 2.1 SC 1.3.2, 2.4.3. Screen readers and keyboard users cannot access a modal without this.</td></tr>
+      <tr><td class="key">Modal closes</td><td>Focus returns to the element that triggered the modal.</td><td>WCAG 2.4.3. Users must not lose their place in the document.</td></tr>
+      <tr><td class="key">HTMX swap</td><td><strong>Focus does not move.</strong> The swapped content is rendered; the user's current focus element is unaffected.</td><td>Acme model. Unexpected focus movement is disorienting and is a WCAG 2.4.3 failure.</td></tr>
+      <tr><td class="key">Validation response</td><td><strong>Focus does not move.</strong> Error messages appear adjacent to the field (OOB swap or inline server response). The field retains focus.</td><td>Acme model. The user is still editing; don't interrupt.</td></tr>
+      <tr><td class="key">Server error</td><td><strong>Focus does not move.</strong> Error content swaps into the target. An <code style="font-family:var(--font-mono)">aria-live</code> region announces the error to screen readers.</td><td>The user did not ask for a focus change.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ssub">Focus order</div>
+  <p class="prose">Tab order follows DOM source order. Do not use <code style="font-family:var(--font-mono);font-size:0.7500remrem">tabindex</code> values greater than 0. The only valid <code style="font-family:var(--font-mono);font-size:0.7500remrem">tabindex</code> values are <code style="font-family:var(--font-mono);font-size:0.7500remrem">0</code> (in flow) and <code style="font-family:var(--font-mono);font-size:0.7500remrem">-1</code> (reachable by JS only, e.g. modal trap). Layout that looks logical visually but has illogical DOM order must have its DOM order corrected &mdash; not patched with tabindex.</p>
+
+  <div class="ssub">HTMX focus implementation</div>
+  <div class="code-block">
+<span class="tcm">/* Acme focus model in HTMX:
+ * htmx:afterSwap fires after every swap.
+ * We explicitly do nothing. No htmx.trigger, no focus(), no scrollIntoView().
+ * The user decides what to look at next.
+ */</span>
+
+<span class="tcm">// DO NOT do this:</span>
+document.body.addEventListener(<span class="tst">'htmx:afterSwap'</span>, <span class="tkw">function</span>(evt) {
+  evt.detail.target.querySelector(<span class="tst">'input'</span>)?.<span class="tfn">focus</span>(); <span class="tcm">// WRONG</span>
+});
+
+<span class="tcm">// Correct: no afterSwap focus handler at all.</span>
+<span class="tcm">// If a specific action should move focus (e.g. a "New record" button),</span>
+<span class="tcm">// the BUTTON's click handler moves focus — not the swap handler.</span>
+document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<span class="tst">'click'</span>, <span class="tkw">function</span>() {
+  htmx.ajax(<span class="tst">'GET'</span>, <span class="tst">'/new'</span>, <span class="tst">'#target'</span>).then(<span class="tkw">function</span>() {
+    document.querySelector(<span class="tst">'#new-form input:first-child'</span>)?.<span class="tfn">focus</span>();
+  }); <span class="tcm">// Focus is a consequence of the user's explicit action, not the swap</span>
+});</div>
+</section>
+
+<section class="section" id="selection">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Selection model</h2>
+  <p class="prose">Text selection is the primary operand for tag-bar commands. <code style="font-family:var(--font-mono);font-size:0.7500remrem">Look</code>, pipe commands, and application-specific commands operate on the current selection. If there is no selection, they operate on the entire window body or prompt for input.</p>
+
+  <table class="spec-table">
+    <thead><tr><th>Gesture</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Click</td><td>Deselect. Position cursor at click point.</td></tr>
+      <tr><td class="key">Click + drag</td><td>Select characters from anchor to pointer.</td></tr>
+      <tr><td class="key">Double-click</td><td>Select word under pointer.</td></tr>
+      <tr><td class="key">Triple-click</td><td>Select line under pointer.</td></tr>
+      <tr><td class="key">Ctrl+A</td><td>Select all text in current field or window body.</td></tr>
+      <tr><td class="key">Shift+arrow</td><td>Extend selection by character.</td></tr>
+      <tr><td class="key">Shift+Ctrl+arrow</td><td>Extend selection by word.</td></tr>
+      <tr><td class="key">Shift+Home/End</td><td>Extend selection to start/end of line.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ssub">Selection and tag-bar commands</div>
+  <p class="prose">When a tag-bar command is invoked and a text selection exists in the window body or any focused input: the command operates on the selection. When no selection exists: the command operates on the full content of the current window body, or prompts if the command requires explicit input (e.g. Look without a search term).</p>
+  <p class="prose">Selection color: <code style="font-family:var(--font-mono);font-size:0.7500remrem">var(--bg-sel)</code> (#9eeeee light / #1a4050 dark). Native browser <code style="font-family:var(--font-mono);font-size:0.7500remrem">::selection</code> pseudo-element. The teal-green is the Acme selection color &mdash; it should be recognizable to Plan 9 users and is CVD-safe.</p>
+
+  <div class="code-block">
+<span class="tcm">/* Selection colour via CSS */</span>
+<span class="tkw">::selection</span> {
+  <span class="tva">background</span>: <span class="tfn">var</span>(<span class="tva">--bg-sel</span>);   <span class="tcm">/* #9eeeee light, #1a4050 dark */</span>
+  <span class="tva">color</span>: <span class="tfn">var</span>(<span class="tva">--fg-head</span>);       <span class="tcm">/* ensure contrast on selection */</span>
+}
+
+<span class="tcm">/* Reading selection for a tag command (JS) */</span>
+<span class="tkw">function</span> <span class="tfn">getOperand</span>(windowEl) {
+  <span class="tkw">const</span> <span class="tva">sel</span> = window.<span class="tfn">getSelection</span>()?.toString().<span class="tfn">trim</span>();
+  <span class="tkw">if</span> (<span class="tva">sel</span>) <span class="tkw">return</span> <span class="tva">sel</span>;                  <span class="tcm">// use selection</span>
+  <span class="tkw">const</span> <span class="tva">inp</span> = document.activeElement;
+  <span class="tkw">if</span> (<span class="tva">inp</span>?.tagName === <span class="tst">'INPUT'</span>) {
+    <span class="tkw">return</span> <span class="tva">inp</span>.value.<span class="tfn">slice</span>(<span class="tva">inp</span>.selectionStart, <span class="tva">inp</span>.selectionEnd) || <span class="tva">inp</span>.value;
+  }
+  <span class="tkw">return</span> <span class="tva">windowEl</span>.textContent;       <span class="tcm">// fall back to full body</span>
+}</div>
+</section>
+
+<section class="section" id="worm">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Worm strip</h2>
+  <p class="prose">The worm strip is a left-edge positional scrollbar &mdash; a Plan 9 Acme primitive. In the Unified system it has two roles: decorative (sidebar global worm, tag-bar leading strip) and interactive (acme-win body left edge). Interactive worm strips respond to click-to-scroll.</p>
+
+  <div class="ssub">Visual specification</div>
+  <table class="spec-table">
+    <thead><tr><th>Location</th><th>Role</th><th>Width</th><th>Interaction</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Global sidebar</td><td>Decorative position indicator for the sidebar's scroll state. Fixed to left viewport edge.</td><td>5px rendered, extends to full sidebar height</td><td>None. The sidebar's native scrollbar handles scrolling.</td></tr>
+      <tr><td class="key">Tag-bar leading edge</td><td>Decorative. Visually connects tag bar to the window body below it.</td><td>5px via <code style="font-family:var(--font-mono);font-size:0.7500remrem">::before</code></td><td>None.</td></tr>
+      <tr><td class="key">Acme-win body left edge</td><td>Interactive scrollbar. Thumb position reflects visible portion of body content. Click scrolls.</td><td>5px rendered, 8px touch target (use transparent padding or wrapper)</td><td>Click at position Y within strip: scroll body to <code style="font-family:var(--font-mono);font-size:0.7500remrem">Y/H * scrollHeight</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ssub">Interactive worm — live demo</div>
+  <div class="acme-win" id="worm-demo-win" style="max-height:200px">
+    <div class="tag-bar"><span class="tag-path">/demo/worm</span><span class="tag-cmd">Look</span></div>
+    <div style="display:flex;overflow:hidden;max-height:160px">
+      <div id="worm-strip" class="worm-strip-demo" style="min-height:160px" title="Click to scroll" tabindex="0" role="scrollbar" aria-controls="worm-body" aria-label="Scroll position indicator — click or press Up/Down to scroll">
+        <div id="worm-thumb" class="worm-thumb" style="top:0%;height:40%"></div>
+      </div>
+      <div id="worm-body" class="acme-body" style="overflow-y:auto;flex:1">
+        <div style="padding-left:0">
+          Click the worm strip on the left to scroll this content.<br><br>
+          Line 3 — established 42<br>
+          Line 4 — time_wait  7<br>
+          Line 5 — listen     3<br>
+          Line 6 — close_wait 1<br>
+          Line 7 — syn_sent   0<br>
+          Line 8 — fin_wait   2<br>
+          Line 9 — last_ack   0<br>
+          Line 10 — closed    0<br>
+          Line 11 — total    55<br>
+          Line 12 — peak     89<br>
+          Line 13 — uptime 847d<br>
+          Line 14 — zone global<br>
+          Line 15 — end of stats
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="code-block">
+<span class="tcm">/* Worm strip interaction — minimal implementation */</span>
+<span class="tkw">function</span> <span class="tfn">initWorm</span>(<span class="tva">stripEl</span>, <span class="tva">bodyEl</span>, <span class="tva">thumbEl</span>) {
+  <span class="tcm">// Click on strip: scroll body to proportional position</span>
+  <span class="tva">stripEl</span>.<span class="tfn">addEventListener</span>(<span class="tst">'click'</span>, <span class="tkw">function</span>(<span class="tva">e</span>) {
+    <span class="tkw">const</span> <span class="tva">r</span> = <span class="tva">stripEl</span>.<span class="tfn">getBoundingClientRect</span>();
+    <span class="tkw">const</span> <span class="tva">ratio</span> = (<span class="tva">e</span>.clientY - <span class="tva">r</span>.top) / <span class="tva">r</span>.height;
+    <span class="tva">bodyEl</span>.scrollTop = <span class="tva">ratio</span> * (<span class="tva">bodyEl</span>.scrollHeight - <span class="tva">bodyEl</span>.clientHeight);
+  });
+  <span class="tcm">// Update thumb on scroll</span>
+  <span class="tva">bodyEl</span>.<span class="tfn">addEventListener</span>(<span class="tst">'scroll'</span>, <span class="tkw">function</span>() {
+    <span class="tkw">if</span> (!<span class="tva">thumbEl</span>) <span class="tkw">return</span>;
+    <span class="tkw">const</span> <span class="tva">vis</span> = <span class="tva">bodyEl</span>.clientHeight / <span class="tva">bodyEl</span>.scrollHeight;
+    <span class="tkw">const</span> <span class="tva">pos</span> = <span class="tva">bodyEl</span>.scrollTop  / <span class="tva">bodyEl</span>.scrollHeight;
+    <span class="tva">thumbEl</span>.style.top    = (<span class="tva">pos</span> * <span class="tnu">100</span>) + <span class="tst">'%'</span>;
+    <span class="tva">thumbEl</span>.style.height = (<span class="tva">vis</span> * <span class="tnu">100</span>) + <span class="tst">'%'</span>;
+  });
+}
+
+<span class="tcm">// Usage — call after DOM ready</span>
+<span class="tfn">initWorm</span>(
+  document.<span class="tfn">querySelector</span>(<span class="tst">'.worm-strip-demo'</span>),
+  document.<span class="tfn">querySelector</span>(<span class="tst">'.acme-body'</span>),
+  document.<span class="tfn">querySelector</span>(<span class="tst">'.worm-thumb'</span>)
+);</div>
+</section>
+
+<section class="section" id="affordances">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Interactive signals</h2>
+  <p class="prose">Every interactive element must communicate its state at rest, without relying on hover or memory. This is Principle 3 applied to affordances.</p>
+
+  <table class="spec-table">
+    <thead><tr><th>Element type</th><th>At-rest signal</th><th>Hover signal</th><th>Focus signal</th><th>Disabled signal</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="key">Solid button</td>
+        <td>Filled background (semantic color), white text. Shape communicates clickability.</td>
+        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">brightness(1.08)</code>. No size change.</td>
+        <td>2px primary outline, offset 2px.</td>
+        <td>opacity: 0.4. cursor: not-allowed.</td>
+      </tr>
+      <tr>
+        <td class="key">Ghost button</td>
+        <td>1px solid border, transparent bg. Border communicates containment.</td>
+        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">bg-sel</code> fill.</td>
+        <td>2px primary outline, offset 2px.</td>
+        <td>opacity: 0.4. cursor: not-allowed.</td>
+      </tr>
+      <tr>
+        <td class="key">Tag-bar command</td>
+        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">fg-faint</code> color — dimmer than path text. Separation from static text is the affordance.</td>
+        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">bg-sel</code> fill + <code style="font-family:var(--font-mono)">fg-head</code> text. cursor: pointer.</td>
+        <td>2px primary outline, offset 1px.</td>
+        <td>Not applicable. Remove the command from the tag bar rather than disabling it.</td>
+      </tr>
+      <tr>
+        <td class="key">Standard input</td>
+        <td>1.5px solid border (<code style="font-family:var(--font-mono)">--border</code>), <code style="font-family:var(--font-mono)">bg-base</code> fill. Border encloses an editable area.</td>
+        <td>No change (input hover state unnecessary; focus is the meaningful state).</td>
+        <td>Border → primary, box-shadow 2px primary ring, bg → bg-sel.</td>
+        <td><code style="font-family:var(--font-mono)">pointer-events:none</code>, opacity: 0.5, add <code style="font-family:var(--font-mono)">disabled</code> attribute.</td>
+      </tr>
+      <tr>
+        <td class="key">Ghost input</td>
+        <td>3px left pip (primary, 50% opacity) + 1.5px bottom line (primary). Both visible at rest — "this has a bottom line and a left mark" reads as editable in the Acme idiom.</td>
+        <td>5% primary background tint. pip stays 50%.</td>
+        <td>pip → 100% opacity, pip height 85%, bg → bg-sel.</td>
+        <td>Remove the ghost input. Ghost inputs are not used for disabled states.</td>
+      </tr>
+      <tr>
+        <td class="key">Link</td>
+        <td>Primary color. Underline on hover. No underline at rest in navigation contexts; underline always in body prose.</td>
+        <td>Underline.</td>
+        <td>2px primary outline, offset 2px.</td>
+        <td>fg-faint, cursor: default, remove href.</td>
+      </tr>
+      <tr>
+        <td class="key">Worm strip (interactive)</td>
+        <td>Distinct background (worm color vs worm-track). cursor: pointer on the strip element.</td>
+        <td>cursor: pointer.</td>
+        <td>2px primary outline on the strip element.</td>
+        <td>Not applicable.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="ssub">Cursor assignments</div>
+  <table class="spec-table">
+    <thead><tr><th>cursor value</th><th>Used on</th></tr></thead>
+    <tbody>
+      <tr><td class="key">default</td><td>All non-interactive surfaces. Body text. Labels. Decorative worm strips.</td></tr>
+      <tr><td class="key">pointer</td><td>Buttons. Tag-bar commands. Links. Interactive worm strips. Context menu items.</td></tr>
+      <tr><td class="key">text</td><td>Input fields. Ghost input wrapper. Editable text areas. Acme body (text is selectable).</td></tr>
+      <tr><td class="key">not-allowed</td><td>Disabled buttons and inputs.</td></tr>
+      <tr><td class="key">wait / progress</td><td>Permitted during HTMX requests only if the request takes &gt;500ms. Use <code style="font-family:var(--font-mono);font-size:0.7500remrem">htmx:beforeRequest</code> / <code style="font-family:var(--font-mono)">htmx:afterRequest</code> events. Prefer inline loading indicators over cursor change.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section" id="feedback">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>System feedback</h2>
+  <p class="prose">Feedback is immediate and in-place. No toast notifications, no overlaying popups, no page-level banners. Feedback appears adjacent to the element that caused it, or in the tag bar meta area. Errors are specific and actionable.</p>
+
+  <div class="ssub">Feedback register</div>
+  <table class="spec-table">
+    <thead><tr><th>Event</th><th>Feedback mechanism</th><th>Duration</th><th>Location</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Form validation error</td><td>Input border → danger color. Error text adjacent below field. Badge in tag bar meta if multiple errors.</td><td>Until corrected.</td><td>Adjacent to field. Server returns <code style="font-family:var(--font-mono);font-size:0.7500remrem">inp state-err</code> class and error text via HTMX OOB.</td></tr>
+      <tr><td class="key">Save / Put success</td><td>Tag bar meta badge: <span class="badge badge-ok" style="font-size:0.6250remrem;padding:0 4px">saved</span> replaces <span class="badge badge-warn" style="font-size:0.6250remrem;padding:0 4px">unsaved</span>.</td><td>Persistent until next modification.</td><td>Tag bar meta area, right-aligned.</td></tr>
+      <tr><td class="key">Get / refresh</td><td>Body content replaces. No loading indicator unless &gt;500ms.</td><td>Instant.</td><td>Acme window body (hx-target).</td></tr>
+      <tr><td class="key">Loading &gt;500ms</td><td>Tag bar meta: <span class="badge badge-info" style="font-size:0.6250remrem;padding:0 4px">loading</span> badge. <code style="font-family:var(--font-mono);font-size:0.7500remrem">htmx:beforeRequest</code> adds it; <code style="font-family:var(--font-mono)">htmx:afterRequest</code> removes it.</td><td>Until response.</td><td>Tag bar meta area.</td></tr>
+      <tr><td class="key">Server error (5xx)</td><td>Alert block (alert-danger) swapped into the body. Error message from server. aria-live=assertive on the target.</td><td>Until dismissed or next Get.</td><td>Acme window body.</td></tr>
+      <tr><td class="key">Destructive action confirmation</td><td>Inline confirmation: replace the trigger button with "Confirm?" + confirm/cancel buttons in place. No modal. No dialog. The button becomes its own confirmation surface.</td><td>Until confirmed or cancelled. Escape cancels.</td><td>In-place at trigger button location.</td></tr>
+      <tr><td class="key">Kill / process stop</td><td>Tag bar meta: polling badge removed. Body retains last content.</td><td>Persistent.</td><td>Tag bar meta.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ssub">Aria-live regions</div>
+  <p class="prose">One <code style="font-family:var(--font-mono);font-size:0.7500remrem">aria-live="polite"</code> region per page for non-urgent status updates (save confirmation, refresh complete). One <code style="font-family:var(--font-mono);font-size:0.7500remrem">aria-live="assertive"</code> region for errors. Both are visually hidden but present in DOM. Server-sent HTMX fragments update these regions as OOB swaps alongside primary content updates.</p>
+
+  <div class="code-block">
+<span class="tcm">&lt;!-- Place in page shell, never moved, always present --&gt;</span>
+&lt;<span class="tkw">div</span> <span class="tva">id</span>=<span class="tst">"live-status"</span> <span class="tva">aria-live</span>=<span class="tst">"polite"</span>   <span class="tva">aria-atomic</span>=<span class="tst">"true"</span>
+     <span class="tva">style</span>=<span class="tst">"position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"</span>&gt;
+&lt;/<span class="tkw">div</span>&gt;
+&lt;<span class="tkw">div</span> <span class="tva">id</span>=<span class="tst">"live-error"</span>  <span class="tva">aria-live</span>=<span class="tst">"assertive"</span> <span class="tva">aria-atomic</span>=<span class="tst">"true"</span>
+     <span class="tva">style</span>=<span class="tst">"position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"</span>&gt;
+&lt;/<span class="tkw">div</span>&gt;
+
+<span class="tcm">&lt;!-- Server OOB fragment updates status after a Put --&gt;</span>
+&lt;<span class="tkw">div</span> <span class="tva">id</span>=<span class="tst">"live-status"</span> <span class="tva">hx-swap-oob</span>=<span class="tst">"true"</span>&gt;Saved /etc/liquidsoap/radio.liq&lt;/<span class="tkw">div</span>&gt;</div>
+
+  <div class="ssub">Inline confirmation pattern</div>
+  <div class="demo">
+    <div style="display:flex;gap:var(--sp-3);align-items:center">
+      <button style="background:var(--oi-vermillion);color:#fff;padding:7px var(--sp-5);border:none;font-family:var(--font-ui);font-size:0.8750remrem;font-weight:600;cursor:pointer" onclick="this.outerHTML='<span style=\'display:flex;gap:8px;align-items:center\'><span style=\'font-family:var(--font-mono);font-size:0.8125remrem;color:var(--fg-muted)\'>Destroy zone 12?</span><button style=\'background:var(--oi-vermillion);color:#fff;padding:5px 16px;border:none;font-family:var(--font-ui);font-size:0.8125remrem;font-weight:600;cursor:pointer\' onclick=\'alert(\'Destroyed\')\'>Confirm</button><button style=\'background:transparent;border:1px solid var(--border);color:var(--fg-head);padding:5px 16px;font-family:var(--font-ui);font-size:0.8125remrem;cursor:pointer\' onclick=\'this.parentElement.outerHTML=\'<button style=\\"background:var(--oi-vermillion);color:#fff;padding:7px 24px;border:none;font-family:var(--font-ui);font-size:0.8750remrem;font-weight:600;cursor:pointer\\" onclick=\\"this.outerHTML=this.outerHTML\\">Destroy zone</button>\'\'>Cancel</button></span>'">Destroy zone</button>
+      <span style="font-family:var(--font-mono);font-size:0.7500remrem;color:var(--fg-faint)">&#8592; click to see inline confirmation</span>
+    </div>
+  </div>
+
+  <div class="anatomy-row">
+    <div class="anatomy-demo">
+      <div class="tag-bar" style="margin-bottom:0">
+        <span class="tag-path">/sys/path</span>
+        <span class="tag-cmd">Get</span>
+        <span class="tag-cmd">Put</span>
+        <span style="flex:1"></span>
+        <span style="font-family:var(--font-mono);font-size:0.625rem;color:var(--fg-faint)">meta</span>
+      </div>
+    </div>
+    <div class="anatomy-ann">
+      <div class="anatomy-title">Tag-bar anatomy (required parts)</div>
+      <div class="ann-item"><div class="ann-num">1</div><div class="ann-text"><strong>Worm strip</strong> &#8212; required. <code style="font-family:var(--font-mono);font-size:0.75rem">::before</code> pseudo, 5px, <code style="font-family:var(--font-mono)">--worm</code> color. Decorative in tag bar.</div></div>
+      <div class="ann-item"><div class="ann-num">2</div><div class="ann-text"><strong>Path</strong> &#8212; required. Identifies window content. <code style="font-family:var(--font-mono);font-size:0.75rem">.tag-path</code>, <code style="font-family:var(--font-mono)">font-weight:700</code>.</div></div>
+      <div class="ann-item"><div class="ann-num">3</div><div class="ann-text"><strong>Command tokens</strong> &#8212; optional (0&#8202;+). <code style="font-family:var(--font-mono);font-size:0.75rem">.tag-cmd</code>. Must be from command registry or registered extension. Forbidden: decorative text that looks like a command.</div></div>
+      <div class="ann-item"><div class="ann-num">4</div><div class="ann-text"><strong>Flex spacer</strong> &#8212; optional. <code style="font-family:var(--font-mono);font-size:0.75rem">flex:1</code> span, separates commands from meta.</div></div>
+      <div class="ann-item"><div class="ann-num">5</div><div class="ann-text"><strong>Meta area</strong> &#8212; optional. Right-aligned status. Read-only. Use badge for state, plain text for counts/timestamps.</div></div>
+    </div>
+  </div>
+
+  <div class="anatomy-row">
+    <div class="anatomy-demo">
+      <div style="border:1px solid var(--border)">
+        <div class="cdebar" style="margin-bottom:0;height:28px">
+          <div class="cdel" style="font-size:0.6875rem">LOGO</div>
+          <div class="cdet" style="font-size:0.75rem">Title</div>
+          <div class="cdec"><div class="cdecb">&#9650;</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="anatomy-ann">
+      <div class="anatomy-title">CDE bar anatomy (application-level chrome)</div>
+      <div class="ann-item"><div class="ann-num">1</div><div class="ann-text"><strong>Logo block</strong> &#8212; required. <code style="font-family:var(--font-mono);font-size:0.75rem">.cde-logo</code>, <code style="font-family:var(--font-mono)">background:var(--sun-orange)</code> default. Override with organisation color.</div></div>
+      <div class="ann-item"><div class="ann-num">2</div><div class="ann-text"><strong>Title</strong> &#8212; required. Application name + context. <code style="font-family:var(--font-mono);font-size:0.75rem">.cde-title</code>, <code style="font-family:var(--font-mono)">flex:1</code>.</div></div>
+      <div class="ann-item"><div class="ann-num">3</div><div class="ann-text"><strong>Action area</strong> &#8212; optional. Secondary pills, version badges. Forbidden: primary navigation items (those belong in tag-bars).</div></div>
+      <div class="ann-item"><div class="ann-num">4</div><div class="ann-text"><strong>Theme controls</strong> &#8212; optional. Light/dark toggle. Forbidden in contexts where system theme is controlled externally.</div></div>
+      <div class="ann-item"><div class="ann-num">5</div><div class="ann-text"><strong>Motif controls</strong> &#8212; optional. Window management buttons. Decorative on web; functional on native.</div></div>
+    </div>
+  </div>
+
+  <div class="anatomy-row">
+    <div class="anatomy-demo">
+      <div class="alert ainf" style="margin-bottom:0">
+        <div class="ahd">Alert head</div>
+        <div class="abd">Alert body text here.</div>
+      </div>
+    </div>
+    <div class="anatomy-ann">
+      <div class="anatomy-title">Alert anatomy</div>
+      <div class="ann-item"><div class="ann-num">1</div><div class="ann-text"><strong>Left border</strong> &#8212; required. <code style="font-family:var(--font-mono);font-size:0.75rem">border-left:3px solid</code>, semantic color token. This is the primary color signal.</div></div>
+      <div class="ann-item"><div class="ann-num">2</div><div class="ann-text"><strong>Head</strong> &#8212; required. <code style="font-family:var(--font-mono);font-size:0.75rem">.ahd</code>. Concise label in Titillium Web. Must not repeat the semantic color meaning in words alone &#8212; add shape/icon context.</div></div>
+      <div class="ann-item"><div class="ann-num">3</div><div class="ann-text"><strong>Body</strong> &#8212; required. <code style="font-family:var(--font-mono);font-size:0.75rem">.abd</code>. Actionable explanation. Forbidden: vague messages like &#8220;An error occurred.&#8221;</div></div>
+      <div class="ann-item"><div class="ann-num">4</div><div class="ann-text"><strong>Background tint</strong> &#8212; required. <code style="font-family:var(--font-mono);font-size:0.75rem">color-mix(in srgb, semantic-color 8%, transparent)</code>. Redundant coding alongside border color.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="htmx-cua">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>HTMX interaction</h2>
+  <p class="prose">HTMX implements the tag-bar command model over HTTP. The mapping is direct: tag-bar verbs become HTTP verbs, acme-win bodies are swap targets, OOB swaps handle meta and aria-live regions. No JS beyond HTMX and the minimal worm/confirmation helpers.</p>
+
+  <div class="ssub">Command &rarr; HTTP mapping</div>
+  <table class="spec-table">
+    <thead><tr><th>Tag command</th><th>hx-verb</th><th>hx-target</th><th>Server returns</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Get</td><td><code style="font-family:var(--font-mono)">hx-get</code></td><td><code style="font-family:var(--font-mono)">#window-body</code></td><td>HTML fragment: new body content. OOB: updated meta badge.</td></tr>
+      <tr><td class="key">Put</td><td><code style="font-family:var(--font-mono)">hx-post / hx-put</code></td><td><code style="font-family:var(--font-mono)">#window-body</code></td><td>HTML fragment: confirmed content. OOB: meta badge → <span class="badge badge-ok" style="font-size:0.6250remrem;padding:0 4px">saved</span>, aria-live status.</td></tr>
+      <tr><td class="key">Look</td><td><code style="font-family:var(--font-mono)">hx-get</code> + <code style="font-family:var(--font-mono)">hx-include</code> (selection)</td><td><code style="font-family:var(--font-mono)">#window-body</code></td><td>HTML fragment: search results.</td></tr>
+      <tr><td class="key">Kill</td><td><code style="font-family:var(--font-mono)">hx-delete</code></td><td><code style="font-family:var(--font-mono)">#window-body</code></td><td>Empty 200. OOB: remove polling badge. Body retains last content.</td></tr>
+      <tr><td class="key">Pipe (|fmt)</td><td><code style="font-family:var(--font-mono)">hx-post</code> (body = selection)</td><td><code style="font-family:var(--font-mono)">#window-body</code></td><td>HTML fragment: reformatted content.</td></tr>
+      <tr><td class="key">Validation</td><td>Triggered by field blur or submit</td><td><code style="font-family:var(--font-mono)">hx-target="this"</code> (field) or form target</td><td>Field with <code style="font-family:var(--font-mono)">state-ok</code> or <code style="font-family:var(--font-mono)">state-err</code> + adjacent error text via OOB.</td></tr>
+    </tbody>
+  </table>
+
+
+  <div class="ssub">HTMX fragment type vocabulary</div>
+  <p class="prose">HTMX responses return HTML fragments. The Unified system defines four fragment types via <code style="font-family:var(--font-mono);font-size:0.75rem">data-fragment-type</code> attribute. This vocabulary enables agents to classify and process fragments correctly without parsing content.</p>
+  <table class="spec-table">
+    <thead><tr><th>data-fragment-type</th><th>Description</th><th>Primary hx-swap</th><th>May include OOB</th></tr></thead>
+    <tbody>
+      <tr><td class="key">window-body</td><td>Complete replacement for an acme-win body. Contains structured content, not chrome.</td><td><code style="font-family:var(--font-mono);font-size:0.75rem">innerHTML</code></td><td>Yes &#8212; meta badge, aria-live</td></tr>
+      <tr><td class="key">tag-update</td><td>Replacement for a tag-bar element. Typically updates the meta area or command set.</td><td><code style="font-family:var(--font-mono);font-size:0.75rem">outerHTML</code></td><td>Yes &#8212; aria-live status</td></tr>
+      <tr><td class="key">oob-meta</td><td>Out-of-band meta badge swap only. No primary swap target. Carries state change signal.</td><td>None (OOB only)</td><td>Inherently OOB</td></tr>
+      <tr><td class="key">oob-status</td><td>Out-of-band aria-live region update. Accessibility announcement for screen readers.</td><td>None (OOB only)</td><td>Inherently OOB</td></tr>
+    </tbody>
+  </table>
+  <div class="code-block">
+<span class="fg-syn-cmt">&lt;!-- Server annotates every fragment with its type --&gt;</span>
+&lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">id</span>=<span class="fg-syn-str">"zone-body"</span>
+     <span class="fg-syn-var">data-fragment-type</span>=<span class="fg-syn-str">"window-body"</span>
+     <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"acme-body"</span>&gt;
+  <span class="fg-syn-cmt">&lt;!-- content --&gt;</span>
+&lt;/<span class="fg-syn-kw">div</span>&gt;
+<span class="fg-syn-cmt">&lt;!-- OOB badge alongside primary response --&gt;</span>
+&lt;<span class="fg-syn-kw">span</span> <span class="fg-syn-var">id</span>=<span class="fg-syn-str">"meta-badge"</span>
+      <span class="fg-syn-var">data-fragment-type</span>=<span class="fg-syn-str">"oob-meta"</span>
+      <span class="fg-syn-var">hx-swap-oob</span>=<span class="fg-syn-str">"true"</span>
+      <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"badge badge-ok"</span>&gt;saved&lt;/<span class="fg-syn-kw">span</span>&gt;</div>
+
+  <div class="ssub">Response time specification &#8212; MIL-STD-1472H alignment</div>
+  <table class="spec-table">
+    <thead><tr><th>Operation type</th><th>Max time</th><th>Required feedback</th><th>Recovery if exceeded</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Acknowledgement (button click, tag command)</td><td>0.1s</td><td>Visual state change on the trigger element (active state)</td><td>N/A &#8212; browser input latency, not application-controlled</td></tr>
+      <tr><td class="key">Simple transaction (Get, Revert)</td><td>1s</td><td>None below 500ms. Loading badge at 500ms.</td><td>Error alert in window body if no response by 10s</td></tr>
+      <tr><td class="key">Complex operation (Put with validation, export)</td><td>10s</td><td>Loading badge immediately. Progress pattern if estimable.</td><td>Kill command surfaces. Error alert. Revert available.</td></tr>
+      <tr><td class="key">Timeout / no response</td><td>10s</td><td>Error alert: specific message + Revert option</td><td>Window body shows last known state. Kill removes polling.</td></tr>
+    </tbody>
+  </table>
+  <div class="ssub">Standard HTMX attributes</div>
+  <div class="code-block">
+<span class="tcm">&lt;!-- Get command: refresh body on click, auto-poll every 5s --&gt;</span>
+&lt;<span class="tkw">button</span> <span class="tva">class</span>=<span class="tst">"tag-cmd"</span>
+  <span class="tva">hx-get</span>=<span class="tst">"/zones/stats"</span>
+  <span class="tva">hx-target</span>=<span class="tst">"#zone-body"</span>
+  <span class="tva">hx-swap</span>=<span class="tst">"innerHTML"</span>&gt;<span class="tkw">&lt;u&gt;G&lt;/u&gt;</span>et&lt;/<span class="tkw">button</span>&gt;
+
+&lt;<span class="tkw">div</span> <span class="tva">id</span>=<span class="tst">"zone-body"</span> <span class="tva">class</span>=<span class="tst">"acme-body"</span>
+     <span class="tva">hx-get</span>=<span class="tst">"/zones/stats"</span>
+     <span class="tva">hx-trigger</span>=<span class="tst">"every 5s"</span>
+     <span class="tva">hx-swap</span>=<span class="tst">"innerHTML"</span>&gt;...&lt;/<span class="tkw">div</span>&gt;
+
+<span class="tcm">&lt;!-- Put command: save form data --&gt;</span>
+&lt;<span class="tkw">button</span> <span class="tva">class</span>=<span class="tst">"tag-cmd"</span>
+  <span class="tva">hx-post</span>=<span class="tst">"/config/save"</span>
+  <span class="tva">hx-include</span>=<span class="tst">"#config-form"</span>
+  <span class="tva">hx-target</span>=<span class="tst">"#config-body"</span>&gt;<span class="tkw">&lt;u&gt;P&lt;/u&gt;</span>ut&lt;/<span class="tkw">button</span>&gt;
+
+<span class="tcm">&lt;!-- Server OOB response after Put --&gt;</span>
+<span class="tcm">&lt;!-- Primary: updated body --&gt;</span>
+&lt;<span class="tkw">div</span> <span class="tva">id</span>=<span class="tst">"config-body"</span>&gt;...&lt;/<span class="tkw">div</span>&gt;
+<span class="tcm">&lt;!-- OOB: meta badge --&gt;</span>
+&lt;<span class="tkw">span</span> <span class="tva">id</span>=<span class="tst">"meta-badge"</span> <span class="tva">hx-swap-oob</span>=<span class="tst">"true"</span>
+      <span class="tva">class</span>=<span class="tst">"badge badge-ok"</span>&gt;saved&lt;/<span class="tkw">span</span>&gt;
+<span class="tcm">&lt;!-- OOB: aria-live --&gt;</span>
+&lt;<span class="tkw">div</span> <span class="tva">id</span>=<span class="tst">"live-status"</span> <span class="tva">hx-swap-oob</span>=<span class="tst">"true"</span>&gt;Saved config&lt;/<span class="tkw">div</span>&gt;</div>
+
+  <div class="ssub">Unsaved state tracking</div>
+  <div class="code-block">
+<span class="tcm">/* Mark window as modified when any input changes */</span>
+document.<span class="tfn">querySelectorAll</span>(<span class="tst">'.acme-win input, .acme-win select, .acme-win textarea'</span>)
+  .<span class="tfn">forEach</span>(<span class="tva">el</span> =&gt; {
+    <span class="tva">el</span>.<span class="tfn">addEventListener</span>(<span class="tst">'input'</span>, <span class="tkw">function</span>() {
+      <span class="tkw">const</span> <span class="tva">badge</span> = <span class="tva">el</span>.<span class="tfn">closest</span>(<span class="tst">'.acme-win'</span>)?.<span class="tfn">querySelector</span>(<span class="tst">'.meta-badge'</span>);
+      <span class="tkw">if</span> (<span class="tva">badge</span>) {
+        <span class="tva">badge</span>.className = <span class="tst">'badge badge-warn'</span>;
+        <span class="tva">badge</span>.textContent = <span class="tst">'unsaved'</span>;
+      }
+    });
+  });</div>
+</section>
+
+<section class="section" id="agents">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Agent / util tier</h2>
+  <p class="prose">Agents and utilities are second-class consumers of the design system. They receive semantic HTML with correct token-class attributes. They do not need interactive affordances, focus management, or HTMX. What they need: readable structure, correct heading hierarchy, meaningful class names they can parse, and no JavaScript dependencies for content access.</p>
+
+
+  <div class="ssub">Empty state pattern</div>
+  <p class="prose">An empty state occurs when an acme-win body has no content to display &#8212; a search with no results, a list with no items, a resource that has not yet been populated. Empty states must communicate three things: what is empty, why it is empty (or what it would contain), and what the user can do next.</p>
+  <table class="spec-table">
+    <thead><tr><th>Element</th><th>Required</th><th>Specification</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Path in tag-bar</td><td>Required</td><td>The tag-bar path identifies what is empty. <code style="font-family:var(--font-mono);font-size:0.75rem">/search</code> being empty is different from <code style="font-family:var(--font-mono);font-size:0.75rem">/zones</code> being empty.</td></tr>
+      <tr><td class="key">Explanation line</td><td>Required</td><td>One sentence, monospace, <code style="font-family:var(--font-mono)">fg-muted</code>. What the space would contain. &#8220;No zones configured.&#8221; not &#8220;Nothing here.&#8221;</td></tr>
+      <tr><td class="key">Suggested action</td><td>Required if action exists</td><td>A tag-bar command or inline link to the relevant resource. &#8220;Run <code style="font-family:var(--font-mono);font-size:0.75rem">Get</code> to refresh, or create a zone at <code style="font-family:var(--font-mono);font-size:0.75rem">/zones/new</code>.&#8221;</td></tr>
+      <tr><td class="key">Illustration</td><td>Forbidden</td><td>No decorative illustration or icon. Heritage: terminals show text, not images.</td></tr>
+      <tr><td class="key">data-fragment-type</td><td>Required for HTMX</td><td><code style="font-family:var(--font-mono);font-size:0.75rem">data-fragment-type="window-body"</code> on the empty state container.</td></tr>
+    </tbody>
+  </table>
+  <div class="code-block">
+<span class="fg-syn-cmt">&lt;!-- Empty state in an acme-body --&gt;</span>
+&lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"acme-body"</span> <span class="fg-syn-var">data-fragment-type</span>=<span class="fg-syn-str">"window-body"</span>
+     <span class="fg-syn-var">role</span>=<span class="fg-syn-str">"status"</span> <span class="fg-syn-var">aria-live</span>=<span class="fg-syn-str">"polite"</span>&gt;
+  &lt;<span class="fg-syn-kw">span</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"fg-muted text-mono text-base"</span>&gt;No zones configured.&lt;/<span class="fg-syn-kw">span</span>&gt;
+  &lt;<span class="fg-syn-kw">span</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"fg-faint text-mono text-base"</span>&gt;
+    Create one at &lt;<span class="fg-syn-kw">a</span> <span class="fg-syn-var">href</span>=<span class="fg-syn-str">"/zones/new"</span>&gt;/zones/new&lt;/<span class="fg-syn-kw">a</span>&gt;.
+  &lt;/<span class="fg-syn-kw">span</span>&gt;
+&lt;/<span class="fg-syn-kw">div</span>&gt;</div>
+  <div class="ssub">What agents get</div>
+  <table class="spec-table">
+    <thead><tr><th>Concern</th><th>Specification</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Heading hierarchy</td><td>Correct H1 &rarr; H6 nesting. Never skip levels. Page title = H1. Section = H2. Subsection = H3. This is both SEO and agent parsing convention.</td></tr>
+      <tr><td class="key">Semantic HTML</td><td>Use <code style="font-family:var(--font-mono)">nav</code>, <code style="font-family:var(--font-mono)">main</code>, <code style="font-family:var(--font-mono)">article</code>, <code style="font-family:var(--font-mono)">section</code>, <code style="font-family:var(--font-mono)">aside</code>. Never use div where a semantic element exists. Tables for tabular data only.</td></tr>
+      <tr><td class="key">Token class naming</td><td>Class names are utilities and describe function (<code style="font-family:var(--font-mono)">fg-body</code>, <code style="font-family:var(--font-mono)">badge-danger</code>). An agent can infer the meaning. Avoid opaque class names that only make sense in context.</td></tr>
+      <tr><td class="key">No JS required</td><td>Static documents must be fully readable with JS disabled. HTMX applications degrade to standard form submission (use <code style="font-family:var(--font-mono)">action</code> and <code style="font-family:var(--font-mono)">method</code> on all forms; HTMX enhances them progressively).</td></tr>
+      <tr><td class="key">Data attributes</td><td>Machine-readable metadata goes in <code style="font-family:var(--font-mono)">data-*</code> attributes on relevant elements. For example, a zone status row: <code style="font-family:var(--font-mono)">data-zone="global" data-status="online" data-uptime="847"</code>. Agents can extract structured data without parsing prose.</td></tr>
+      <tr><td class="key">Print / export</td><td>A <code style="font-family:var(--font-mono)">@media print</code> stylesheet strips chrome (sidebar, tag bars, CDE bar), preserves content. Minimum: <code style="font-family:var(--font-mono)">.sidebar, .cde-bar, .tag-bar { display:none }</code> in print media.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="code-block">
+<span class="tcm">&lt;!-- Agent-consumable zone status row --&gt;</span>
+&lt;<span class="tkw">tr</span> <span class="tva">data-zone</span>=<span class="tst">"zone-nfs"</span> <span class="tva">data-status</span>=<span class="tst">"fault"</span> <span class="tva">data-uptime</span>=<span class="tst">"0"</span>&gt;
+  &lt;<span class="tkw">td</span>&gt;&lt;<span class="tkw">code</span> <span class="tva">class</span>=<span class="tst">"text-mono fg-primary"</span>&gt;svc:/network/nfs&lt;/<span class="tkw">code</span>&gt;&lt;/<span class="tkw">td</span>&gt;
+  &lt;<span class="tkw">td</span>&gt;&lt;<span class="tkw">span</span> <span class="tva">class</span>=<span class="tst">"badge badge-crit"</span>&gt;fault&lt;/<span class="tkw">span</span>&gt;&lt;/<span class="tkw">td</span>&gt;
+  &lt;<span class="tkw">td</span>&gt;0d&lt;/<span class="tkw">td</span>&gt;
+&lt;/<span class="tkw">tr</span>&gt;
+
+<span class="tcm">&lt;!-- Progressive enhancement: form works without HTMX --&gt;</span>
+&lt;<span class="tkw">form</span> <span class="tva">action</span>=<span class="tst">"/config/save"</span> <span class="tva">method</span>=<span class="tst">"post"</span>
+      <span class="tva">hx-post</span>=<span class="tst">"/config/save"</span>
+      <span class="tva">hx-target</span>=<span class="tst">"#config-body"</span>&gt;
+  <span class="tcm">&lt;!-- fields --&gt;</span>
+  &lt;<span class="tkw">button</span> <span class="tva">type</span>=<span class="tst">"submit"</span> <span class="tva">class</span>=<span class="tst">"tag-cmd"</span>&gt;Put&lt;/<span class="tkw">button</span>&gt;
+&lt;/<span class="tkw">form</span>&gt;</div>
+</section>
+
+
+<section class="section" id="conformance">
+  <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Conformance criteria</h2>
+  <p class="prose">An implementation conforms to the Unified CUA v1.0 if and only if it satisfies all required criteria below. Recommended criteria improve quality but are not required for conformance. This checklist is the answer to &#8220;does this implementation conform?&#8221;</p>
+
+  <div class="ssub">Required &#8212; all must pass</div>
+  <table class="spec-table">
+    <thead><tr><th>#</th><th>Criterion</th><th>How to verify</th></tr></thead>
+    <tbody>
+      <tr><td class="key">C-01</td><td>Every action available by mouse is expressible as visible text in the tag bar or via keyboard shortcut.</td><td>Enumerate all interactive elements. Confirm each has a keyboard equivalent and/or tag-bar command.</td></tr>
+      <tr><td class="key">C-02</td><td>Focus is never moved programmatically except on initial page load and modal open/close.</td><td>Trigger every HTMX swap. Confirm focused element does not change.</td></tr>
+      <tr><td class="key">C-03</td><td>All interactive elements have a minimum hit area of 24&#215;24px (desktop) or 44&#215;44px (pointer:coarse).</td><td>Browser DevTools accessibility audit. @media (pointer:coarse) simulation.</td></tr>
+      <tr><td class="key">C-04</td><td>All form inputs have an associated label (via for/id pair or aria-label).</td><td>axe-core audit. Zero label violations.</td></tr>
+      <tr><td class="key">C-05</td><td>Color is never the sole signal for meaning. Every badge, alert, and status indicator has a text label.</td><td>View in forced-colors mode. All meaning must remain legible.</td></tr>
+      <tr><td class="key">C-06</td><td>Body text contrast ratio &#8805; 4.5:1 in both light and dark modes.</td><td>Measure --fg-body against --bg. Light: 4.99:1. Dark: 5.61:1.</td></tr>
+      <tr><td class="key">C-07</td><td>font-size declarations use rem units, not px.</td><td>Search computed styles. No font-size in px on text elements.</td></tr>
+      <tr><td class="key">C-08</td><td>Skip-to-main link present and functional.</td><td>Tab to first element on page. First focus must be skip link.</td></tr>
+      <tr><td class="key">C-09</td><td>Page has exactly one h1. Section headings use h2. No heading levels skipped.</td><td>Document outline tool (browser extension or axe-core).</td></tr>
+      <tr><td class="key">C-10</td><td>acme-win components contain both .tag-bar and .acme-body. Neither may appear alone as a complete window.</td><td>DOM inspection. Every .acme-win has exactly one of each.</td></tr>
+      <tr><td class="key">C-11</td><td>Destructive commands (Kill, Del, Exit with unsaved state) have either a Revert option or inline confirmation. No modal dialogs for confirmation.</td><td>Trigger each destructive command. Confirm inline confirmation or Revert surfaces.</td></tr>
+      <tr><td class="key">C-12</td><td>@media print hides all chrome (nav, CDE bar, tag bars) and lets content flow.</td><td>Browser print preview. Only content visible.</td></tr>
+      <tr><td class="key">C-13</td><td>@media (forced-colors: active) does not break information hierarchy. All meaning remains legible.</td><td>Enable Windows High Contrast or Chrome forced-colors emulation.</td></tr>
+      <tr><td class="key">C-14</td><td>No positive tabindex values anywhere in the document.</td><td>Search DOM for tabindex > 0.</td></tr>
+      <tr><td class="key">C-15</td><td>Empty states include: what is empty, an explanation, and a suggested action (if one exists).</td><td>Trigger every empty state. Confirm three required elements present.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ssub">Recommended</div>
+  <table class="spec-table">
+    <thead><tr><th>#</th><th>Criterion</th></tr></thead>
+    <tbody>
+      <tr><td class="key">R-01</td><td>HTMX response fragments carry data-fragment-type attribute.</td></tr>
+      <tr><td class="key">R-02</td><td>aria-live="polite" and aria-live="assertive" regions present in page shell.</td></tr>
+      <tr><td class="key">R-03</td><td>Worm strip on acme-win body is interactive (click-to-scroll) not merely decorative.</td></tr>
+      <tr><td class="key">R-04</td><td>Loading feedback appears within 500ms for any HTMX request exceeding that threshold.</td></tr>
+      <tr><td class="key">R-05</td><td>All decorative spans and pseudo-elements carry aria-hidden="true".</td></tr>
+    </tbody>
+  </table>
+</section>
+  </div><!-- /cb -->
+</main>
+</div><!-- /page-wrap -->
+
+<script>
+function setTheme(theme, btnId) {
+  document.documentElement.dataset.theme = theme;
+  document.querySelectorAll('.cde-theme button').forEach(b => b.classList.remove('active'));
+  if (btnId) document.getElementById(btnId).classList.add('active');
+}
+
+// Scrollspy
+const links = document.querySelectorAll('.nav-link');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+    }
+  });
+}, { rootMargin: '-38px 0px -55% 0px', threshold: 0 });
+document.querySelectorAll('section[id]').forEach(s => obs.observe(s));
+
+// Worm strip demo
+(function() {
+  const strip = document.getElementById('worm-strip');
+  const body  = document.getElementById('worm-body');
+  const thumb = document.getElementById('worm-thumb');
+  if (!strip || !body || !thumb) return;
+
+  strip.addEventListener('click', function(e) {
+    const r = strip.getBoundingClientRect();
+    const ratio = (e.clientY - r.top) / r.height;
+    body.scrollTop = ratio * (body.scrollHeight - body.clientHeight);
+  });
+
+  body.addEventListener('scroll', function() {
+    const vis = body.clientHeight / body.scrollHeight;
+    const pos = body.scrollTop  / body.scrollHeight;
+    thumb.style.top    = (pos * 100) + '%';
+    thumb.style.height = (vis * 100) + '%';
+  });
+
+  // Initialize thumb
+  body.dispatchEvent(new Event('scroll'));
+
+  // Keyboard scroll on worm strip (Up/Down/PageUp/PageDown/Home/End)
+  strip.addEventListener('keydown', function(e) {
+    const step = body.clientHeight * 0.1;
+    const page = body.clientHeight * 0.9;
+    const map = {
+      ArrowUp: -step, ArrowDown: step,
+      PageUp: -page,  PageDown: page,
+      Home: -body.scrollHeight, End: body.scrollHeight
+    };
+    if (map[e.key] !== undefined) {
+      e.preventDefault();
+      body.scrollTop += map[e.key];
+    }
+  });
+})();
+</script>
+</body>
+</html>

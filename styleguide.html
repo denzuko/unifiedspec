@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unified Design System v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inconsolata:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+
+/*
+ * UNIFIED DESIGN SYSTEM v2
+ * Solarized · Okabe-Ito · Plan 9/Acme · Solaris/CDE
+ *
+ * Philosophy: utility-first composition (Bell Labs / Plan 9 practice)
+ * Acme is the primary pattern. CDE reserved for deep-action application frames.
+ * Animations: none (heritage practice). Exception: focus-visible outlines only.
+ * Viewport: desktop + tablet first. Mobile receives graceful degradation.
+ *
+ * Token architecture:
+ *   Layer 0 — raw palette constants (never used directly in markup)
+ *   Layer 1 — semantic tokens (used in utility classes)
+ *   Layer 2 — utility classes (composed at call site)
+ */
+
+/* ── LAYER 0: RAW PALETTE CONSTANTS ──────────────────────────────────────── */
+:root {
+  /* Solarized — Ethan Schoonover 2011, CIELAB-calibrated */
+  --sol-base03: #002b36; --sol-base02: #073642; --sol-base01: #586e75;
+  --sol-base00: #657b83; --sol-base0:  #839496; --sol-base1:  #93a1a1;
+  --sol-base2:  #eee8d5; --sol-base3:  #fdf6e3;
+  --sol-yellow: #b58900; --sol-orange: #cb4b16; --sol-red:    #dc322f;
+  --sol-magenta:#d33682; --sol-violet: #6c71c4; --sol-blue:   #268bd2;
+  --sol-cyan:   #2aa198; --sol-green:  #859900;
+
+  /* Okabe-Ito — CVD-safe, 2002 */
+  --oi-blue:       #0072b2; --oi-skyblue:   #56b4e9;
+  --oi-green:      #009e73; --oi-orange:    #e69f00;
+  --oi-vermillion: #d55e00; --oi-pink:      #cc79a7;
+  --oi-yellow:     #f0e442;
+
+  /* Plan 9 / Acme */
+  --p9-body: #ffffea; --p9-tag:    #eaffff;
+  --p9-sel:  #9eeeee; --p9-scroll: #aaaaaa;
+
+  /* Solaris / CDE */
+  --cde-teal:   #008080; --cde-teal-dk: #005555;
+  --sun-orange: #d04000;
+  --motif-gray: #c0c0c0; --motif-lt:    #e8e8e8;
+
+  /* ── LAYER 1: SEMANTIC TOKENS — LIGHT ──────────────────────────────────── */
+  /*
+   * Dark mode fix v2:
+   *   Light: fg-body = base01 (#586e75) @ 4.99:1 on base3  ✓ AA
+   *   Dark:  fg-body = base1  (#93a1a1) @ 5.61:1 on base03 ✓ AA
+   *   Previously used base0 (#839496) @ 4.75:1 — technically AA but perceptually dim
+   */
+
+  /* Backgrounds */
+  --bg:          var(--sol-base3);   /* content area */
+  --bg-surface:  var(--sol-base2);   /* panels, sidebar, demo blocks */
+  --bg-tag:      #eafaff;            /* Acme tag bar — P9 + Solarized blend */
+  --bg-titlebar: var(--cde-teal);    /* CDE app frame */
+  --bg-sel:      var(--p9-sel);      /* selection, focus fill */
+  --bg-code:     var(--sol-base02);  /* code block surface */
+
+  /* Foreground — CORRECTED dark mode progression */
+  --fg-head:    var(--sol-base03);   /* 13.92:1 on base3  | swaps to base2 in dark */
+  --fg-body:    var(--sol-base01);   /* 4.99:1  on base3  | swaps to base1 in dark */
+  --fg-muted:   var(--sol-base00);   /* 4.13:1  on base3  | swaps to base0 in dark */
+  --fg-faint:   var(--sol-base1);    /* decorative/disabled only */
+  --fg-on-dark: var(--sol-base3);    /* text on dark surfaces */
+  --fg-code:    var(--sol-base0);    /* code text on base02 */
+
+  /* Borders — Plan 9 weight: 1px is the default, structural */
+  --border:    #999999;
+  --border-lt: #cccccc;
+  --border-tag:#b8d8d8;
+  --border-titlebar: var(--cde-teal-dk);
+
+  /* Semantic accent — Okabe-Ito */
+  --primary:   var(--oi-blue);
+  --success:   var(--oi-green);
+  --warning:   var(--oi-orange);
+  --danger:    var(--oi-vermillion);
+  --info:      var(--oi-skyblue);
+  --special:   var(--oi-pink);
+
+  /* Syntax — Solarized token assignments */
+  --syn-kw:    var(--sol-green);
+  --syn-str:   var(--sol-cyan);
+  --syn-num:   var(--sol-magenta);
+  --syn-cmt:   var(--sol-base01);
+  --syn-fn:    var(--sol-blue);
+  --syn-var:   var(--sol-yellow);
+  --syn-type:  var(--sol-orange);
+
+  /* Worm — Plan 9 positional scrollbar */
+  --worm:       var(--p9-scroll);
+  --worm-track: #e0e0e0;
+
+  /* Typography */
+  --font-ui:   'Titillium Web', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'Inconsolata', 'Courier New', monospace;
+
+  /* Spacing — 4px base (Plan 9 dense convention) */
+  --sp-1: 4px;  --sp-2: 8px;   --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px;  --sp-7: 48px; --sp-8: 64px;
+
+  /* Radius — split register */
+  --r-0: 0px; --r-1: 2px; --r-2: 4px; --r-3: 6px;
+}
+
+/* ── LAYER 1: SEMANTIC TOKENS — DARK ────────────────────────────────────── */
+[data-theme="dark"] {
+  /* Backgrounds */
+  --bg:          var(--sol-base03);  /* #002b36 — keep true base03 */
+  --bg-surface:  var(--sol-base02);  /* #073642 — panels/sidebar */
+  --bg-tag:      #052030;
+  --bg-titlebar: #005060;
+  --bg-sel:      #1a4050;
+  --bg-code:     #011018;
+
+  /* Foreground — FIXED: body lifted from base0 to base1 */
+  --fg-head:   var(--sol-base2);    /* #eee8d5 — 12.25:1 ✓✓ */
+  --fg-body:   var(--sol-base1);    /* #93a1a1 —  5.61:1 ✓  was base0 @ 4.75 */
+  --fg-muted:  var(--sol-base0);    /* #839496 —  4.75:1 ✓  secondary text */
+  --fg-faint:  var(--sol-base01);   /* #586e75 —  2.79:1    decorative only */
+  --fg-on-dark:var(--sol-base3);
+  --fg-code:   var(--sol-base0);    /* code on base02 panel: 4.11:1 */
+
+  /* Borders */
+  --border:     var(--sol-base02);
+  --border-lt:  #0d3040;
+  --border-tag: #0a3040;
+  --border-titlebar: #003344;
+
+  /* Accents — skyblue replaces blue for dark bg legibility */
+  --primary:  var(--oi-skyblue);    /* #56b4e9 — brighter on dark */
+  --success:  #00c896;
+  --danger:   #f07050;
+  --special:  #e098c0;
+
+  --worm:       #3a5a6a;
+  --worm-track: #031820;
+}
+
+/* ── RESET ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 1rem; }
+body {
+  background: var(--bg-surface);
+  color: var(--fg-body);
+  font-family: var(--font-ui);
+  line-height: 1.6;
+}
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code, kbd, pre, samp { font-family: var(--font-mono); }
+
+/* No animations. Exception: focus-visible ring only. */
+*:focus { outline: none; }
+*:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* ── LAYER 2: UTILITY CLASSES ───────────────────────────────────────────── */
+/*
+ * Utility-first composition — Bell Labs / Plan 9 philosophy.
+ * Classes describe what they do, not what they are.
+ * Compose at the call site; no component wrappers own the markup.
+ *
+ * Naming:
+ *   bg-*      background
+ *   fg-*      foreground / color
+ *   border-*  border
+ *   p-*       padding
+ *   m-*       margin
+ *   text-*    typography
+ *   flex-*    flexbox
+ *   grid-*    grid
+ *   w-*       width
+ *   h-*       height
+ *   gap-*     gap
+ *   r-*       border-radius
+ *   worm-*    Plan 9 worm strip
+ *   tag-*     Acme tag bar
+ *   cde-*     Solaris CDE chrome
+ */
+
+/* Backgrounds */
+.bg-base       { background: var(--bg); }
+.bg-surface    { background: var(--bg-surface); }
+.bg-tag        { background: var(--bg-tag); }
+.bg-sel        { background: var(--bg-sel); }
+.bg-titlebar   { background: var(--bg-titlebar); }
+.bg-code       { background: var(--bg-code); }
+.bg-primary    { background: var(--primary); }
+.bg-success    { background: var(--success); }
+.bg-warning    { background: var(--warning); }
+.bg-danger     { background: var(--danger); }
+.bg-info       { background: var(--info); }
+.bg-special    { background: var(--special); }
+.bg-transparent{ background: transparent; }
+
+/* Foreground / color */
+.fg-head       { color: var(--fg-head); }
+.fg-body       { color: var(--fg-body); }
+.fg-muted      { color: var(--fg-muted); }
+.fg-faint      { color: var(--fg-faint); }
+.fg-on-dark    { color: var(--fg-on-dark); }
+.fg-primary    { color: var(--primary); }
+.fg-success    { color: var(--success); }
+.fg-warning    { color: var(--warning); }
+.fg-danger     { color: var(--danger); }
+.fg-info       { color: var(--info); }
+.fg-special    { color: var(--special); }
+.fg-syn-kw     { color: var(--syn-kw); }
+.fg-syn-str    { color: var(--syn-str); }
+.fg-syn-fn     { color: var(--syn-fn); }
+.fg-syn-num    { color: var(--syn-num); }
+.fg-syn-cmt    { color: var(--syn-cmt); font-style: italic; }
+.fg-syn-var    { color: var(--syn-var); }
+.fg-syn-type   { color: var(--syn-type); }
+
+/* Borders */
+.border        { border: 1px solid var(--border); }
+.border-lt     { border: 1px solid var(--border-lt); }
+.border-tag    { border: 1px solid var(--border-tag); }
+.border-t      { border-top: 1px solid var(--border); }
+.border-b      { border-bottom: 1px solid var(--border); }
+.border-l      { border-left: 1px solid var(--border); }
+.border-r      { border-right: 1px solid var(--border); }
+.border-t-lt   { border-top: 1px solid var(--border-lt); }
+.border-b-lt   { border-bottom: 1px solid var(--border-lt); }
+.border-2      { border-width: 2px; }
+.border-primary{ border-color: var(--primary); }
+.border-success{ border-color: var(--success); }
+.border-danger { border-color: var(--danger); }
+.border-titlebar{ border-bottom: 2px solid var(--border-titlebar); }
+.border-none   { border: none; }
+.border-l-3    { border-left: 3px solid; }
+.border-t-3    { border-top: 3px solid; }
+
+/* Padding */
+.p-1 { padding: var(--sp-1); } .p-2 { padding: var(--sp-2); }
+.p-3 { padding: var(--sp-3); } .p-4 { padding: var(--sp-4); }
+.p-5 { padding: var(--sp-5); } .p-6 { padding: var(--sp-6); }
+.px-1{ padding-left: var(--sp-1); padding-right: var(--sp-1); }
+.px-2{ padding-left: var(--sp-2); padding-right: var(--sp-2); }
+.px-3{ padding-left: var(--sp-3); padding-right: var(--sp-3); }
+.px-4{ padding-left: var(--sp-4); padding-right: var(--sp-4); }
+.px-5{ padding-left: var(--sp-5); padding-right: var(--sp-5); }
+.py-1{ padding-top: var(--sp-1); padding-bottom: var(--sp-1); }
+.py-2{ padding-top: var(--sp-2); padding-bottom: var(--sp-2); }
+.py-3{ padding-top: var(--sp-3); padding-bottom: var(--sp-3); }
+.py-4{ padding-top: var(--sp-4); padding-bottom: var(--sp-4); }
+.pl-4{ padding-left: var(--sp-4); } .pl-5{ padding-left: var(--sp-5); }
+.pl-6{ padding-left: var(--sp-6); } .pl-7{ padding-left: var(--sp-7); }
+.pr-4{ padding-right: var(--sp-4); }
+.pt-4{ padding-top: var(--sp-4); } .pb-4{ padding-bottom: var(--sp-4); }
+
+/* Margin */
+.mb-1{ margin-bottom: var(--sp-1); } .mb-2{ margin-bottom: var(--sp-2); }
+.mb-3{ margin-bottom: var(--sp-3); } .mb-4{ margin-bottom: var(--sp-4); }
+.mb-5{ margin-bottom: var(--sp-5); } .mb-6{ margin-bottom: var(--sp-6); }
+.mb-7{ margin-bottom: var(--sp-7); } .mb-8{ margin-bottom: var(--sp-8); }
+.mt-4{ margin-top: var(--sp-4); } .mt-5{ margin-top: var(--sp-5); }
+.mt-6{ margin-top: var(--sp-6); }
+
+/* Typography */
+.text-ui     { font-family: var(--font-ui); }
+.text-mono   { font-family: var(--font-mono); }
+.text-xs     { font-size: 0.625rem; }
+.text-sm     { font-size: 0.6875rem; }
+.text-base   { font-size: 0.8125rem; }
+.text-md     { font-size: 0.875rem; }
+.text-lg     { font-size: 1rem; }
+.text-xl     { font-size: 1.25rem; }
+.text-2xl    { font-size: 1.75rem; }
+.text-3xl    { font-size: 2.25rem; }
+.text-4xl    { font-size: 3.25rem; }
+.text-bold   { font-weight: 700; }
+.text-semibold{ font-weight: 600; }
+.text-normal { font-weight: 400; }
+.text-upper  { text-transform: uppercase; }
+.text-tracked{ letter-spacing: .12em; }
+.text-tracked-wide { letter-spacing: .14em; }
+.text-italic { font-style: italic; }
+.line-snug   { line-height: 1.2; }
+.line-base   { line-height: 1.6; }
+.line-loose  { line-height: 1.75; }
+.line-code   { line-height: 1.7; }
+.max-prose   { max-width: 64ch; }
+.max-wide    { max-width: 920px; }
+
+/* Radius */
+.r-0  { border-radius: var(--r-0); }
+.r-1  { border-radius: var(--r-1); }
+.r-2  { border-radius: var(--r-2); }
+.r-3  { border-radius: var(--r-3); }
+
+/* Layout */
+.flex        { display: flex; }
+.flex-col    { display: flex; flex-direction: column; }
+.flex-1      { flex: 1; }
+.flex-none   { flex: none; }
+.items-center{ align-items: center; }
+.items-start { align-items: flex-start; }
+.items-stretch{ align-items: stretch; }
+.justify-between{ justify-content: space-between; }
+.flex-wrap   { flex-wrap: wrap; }
+.gap-1{ gap: var(--sp-1); } .gap-2{ gap: var(--sp-2); }
+.gap-3{ gap: var(--sp-3); } .gap-4{ gap: var(--sp-4); }
+.gap-5{ gap: var(--sp-5); } .gap-6{ gap: var(--sp-6); }
+.grid        { display: grid; }
+.grid-2      { grid-template-columns: 1fr 1fr; }
+.grid-3      { grid-template-columns: 1fr 1fr 1fr; }
+.grid-4      { grid-template-columns: repeat(4, 1fr); }
+.grid-sidebar{ grid-template-columns: 230px 1fr; }
+.grid-token  { grid-template-columns: 200px 36px 110px 1fr; }
+.grid-field  { grid-template-columns: 1fr 1fr; }
+.grid-auto   { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); }
+.overflow-x  { overflow-x: auto; }
+.overflow-y  { overflow-y: auto; }
+.overflow-h  { overflow: hidden; }
+.w-full      { width: 100%; }
+.h-full      { height: 100%; }
+.min-h-screen{ min-height: 100vh; }
+.sticky      { position: sticky; }
+.top-0       { top: 0; }
+.relative    { position: relative; }
+.absolute    { position: absolute; }
+.fixed       { position: fixed; }
+.z-5         { z-index: 5; }
+.z-20        { z-index: 20; }
+.z-30        { z-index: 30; }
+.cursor-pointer{ cursor: pointer; }
+.cursor-text   { cursor: text; }
+.pointer-none  { pointer-events: none; }
+.select-none   { user-select: none; }
+.whitespace-nowrap{ white-space: nowrap; }
+.opacity-0   { opacity: 0; }
+.inset-0     { inset: 0; }
+
+/* ── PLAN 9 ACME PRIMITIVES ─────────────────────────────────────────────── */
+/*
+ * The core Acme pattern: tag-bar + body + worm.
+ * Compose from utilities; these are the only Acme-specific helpers.
+ */
+
+/* Worm strip — left-edge positional indicator */
+.worm-strip {
+  width: 5px; flex-shrink: 0;
+  background: var(--worm);
+  border-right: 1px solid var(--border-lt);
+}
+/* Worm as sidebar position indicator (fixed, global) */
+.worm-global {
+  position: fixed; left: 0; top: 38px; bottom: 0; width: 5px;
+  background: linear-gradient(to bottom, var(--worm) 0%, var(--worm) 28%, var(--worm-track) 28%);
+  pointer-events: none; z-index: 20;
+}
+
+/* Tag bar — the Acme window header */
+.tag-bar {
+  background: var(--bg-tag);
+  border-bottom: 1px solid var(--border-tag);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--fg-body);
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: 3px var(--sp-5) 3px 14px;
+  position: relative;
+}
+.tag-bar::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+  background: var(--worm);
+  border-right: 1px solid var(--border-lt);
+}
+.tag-bar .tag-path { font-weight: 700; }
+.tag-bar .tag-cmd  { color: var(--fg-faint); padding: 0 2px; }
+.tag-bar .tag-cmd:hover { background: var(--bg-sel); color: var(--fg-head); cursor: pointer; }
+
+/* Acme body — content area with left worm track */
+.acme-body {
+  background: var(--bg);
+  padding: var(--sp-5) var(--sp-5) var(--sp-5) var(--sp-7);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem; line-height: 1.7; color: var(--fg-body);
+  position: relative;
+}
+.acme-body::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+  background: var(--worm-track);
+  border-right: 1px solid var(--border-lt);
+}
+
+/* Acme window = border wrapping tag-bar + acme-body */
+.acme-win { border: 1px solid var(--border); }
+
+/* ── CDE CHROME ─────────────────────────────────────────────────────────── */
+/* Use sparingly — applications with many top-level actions only */
+.cde-bar {
+  background: var(--bg-titlebar); color: var(--fg-on-dark);
+  border-bottom: 2px solid var(--border-titlebar);
+  display: flex; align-items: stretch; height: 38px;
+}
+.cde-bar .cde-logo {
+  background: var(--sun-orange);
+  padding: 0 var(--sp-5);
+  display: flex; align-items: center;
+  font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; color: #fff;
+  border-right: 1px solid rgba(0,0,0,.2); white-space: nowrap; gap: var(--sp-3);
+}
+.cde-bar .cde-title {
+  padding: 0 var(--sp-5); flex: 1; display: flex; align-items: center;
+  font-family: var(--font-ui); font-size: 0.875rem; font-weight: 600;
+  color: rgba(255,255,255,.95); letter-spacing: .03em;
+}
+.cde-bar .cde-actions {
+  display: flex; align-items: center; gap: var(--sp-2);
+  padding: 0 var(--sp-4); border-left: 1px solid rgba(255,255,255,.1);
+}
+.cde-bar .cde-btn {
+  width: 14px; height: 10px;
+  background: var(--motif-lt); border: 1px outset var(--motif-lt);
+  font-size: 7px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.cde-bar .cde-btn:active { border-style: inset; }
+.cde-bar .cde-theme {
+  display: flex; align-items: center; gap: 4px;
+  padding: 0 var(--sp-4); border-left: 1px solid rgba(255,255,255,.1);
+}
+.cde-bar .cde-theme button {
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.85); font-family: var(--font-mono); font-size: 0.6875rem;
+  padding: 3px var(--sp-3); cursor: pointer;
+}
+.cde-bar .cde-theme button:hover  { background: rgba(255,255,255,.22); }
+.cde-bar .cde-theme button.active { background: rgba(255,255,255,.28); color: #fff; font-weight: 700; }
+
+/* ── INTERACTIVE COMPONENTS ─────────────────────────────────────────────── */
+
+/* Buttons — three registers */
+.btn {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  font-family: var(--font-ui); font-size: 0.875rem; font-weight: 600;
+  cursor: pointer; border: none; padding: 7px var(--sp-5);
+}
+.btn:hover   { filter: brightness(1.08); }
+.btn:active  { filter: brightness(.95); }
+.btn:disabled{ opacity: .4; cursor: not-allowed; filter: none; }
+
+/* Solid — Okabe-Ito semantic */
+.btn-primary  { background: var(--primary);  color: #fff; border-radius: var(--r-2); }
+.btn-success  { background: var(--success);  color: #fff; border-radius: var(--r-2); }
+.btn-warning  { background: var(--warning);  color: #fff; border-radius: var(--r-2); }
+.btn-danger   { background: var(--danger);   color: #fff; border-radius: var(--r-2); }
+.btn-info     { background: var(--info);     color: #fff; border-radius: var(--r-2); }
+.btn-special  { background: var(--special);  color: #fff; border-radius: var(--r-2); }
+[data-theme="dark"] .btn-primary { background: var(--oi-skyblue); }
+
+/* Motif — CDE 3D depth */
+.btn-motif {
+  background: var(--motif-gray); border: 2px outset var(--motif-lt);
+  color: #222; padding: 5px var(--sp-5); font-weight: 400;
+  border-radius: var(--r-0);
+}
+.btn-motif:active { border-style: inset; filter: none; }
+.btn-motif:hover  { filter: none; }
+[data-theme="dark"] .btn-motif { background: #1e3448; border-color: #2a4a64; color: var(--fg-body); }
+
+/* Ghost — Plan 9 borderless */
+.btn-ghost {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--fg-head); border-radius: var(--r-0);
+}
+.btn-ghost:hover { background: var(--bg-sel); filter: none; }
+
+/* Inputs — standard */
+.inp {
+  background: var(--bg); border: 1.5px solid var(--border);
+  padding: 7px var(--sp-4); font-family: var(--font-mono); font-size: 0.8125rem;
+  color: var(--fg-body); width: 100%;
+}
+.inp:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 20%, transparent);
+  background: var(--bg-sel);
+}
+.inp::placeholder { color: var(--fg-faint); }
+.inp.state-ok     { border-color: var(--success); }
+.inp.state-err    { border-color: var(--danger); }
+select.inp {
+  appearance: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px;
+}
+[data-theme="dark"] .inp { background: var(--bg-surface); }
+
+/* Ghost input — Plan 9 register with affordance pip */
+.inp-ghost-wrap { position: relative; cursor: text; }
+.inp-ghost-wrap::before {
+  content: ''; position: absolute;
+  left: 0; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 60%;
+  background: var(--primary); opacity: .5;
+}
+.inp-ghost-wrap:focus-within::before { opacity: 1; height: 85%; }
+.inp-ghost {
+  background: transparent; border: none; border-bottom: 1.5px solid var(--primary);
+  padding: 6px 4px 5px var(--sp-4); font-family: var(--font-mono); font-size: 0.8125rem;
+  color: var(--fg-body); width: 100%; cursor: text;
+}
+.inp-ghost:focus  { outline: none; background: var(--bg-sel); }
+.inp-ghost:hover  { background: color-mix(in srgb, var(--primary) 5%, transparent); }
+.inp-ghost::placeholder { color: var(--fg-faint); }
+
+/* Badges — OI colors, Plan 9 rectilinear */
+.badge {
+  display: inline-block; padding: 2px var(--sp-3);
+  font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .05em; border: 1px solid;
+  border-radius: var(--r-0);
+}
+.badge-primary { background: color-mix(in srgb, var(--primary)  12%, transparent); border-color: color-mix(in srgb, var(--primary)  35%, transparent); color: var(--primary); }
+.badge-success { background: color-mix(in srgb, var(--success)  12%, transparent); border-color: color-mix(in srgb, var(--success)  35%, transparent); color: var(--success); }
+.badge-warning { background: color-mix(in srgb, var(--warning)  12%, transparent); border-color: color-mix(in srgb, var(--warning)  35%, transparent); color: var(--warning); }
+.badge-danger  { background: color-mix(in srgb, var(--danger)   12%, transparent); border-color: color-mix(in srgb, var(--danger)   35%, transparent); color: var(--danger); }
+.badge-info    { background: color-mix(in srgb, var(--info)     12%, transparent); border-color: color-mix(in srgb, var(--info)     35%, transparent); color: var(--info); }
+.badge-special { background: color-mix(in srgb, var(--special)  12%, transparent); border-color: color-mix(in srgb, var(--special)  35%, transparent); color: var(--special); }
+.badge-neutral { background: color-mix(in srgb, var(--fg-muted) 10%, transparent); border-color: color-mix(in srgb, var(--fg-muted) 28%, transparent); color: var(--fg-muted); }
+
+/* Alerts */
+.alert { padding: var(--sp-4) var(--sp-5); border-left: 3px solid; font-size: 0.875rem; }
+.alert-head { font-family: var(--font-ui); font-weight: 700; margin-bottom: 3px; color: var(--fg-head); }
+.alert-body { font-size: 0.875rem; color: var(--fg-body); line-height: 1.65; }
+.alert-info    { background: color-mix(in srgb, var(--info)    8%, transparent); border-color: var(--info); }
+.alert-success { background: color-mix(in srgb, var(--success) 8%, transparent); border-color: var(--success); }
+.alert-warning { background: color-mix(in srgb, var(--warning) 8%, transparent); border-color: var(--warning); }
+.alert-danger  { background: color-mix(in srgb, var(--danger)  9%, transparent); border-color: var(--danger); }
+
+/* Code block */
+.code-block {
+  background: var(--bg-code); font-family: var(--font-mono); font-size: 0.8125rem;
+  line-height: 1.7; color: var(--fg-code); overflow-x: auto;
+  padding: var(--sp-5) var(--sp-5) var(--sp-5) var(--sp-7);
+  position: relative; border: 1px solid rgba(0,0,0,.2);
+}
+.code-block::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+  background: var(--worm);
+}
+
+/* Tables */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.data-table th {
+  background: var(--bg-titlebar); color: var(--fg-on-dark);
+  padding: var(--sp-3) var(--sp-4); text-align: left;
+  font-family: var(--font-mono); font-size: 0.6875rem;
+  text-transform: uppercase; letter-spacing: .08em;
+}
+.data-table td { padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--border-lt); color: var(--fg-body); }
+.data-table tr:nth-child(even) td { background: var(--bg-surface); }
+.data-table tr:hover td { background: var(--bg-sel); }
+
+/* Cards — CDE header convention */
+.card { border: 1px solid var(--border-lt); background: var(--bg); overflow: hidden; }
+.card-head {
+  background: var(--bg-titlebar); color: var(--fg-on-dark);
+  padding: var(--sp-2) var(--sp-4); font-family: var(--font-mono);
+  font-size: 0.75rem; font-weight: 700;
+  display: flex; align-items: center; gap: var(--sp-2);
+}
+.card-head-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.35); }
+.card-body { padding: var(--sp-4); font-size: 0.8125rem; color: var(--fg-muted); line-height: 1.65; }
+
+/* Stat card */
+.stat-card { background: var(--bg); border: 1px solid var(--border-lt); border-top: 3px solid var(--primary); padding: var(--sp-4); }
+.stat-label { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--fg-faint); text-transform: uppercase; letter-spacing: .08em; margin-bottom: var(--sp-2); }
+.stat-value { font-family: var(--font-mono); font-size: 26px; font-weight: 700; color: var(--fg-head); }
+.stat-delta { font-size: 0.75rem; margin-top: var(--sp-2); }
+
+/* Do / Don't */
+.rule-do   { border: 1px solid var(--success); padding: var(--sp-4); }
+.rule-dont { border: 1px solid var(--danger);  padding: var(--sp-4); }
+.rule-label{ font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; margin-bottom: var(--sp-3); }
+.rule-do   .rule-label { color: var(--success); }
+.rule-dont .rule-label { color: var(--danger); }
+[data-theme="dark"] .rule-do   .rule-label { color: #3dddaa; }
+[data-theme="dark"] .rule-dont .rule-label { color: #f07060; }
+.rule-body { font-size: 0.8125rem; color: var(--fg-body); line-height: 1.7; }
+
+/* Divider */
+.divider   { border: none; border-top: 1px solid var(--border); margin: var(--sp-5) 0; }
+.divider-lt{ border: none; border-top: 1px solid var(--border-lt); }
+
+/* Scrollbar — Acme worm style */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--worm-track); }
+::-webkit-scrollbar-thumb { background: var(--worm); }
+
+/* ── PAGE CHROME ────────────────────────────────────────────────────────── */
+/* These are the few structural classes that exist at the layout level */
+.page-sidebar {
+  background: var(--bg-tag);
+  border-right: 1px solid var(--border-tag);
+  overflow-y: auto; position: sticky;
+  top: 38px; height: calc(100vh - 38px);
+}
+.sb-brand {
+  background: var(--bg-titlebar);
+  padding: var(--sp-5) var(--sp-5) var(--sp-4);
+  border-bottom: 2px solid var(--border-titlebar);
+}
+.nav-link {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: 4px var(--sp-4) 4px var(--sp-6);
+  font-family: var(--font-mono); font-size: 0.75rem; color: var(--fg-muted);
+  text-decoration: none; border-left: 2px solid transparent;
+}
+.nav-link:hover { background: color-mix(in srgb, var(--primary) 7%, transparent); color: var(--fg-body); text-decoration: none; }
+.nav-link.active { color: var(--primary); border-left-color: var(--primary); background: color-mix(in srgb, var(--primary) 9%, transparent); font-weight: 700; }
+.nav-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.nav-group-label { font-family: var(--font-mono); font-size: 0.625rem; text-transform: uppercase; letter-spacing: .12em; color: var(--fg-faint); padding: 0 var(--sp-4) var(--sp-2) var(--sp-6); }
+.section { margin-bottom: var(--sp-8); scroll-margin-top: calc(38px + var(--sp-7)); }
+
+
+/* Print — strip chrome, let content flow */
+@media print {
+  .cde-bar, .page-sidebar, .skip-link, .worm-global,
+  .ctag, .tb-theme { display: none !important; }
+  .page-wrap { grid-template-columns: 1fr !important; }
+  .main { overflow: visible !important; }
+  .cb { padding: 0 !important; max-width: 100% !important; }
+  .section { break-inside: avoid; margin-bottom: 24pt; }
+  .code-block { break-inside: avoid; font-size: 10pt; }
+  a[href]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #666; }
+  a[href^="#"]::after { content: ""; }
+
+/* Selection colour — Acme cyan */
+::selection { background: var(--bg-sel); color: var(--fg-head); }
+
+/* Skip to main content */
+.skip-link {
+  position: absolute; top: -40px; left: 0; z-index: 100;
+  background: var(--bg-titlebar); color: var(--fg-on-dark);
+  padding: var(--sp-3) var(--sp-5);
+  font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 700;
+  text-decoration: none;
+}
+.skip-link:focus-visible { top: 0; outline: 2px solid #fff; outline-offset: 2px; }
+}
+
+/* ── FORCED COLORS (Windows High Contrast / Apple Increase Contrast) ──────
+   Overrides Solarized palette with OS-mandated system colors.
+   Required for federal procurement and WCAG 1.4.11.               */
+@media (forced-colors: active) {
+  :root {
+    --bg:          Canvas;
+    --bg-surface:  Canvas;
+    --bg-tag:      Canvas;
+    --bg-sel:      Highlight;
+    --fg-head:     CanvasText;
+    --fg-body:     CanvasText;
+    --fg-muted:    CanvasText;
+    --fg-faint:    GrayText;
+    --fg-on-dark:  CanvasText;
+    --border:      ButtonText;
+    --border-lt:   ButtonText;
+    --border-tag:  ButtonText;
+    --primary:     Highlight;
+    --success:     CanvasText;
+    --warning:     CanvasText;
+    --danger:      CanvasText;
+    --worm:        ButtonText;
+    --worm-track:  Canvas;
+  }
+  .cde-bar, .sb-brand, .tag-bar, .acme-win,
+  .card-head, .chdr, .badge, .alert,
+  .btn, .inp, .inp-ghost, .data-table th,
+  .dtbl th, .spec-table th { forced-color-adjust: none; }
+  .skip-link:focus-visible { outline: 3px solid Highlight; }
+  *:focus-visible { outline: 2px solid Highlight; outline-offset: 2px; }
+}
+
+/* ── POINTER: COARSE (tablet / touch contexts) ─────────────────────────────
+   Desktop/tablet first. Coarse pointer = touch. Increase hit targets to 44px.
+   Tag-bar commands, worm strip, nav links, buttons all benefit.    */
+@media (pointer: coarse) {
+  .tag-cmd           { padding: var(--sp-3) var(--sp-4); min-height: 44px;
+                       display: inline-flex; align-items: center; }
+  .ctag .tag-cmd     { min-height: 38px; padding: var(--sp-2) var(--sp-4); }
+  .nav-link          { padding-top: var(--sp-3); padding-bottom: var(--sp-3); min-height: 44px; }
+  .worm-strip-demo   { width: 16px; min-width: 16px; }
+  .worm-global       { width: 10px; }
+  .sidebar::after    { width: 10px; }
+  .btn               { min-height: 44px; padding: var(--sp-3) var(--sp-5); }
+  .inp               { min-height: 44px; padding: var(--sp-3) var(--sp-4); }
+  .cde-btn, .cdecb   { width: 44px; height: 44px; font-size: 14px; }
+}
+
+/* ── BREAKPOINT TOKENS ──────────────────────────────────────────────────────
+   Used in @media queries only — not in the token cascade.
+   Desktop/tablet first; these are the floor values for layout shifts. */
+:root {
+  --bp-sm:  768px;   /* tablet portrait floor   */
+  --bp-md: 1024px;   /* tablet landscape / small desktop */
+  --bp-lg: 1280px;   /* standard desktop        */
+}
+
+/* ── SKELETON / LOADING PATTERN ─────────────────────────────────────────────
+   No animation. Structural placeholder using bg-surface tones.
+   For HTMX requests exceeding 500ms show loading badge.
+   For operations >2s, show skeleton structure.                     */
+.skeleton-line {
+  height: 0.875rem; background: var(--bg-surface);
+  border: 1px solid var(--border-lt); margin-bottom: var(--sp-3);
+  max-width: 100%;
+}
+.skeleton-line.w-75 { max-width: 75%; }
+.skeleton-line.w-50 { max-width: 50%; }
+.skeleton-line.w-33 { max-width: 33%; }
+.skeleton-block {
+  height: 60px; background: var(--bg-surface);
+  border: 1px solid var(--border-lt); margin-bottom: var(--sp-3);
+}
+
+/* ── EXPANDED / COLLAPSED STATE ─────────────────────────────────────────────
+   Disclosure pattern. No animation — state change is instantaneous.
+   aria-expanded drives the visual toggle.                           */
+.disclosure-trigger {
+  display: flex; align-items: center; gap: var(--sp-3);
+  cursor: pointer; font-family: var(--font-mono); font-size: 0.8125rem;
+  color: var(--fg-body); padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--border-lt); user-select: none;
+}
+.disclosure-trigger:hover { color: var(--fg-head); }
+.disclosure-indicator {
+  font-size: 0.6875rem; color: var(--fg-faint);
+  font-family: var(--font-mono); width: 12px; flex-shrink: 0;
+}
+[aria-expanded="true"]  .disclosure-indicator::before { content: '▼'; }
+[aria-expanded="false"] .disclosure-indicator::before { content: '▶'; }
+.disclosure-body { border-bottom: 1px solid var(--border-lt); }
+.disclosure-body[hidden] { display: none; }
+
+/* ── READONLY STATE ──────────────────────────────────────────────────────────
+   Field is populated but not editable.
+   Border softens to --border-lt. Cursor: default. No focus ring.   */
+.inp[readonly], .inp-readonly {
+  background: var(--bg-surface);
+  border-color: var(--border-lt);
+  color: var(--fg-muted);
+  cursor: default;
+}
+.inp[readonly]:focus-visible, .inp-readonly:focus-visible {
+  outline: none; box-shadow: none; border-color: var(--border-lt);
+  background: var(--bg-surface);
+}
+</style>
+</head>
+<body>
+
+<!-- CDE BAR — sticky application frame -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="cde-bar sticky top-0 z-30" style="grid-column:1/-1">
+  <div class="cde-logo">
+    <span style="display:flex;gap:3px">
+      <span style="width:7px;height:7px;border-radius:50%;background:#e69f00"></span>
+      <span style="width:7px;height:7px;border-radius:50%;background:#56b4e9"></span>
+      <span style="width:7px;height:7px;border-radius:50%;background:#009e73"></span>
+      <span style="width:7px;height:7px;border-radius:50%;background:#d55e00"></span>
+    </span>
+    UNIFIED
+  </div>
+  <div class="cde-title">Unified Design System &mdash; v2.0</div>
+  <div class="cde-actions">
+    <span class="text-mono text-xs fg-on-dark" style="opacity:.6;letter-spacing:.1em;text-transform:uppercase">Solarized &middot; OI &middot; Plan&nbsp;9 &middot; CDE</span>
+  </div>
+  <div class="cde-theme">
+    <button id="btn-light" class="active" onclick="setTheme('light','btn-light')">&#9728; Light</button>
+    <button id="btn-dark"  onclick="setTheme('dark','btn-dark')">&#9773; Dark</button>
+  </div>
+</div>
+
+  <!-- Aria-live regions -->
+  <div id="live-status" aria-live="polite"   aria-atomic="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"></div>
+  <div id="live-error"  aria-live="assertive" aria-atomic="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"></div>
+
+<div class="grid grid-sidebar min-h-screen">
+
+<!-- SIDEBAR -->
+<nav class="page-sidebar" aria-label="Styleguide navigation">
+  <div class="worm-global"></div>
+  <div class="sb-brand">
+    <div class="text-mono text-xs fg-on-dark mb-2" style="opacity:.5;text-transform:uppercase;letter-spacing:.14em">Design System</div>
+    <div class="text-ui text-xl text-bold fg-on-dark">Unified</div>
+    <div class="text-mono text-sm" style="color:rgba(255,255,255,.42);margin-top:3px">Sol &middot; OI &middot; P9 &middot; CDE</div>
+  </div>
+  <div class="border-b-lt py-3">
+    <div class="nav-group-label">Philosophy</div>
+    <a class="nav-link active" href="#synthesis"><span class="nav-dot" style="background:var(--oi-blue)" aria-hidden="true"></span>Synthesis</a>
+    <a class="nav-link" href="#palette"><span class="nav-dot" style="background:var(--oi-orange)" aria-hidden="true"></span>Palette origins</a>
+  </div>
+  <div class="border-b-lt py-3">
+    <div class="nav-group-label">Foundation</div>
+    <a class="nav-link" href="#tokens"><span class="nav-dot" style="background:var(--oi-green)" aria-hidden="true"></span>Tokens</a>
+    <a class="nav-link" href="#utilities"><span class="nav-dot" style="background:var(--oi-pink)" aria-hidden="true"></span>Utilities</a>
+    <a class="nav-link" href="#spacing"><span class="nav-dot" style="background:var(--sol-cyan)" aria-hidden="true"></span>Spacing &amp; radius</a>
+    <a class="nav-link" href="#typography"><span class="nav-dot" style="background:var(--oi-orange)" aria-hidden="true"></span>Typography</a>
+  </div>
+  <div class="border-b-lt py-3">
+    <div class="nav-group-label">Acme patterns</div>
+    <a class="nav-link" href="#acme"><span class="nav-dot" style="background:var(--p9-scroll)" aria-hidden="true"></span>Tag bar &amp; body</a>
+    <a class="nav-link" href="#ghost"><span class="nav-dot" style="background:var(--oi-skyblue)" aria-hidden="true"></span>Ghost inputs</a>
+  </div>
+  <div class="border-b-lt py-3">
+    <div class="nav-group-label">Components</div>
+    <a class="nav-link" href="#buttons"><span class="nav-dot" style="background:var(--oi-blue)" aria-hidden="true"></span>Buttons</a>
+    <a class="nav-link" href="#inputs"><span class="nav-dot" style="background:var(--oi-skyblue)" aria-hidden="true"></span>Inputs</a>
+    <a class="nav-link" href="#badges"><span class="nav-dot" style="background:var(--oi-orange)" aria-hidden="true"></span>Badges</a>
+    <a class="nav-link" href="#cards"><span class="nav-dot" style="background:var(--cde-teal)" aria-hidden="true"></span>Cards</a>
+    <a class="nav-link" href="#alerts"><span class="nav-dot" style="background:var(--oi-vermillion)" aria-hidden="true"></span>Alerts</a>
+    <a class="nav-link" href="#code"><span class="nav-dot" style="background:var(--sol-cyan)" aria-hidden="true"></span>Code</a>
+    <a class="nav-link" href="#tables"><span class="nav-dot" style="background:var(--sol-blue)" aria-hidden="true"></span>Tables</a>
+  </div>
+  <div class="py-3">
+    <div class="nav-group-label">Guidelines</div>
+    <a class="nav-link" href="#breakpoints"><span class="nav-dot" style="background:var(--sol-blue)" aria-hidden="true"></span>Breakpoints</a>
+    <a class="nav-link" href="#skeleton"><span class="nav-dot" style="background:var(--fg-faint)" aria-hidden="true"></span>Skeleton / loading</a>
+    <a class="nav-link" href="#disclosure"><span class="nav-dot" style="background:var(--sol-cyan)" aria-hidden="true"></span>Disclosure</a>
+    <a class="nav-link" href="#readonly"><span class="nav-dot" style="background:var(--sol-base1)" aria-hidden="true"></span>Readonly</a>
+    <a class="nav-link" href="#dataviz"><span class="nav-dot" style="background:var(--oi-orange)" aria-hidden="true"></span>Data visualisation</a>
+    <a class="nav-link" href="#htmx"><span class="nav-dot" style="background:var(--oi-green)" aria-hidden="true"></span>HTMX patterns</a>
+    <a class="nav-link" href="#usage"><span class="nav-dot" style="background:var(--sol-green)" aria-hidden="true"></span>Usage rules</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="bg-base overflow-y" id="main-content">
+  <!-- Content tag bar — Acme idiom for main column -->
+  <div class="tag-bar sticky top-0 z-5 border-b">
+    <strong class="fg-body">/sys/unified/styleguide</strong>
+    <span class="tag-cmd">Get</span><span class="tag-cmd">Put</span><span class="tag-cmd">Look</span>
+    <span class="flex-1"></span>
+    <span class="fg-faint text-mono text-xs">v2.0 &middot; utility-first &middot; Acme-primary</span>
+  </div>
+  <div class="p-7 max-wide">
+
+<section class="section" id="synthesis">
+  <div class="mb-8 pb-7 border-b-lt">
+    <div class="flex gap-2 flex-wrap mb-5 items-center text-mono text-xs text-upper fg-faint" style="letter-spacing:.1em">
+      <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--sol-cyan)"></span>Solarized</span>
+      <span style="color:var(--border)">&rarr;</span>
+      <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--oi-orange)"></span>Okabe-Ito</span>
+      <span style="color:var(--border)">&rarr;</span>
+      <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--p9-scroll)"></span>Plan 9</span>
+      <span style="color:var(--border)">&rarr;</span>
+      <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--cde-teal)"></span>Solaris</span>
+    </div>
+    <div class="text-ui text-4xl text-bold fg-head line-snug mb-5" style="letter-spacing:-.02em"><h1 style="font:inherit;display:inline">Unified<br><span class="fg-primary">Design System</span></h1></div>
+    <p class="text-base line-loose fg-body max-prose mb-5">Four precision-engineered design traditions synthesised into one utility-first system. Utility classes compose at the call site; no component wrappers own the markup. Acme is the primary pattern.</p>
+    <div class="grid grid-2 gap-4 mb-5">
+      <div class="border-lt bg-surface p-4"><div class="text-mono text-xs text-upper text-bold mb-2 fg-syn-str" style="letter-spacing:.1em">Solarized &rarr; Tonal palette</div><div class="text-base fg-muted line-loose">CIELAB-calibrated base tones. Dark mode fix v2: fg-body lifted from base0 to base1, yielding 5.61:1 contrast on base03 (was 4.75). Headings use base2 at 12.25:1.</div></div>
+      <div class="border-lt bg-surface p-4"><div class="text-mono text-xs text-upper text-bold mb-2" style="letter-spacing:.1em;color:var(--oi-orange)">Okabe-Ito &rarr; Semantic color</div><div class="text-base fg-muted line-loose">All accent assignments (primary, success, warning, danger, special, info) are perceptually distinct under deuteranopia, protanopia, and tritanopia.</div></div>
+      <div class="border-lt bg-surface p-4"><div class="text-mono text-xs text-upper text-bold mb-2 fg-faint" style="letter-spacing:.1em">Plan 9 &rarr; Structure + utilities</div><div class="text-base fg-muted line-loose">Utility-first composition (Bell Labs practice). Tag-bar + body + worm as primary layout primitive. No animations except focus-visible accessibility requirement.</div></div>
+      <div class="border-lt bg-surface p-4"><div class="text-mono text-xs text-upper text-bold mb-2" style="letter-spacing:.1em;color:var(--cde-teal)">Solaris &rarr; Application chrome</div><div class="text-base fg-muted line-loose">CDE bar reserved for applications with many top-level actions. Most interfaces lead with Acme tag-bar. Motif 3D buttons available for command-heavy contexts.</div></div>
+    </div>
+    <div class="flex gap-2 flex-wrap">
+      <span class="badge badge-neutral">utility-first</span>
+      <span class="badge badge-neutral">no animations</span>
+      <span class="badge badge-neutral">desktop + tablet</span>
+      <span class="badge badge-neutral">htmx / static</span>
+      <span class="badge badge-neutral">2 fonts</span>
+      <span class="badge badge-success">dark mode fixed</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="palette">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Palette origins</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">All raw palette constants preserved verbatim. Never reference these in markup &mdash; always go through a utility class backed by a semantic token.</p>
+  <div>
+    <div class="flex gap-4 py-4 border-b-lt items-start">
+      <div class="text-mono text-xs text-upper fg-faint" style="letter-spacing:.1em;width:130px;padding-top:2px;flex-shrink:0">Solarized<br>base tones</div>
+      <div class="flex gap-2 flex-wrap">
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#002b36;border:1px solid #333;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">base03</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#073642;border:1px solid #333;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">base02</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#eee8d5;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">base2</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#fdf6e3;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">base3</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#93a1a1;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">base1 &uarr;</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#839496;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">base0</span></span>
+      </div>
+    </div>
+    <div class="flex gap-4 py-4 border-b-lt items-start">
+      <div class="text-mono text-xs text-upper fg-faint" style="letter-spacing:.1em;width:130px;padding-top:2px;flex-shrink:0">Solarized<br>accents</div>
+      <div class="flex gap-2 flex-wrap">
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#268bd2;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">blue</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#2aa198;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">cyan</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#859900;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">green</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#b58900;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">yellow</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#d33682;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">magenta</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#6c71c4;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">violet</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#cb4b16;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">orange</span></span>
+      </div>
+    </div>
+    <div class="flex gap-4 py-4 border-b-lt items-start">
+      <div class="text-mono text-xs text-upper fg-faint" style="letter-spacing:.1em;width:130px;padding-top:2px;flex-shrink:0">Okabe-Ito<br>semantics</div>
+      <div class="flex gap-2 flex-wrap">
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#0072b2;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">primary</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#56b4e9;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">info</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#009e73;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">success</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#e69f00;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">warning</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#d55e00;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">danger</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#cc79a7;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">special</span></span>
+      </div>
+    </div>
+    <div class="flex gap-4 py-4 border-b-lt items-start">
+      <div class="text-mono text-xs text-upper fg-faint" style="letter-spacing:.1em;width:130px;padding-top:2px;flex-shrink:0">Plan 9 Acme</div>
+      <div class="flex gap-2 flex-wrap">
+        <span class="flex items-center gap-2 px-3 py-1" style="border:1px solid #ccc"><span style="width:14px;height:14px;background:#ffffea;border:1px solid #ccc;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">body</span></span>
+        <span class="flex items-center gap-2 px-3 py-1" style="border:1px solid #ccc"><span style="width:14px;height:14px;background:#eaffff;border:1px solid #ccc;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">tag</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#9eeeee;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">sel</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#aaaaaa;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">worm</span></span>
+      </div>
+    </div>
+    <div class="flex gap-4 py-4 items-start">
+      <div class="text-mono text-xs text-upper fg-faint" style="letter-spacing:.1em;width:130px;padding-top:2px;flex-shrink:0">Solaris CDE</div>
+      <div class="flex gap-2 flex-wrap">
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#008080;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">teal</span></span>
+        <span class="flex items-center gap-2 px-3 py-1 border-lt"><span style="width:14px;height:14px;background:#d04000;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">orange</span></span>
+        <span class="flex items-center gap-2 px-3 py-1" style="border:1px solid #aaa"><span style="width:14px;height:14px;background:#c0c0c0;flex-shrink:0"></span><span class="text-mono text-xs fg-muted">motif</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="tokens">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Design tokens</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">Semantic tokens are the only layer markup should reference &mdash; via utility classes. The dark-mode fix is documented in the source column.</p>
+  <div class="overflow-x">
+    <table class="data-table">
+      <thead><tr><th>Token</th><th>Chip</th><th>Light</th><th>Dark</th><th>Contrast</th><th>Source</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td class="fg-primary text-mono text-base">--fg-head</td><td><div style="width:28px;height:20px;border:1px solid var(--border-lt);background:var(--fg-head)"></div></td><td>#002b36</td><td>#eee8d5</td><td>13.9 / 12.3</td><td><span class="badge badge-neutral">Sol base03/2</span></td><td>Headings</td></tr>
+        <tr><td class="fg-primary text-mono text-base">--fg-body</td><td><div style="width:28px;height:20px;border:1px solid var(--border-lt);background:var(--fg-body)"></div></td><td>#586e75</td><td>#93a1a1</td><td>5.0 / 5.6 &#10003;</td><td><span class="badge badge-success">Sol base01/1 v2</span></td><td>Body text &mdash; FIXED</td></tr>
+        <tr><td class="fg-primary text-mono text-base">--fg-muted</td><td><div style="width:28px;height:20px;border:1px solid var(--border-lt);background:var(--fg-muted)"></div></td><td>#657b83</td><td>#839496</td><td>4.1 / 4.8</td><td><span class="badge badge-neutral">Sol base00/0</span></td><td>Secondary text</td></tr>
+        <tr><td class="fg-primary text-mono text-base">--bg</td><td><div style="width:28px;height:20px;border:1px solid var(--border-lt);background:var(--bg)"></div></td><td>#fdf6e3</td><td>#002b36</td><td>&mdash;</td><td><span class="badge badge-neutral">Sol base3/03</span></td><td>Content area</td></tr>
+        <tr><td class="fg-primary text-mono text-base">--bg-surface</td><td><div style="width:28px;height:20px;border:1px solid var(--border-lt);background:var(--bg-surface)"></div></td><td>#eee8d5</td><td>#073642</td><td>&mdash;</td><td><span class="badge badge-neutral">Sol base2/02</span></td><td>Panels, sidebar</td></tr>
+        <tr><td class="fg-primary text-mono text-base">--bg-sel</td><td><div style="width:28px;height:20px;border:1px solid var(--border-lt);background:var(--bg-sel)"></div></td><td>#9eeeee</td><td>#1a4050</td><td>&mdash;</td><td><span class="badge badge-neutral">Acme sel</span></td><td>Selection, focus fill</td></tr>
+        <tr><td class="fg-primary text-mono text-base">--primary</td><td><div style="width:28px;height:20px;border:1px solid var(--border-lt);background:var(--primary)"></div></td><td>#0072b2</td><td>#56b4e9</td><td>&mdash;</td><td><span class="badge badge-neutral">OI blue/sky</span></td><td>Actions, links</td></tr>
+        <tr><td class="fg-primary text-mono text-base">--success</td><td><div style="width:28px;height:20px;border:1px solid var(--border-lt);background:var(--success)"></div></td><td>#009e73</td><td>#00c896</td><td>&mdash;</td><td><span class="badge badge-neutral">OI green</span></td><td>Success, ok</td></tr>
+        <tr><td class="fg-primary text-mono text-base">--warning</td><td><div style="width:28px;height:20px;border:1px solid var(--border-lt);background:var(--warning)"></div></td><td>#e69f00</td><td>#e69f00</td><td>&mdash;</td><td><span class="badge badge-neutral">OI orange</span></td><td>Caution</td></tr>
+        <tr><td class="fg-primary text-mono text-base">--danger</td><td><div style="width:28px;height:20px;border:1px solid var(--border-lt);background:var(--danger)"></div></td><td>#d55e00</td><td>#f07050</td><td>&mdash;</td><td><span class="badge badge-neutral">OI vermillion</span></td><td>Error, destructive</td></tr>
+        <tr><td class="fg-primary text-mono text-base">--worm</td><td><div style="width:28px;height:20px;border:1px solid var(--border-lt);background:var(--worm)"></div></td><td>#aaaaaa</td><td>#3a5a6a</td><td>&mdash;</td><td><span class="badge badge-neutral">Plan 9 Acme</span></td><td>Scrollbar worm strip</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section" id="utilities">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Utilities</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">Classes compose at the call site. No component wrappers, no semantic class names. This is the Bell Labs practice &mdash; small, orthogonal tools combined by the programmer.</p>
+
+  <div class="acme-win mb-5">
+    <div class="tag-bar"><span class="tag-path">/sys/unified/util-example.html</span><span class="tag-cmd">Look</span></div>
+    <div class="acme-body"><span class="fg-syn-cmt">&lt;!-- Standard bordered inputs use --&gt;</span>
+<span class="fg-syn-kw">class</span>=<span class="fg-syn-str">"inp"</span>               <span class="fg-syn-cmt">&lt;!-- all input styles --&gt;</span>
+<span class="fg-syn-kw">class</span>=<span class="fg-syn-str">"inp state-ok"</span>      <span class="fg-syn-cmt">&lt;!-- success border --&gt;</span>
+
+<span class="fg-syn-cmt">&lt;!-- A card assembled from utilities --&gt;</span>
+&lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"card"</span>&gt;
+  &lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"card-head"</span>&gt;...&lt;/<span class="fg-syn-kw">div</span>&gt;
+  &lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"card-body"</span>&gt;...&lt;/<span class="fg-syn-kw">div</span>&gt;
+&lt;/<span class="fg-syn-kw">div</span>&gt;
+
+<span class="fg-syn-cmt">&lt;!-- An inline stat assembled from utilities --&gt;</span>
+&lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"flex items-center gap-3 p-3 border-lt bg-surface"</span>&gt;
+  &lt;<span class="fg-syn-kw">span</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"text-mono text-2xl text-bold fg-primary"</span>&gt;847d&lt;/<span class="fg-syn-kw">span</span>&gt;
+  &lt;<span class="fg-syn-kw">span</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"text-mono text-xs text-upper fg-faint"</span>&gt;uptime&lt;/<span class="fg-syn-kw">span</span>&gt;
+&lt;/<span class="fg-syn-kw">div</span>&gt;
+
+<span class="fg-syn-cmt">&lt;!-- Ghost input with affordance wrapper --&gt;</span>
+&lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"inp-ghost-wrap"</span>&gt;
+  &lt;<span class="fg-syn-kw">input</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"inp-ghost"</span> <span class="fg-syn-var">placeholder</span>=<span class="fg-syn-str">"Look..."</span>&gt;
+&lt;/<span class="fg-syn-kw">div</span>&gt;</div>
+  </div>
+
+  <div class="grid grid-3 gap-4 mb-5 text-mono text-xs fg-muted">
+    <div class="border-lt p-3 bg-surface">
+      <div class="text-bold fg-body mb-2">Backgrounds</div>
+      bg-base &nbsp; bg-surface &nbsp; bg-tag<br>
+      bg-sel &nbsp; bg-titlebar &nbsp; bg-code<br>
+      bg-primary &nbsp; bg-success &nbsp; bg-warning<br>
+      bg-danger &nbsp; bg-info &nbsp; bg-special
+    </div>
+    <div class="border-lt p-3 bg-surface">
+      <div class="text-bold fg-body mb-2">Foreground</div>
+      fg-head &nbsp; fg-body &nbsp; fg-muted<br>
+      fg-faint &nbsp; fg-on-dark &nbsp; fg-primary<br>
+      fg-success &nbsp; fg-warning &nbsp; fg-danger<br>
+      fg-syn-kw &nbsp; fg-syn-str &nbsp; fg-syn-fn
+    </div>
+    <div class="border-lt p-3 bg-surface">
+      <div class="text-bold fg-body mb-2">Typography</div>
+      text-ui &nbsp; text-mono<br>
+      text-xs(10) sm(11) base(13) md(14)<br>
+      text-lg(16) xl(20) 2xl(28) 4xl(52)<br>
+      text-bold &nbsp; text-semibold &nbsp; text-upper
+    </div>
+    <div class="border-lt p-3 bg-surface">
+      <div class="text-bold fg-body mb-2">Spacing (padding)</div>
+      p-1(4) p-2(8) p-3(12) p-4(16)<br>
+      p-5(24) p-6(32)<br>
+      px-N &nbsp; py-N &nbsp; pl-N &nbsp; pr-N<br>
+      pt-N &nbsp; pb-N &nbsp; (same scale)
+    </div>
+    <div class="border-lt p-3 bg-surface">
+      <div class="text-bold fg-body mb-2">Spacing (margin)</div>
+      mb-1 through mb-8<br>
+      mt-4 &nbsp; mt-5 &nbsp; mt-6
+    </div>
+    <div class="border-lt p-3 bg-surface">
+      <div class="text-bold fg-body mb-2">Layout</div>
+      flex &nbsp; flex-col &nbsp; flex-1<br>
+      grid &nbsp; grid-2 &nbsp; grid-3 &nbsp; grid-4<br>
+      grid-sidebar &nbsp; grid-token &nbsp; grid-field<br>
+      gap-1 through gap-6 &nbsp; items-center
+    </div>
+    <div class="border-lt p-3 bg-surface">
+      <div class="text-bold fg-body mb-2">Borders</div>
+      border &nbsp; border-lt &nbsp; border-tag<br>
+      border-t &nbsp; border-b &nbsp; border-l &nbsp; border-r<br>
+      border-2 &nbsp; border-l-3 &nbsp; border-t-3<br>
+      border-primary &nbsp; border-success &nbsp; border-danger
+    </div>
+    <div class="border-lt p-3 bg-surface">
+      <div class="text-bold fg-body mb-2">Radius</div>
+      r-0 (0px) &mdash; chrome<br>
+      r-1 (2px) &mdash; borders<br>
+      r-2 (4px) &mdash; buttons<br>
+      r-3 (6px) &mdash; cards
+    </div>
+    <div class="border-lt p-3 bg-surface">
+      <div class="text-bold fg-body mb-2">Position / misc</div>
+      sticky &nbsp; fixed &nbsp; relative &nbsp; absolute<br>
+      top-0 &nbsp; z-5 &nbsp; z-20 &nbsp; z-30<br>
+      overflow-x &nbsp; overflow-y &nbsp; overflow-h<br>
+      w-full &nbsp; cursor-pointer &nbsp; select-none
+    </div>
+  </div>
+</section>
+
+<section class="section" id="spacing">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Spacing &amp; radius</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">4px base unit. Eight steps. Radius is a split register: 0px for chrome (Plan 9), 2&ndash;6px for content (usability).</p>
+  <div class="mb-6">
+    <div class="flex items-center gap-5 py-3 border-b-lt"><div class="bg-primary" style="width:4px;height:12px;flex-shrink:0"></div><span class="text-mono text-base fg-primary" style="min-width:56px">--sp-1</span><span class="fg-muted" style="font-size:0.8125remrem">4px &mdash; icon/glyph gaps, badge padding</span></div>
+    <div class="flex items-center gap-5 py-3 border-b-lt"><div class="bg-primary" style="width:8px;height:12px;flex-shrink:0"></div><span class="text-mono text-base fg-primary" style="min-width:56px">--sp-2</span><span class="fg-muted" style="font-size:0.8125remrem">8px &mdash; tight element groups</span></div>
+    <div class="flex items-center gap-5 py-3 border-b-lt"><div class="bg-primary" style="width:12px;height:12px;flex-shrink:0"></div><span class="text-mono text-base fg-primary" style="min-width:56px">--sp-3</span><span class="fg-muted" style="font-size:0.8125remrem">12px &mdash; cell padding, tag-bar items</span></div>
+    <div class="flex items-center gap-5 py-3 border-b-lt"><div class="bg-primary" style="width:16px;height:12px;flex-shrink:0"></div><span class="text-mono text-base fg-primary" style="min-width:56px">--sp-4</span><span class="fg-muted" style="font-size:0.8125remrem">16px &mdash; component internal padding</span></div>
+    <div class="flex items-center gap-5 py-3 border-b-lt"><div class="bg-primary" style="width:24px;height:12px;flex-shrink:0"></div><span class="text-mono text-base fg-primary" style="min-width:56px">--sp-5</span><span class="fg-muted" style="font-size:0.8125remrem">24px &mdash; card/panel padding</span></div>
+    <div class="flex items-center gap-5 py-3 border-b-lt"><div class="bg-primary" style="width:32px;height:12px;flex-shrink:0"></div><span class="text-mono text-base fg-primary" style="min-width:56px">--sp-6</span><span class="fg-muted" style="font-size:0.8125remrem">32px &mdash; between component groups</span></div>
+    <div class="flex items-center gap-5 py-3 border-b-lt"><div class="bg-primary" style="width:48px;height:12px;flex-shrink:0"></div><span class="text-mono text-base fg-primary" style="min-width:56px">--sp-7</span><span class="fg-muted" style="font-size:0.8125remrem">48px &mdash; major section gaps, page padding</span></div>
+    <div class="flex items-center gap-5 py-3"><div class="bg-primary" style="width:64px;height:12px;flex-shrink:0"></div><span class="text-mono text-base fg-primary" style="min-width:56px">--sp-8</span><span class="fg-muted" style="font-size:0.8125remrem">64px &mdash; page-level separation</span></div>
+  </div>
+  <div class="text-mono text-xs text-upper fg-faint mb-3" style="letter-spacing:.12em">Radius register</div>
+  <div class="grid grid-4 gap-4">
+    <div class="bg-surface border-lt p-4 flex flex-col items-center gap-3"><div class="bg-primary" style="width:52px;height:52px;border-radius:0;opacity:.8"></div><span class="text-mono text-xs fg-primary">r-0 / 0px</span><span class="fg-muted text-xs text-ui">Chrome: titlebars, tag bars, Motif buttons</span></div>
+    <div class="bg-surface border-lt p-4 flex flex-col items-center gap-3"><div class="bg-primary" style="width:52px;height:52px;border-radius:2px;opacity:.8"></div><span class="text-mono text-xs fg-primary">r-1 / 2px</span><span class="fg-muted text-xs text-ui">Table rows, input borders, badges</span></div>
+    <div class="bg-surface border-lt p-4 flex flex-col items-center gap-3"><div class="bg-primary" style="width:52px;height:52px;border-radius:4px;opacity:.8"></div><span class="text-mono text-xs fg-primary">r-2 / 4px</span><span class="fg-muted text-xs text-ui">Solid action buttons, dropdowns</span></div>
+    <div class="bg-surface border-lt p-4 flex flex-col items-center gap-3"><div class="bg-primary" style="width:52px;height:52px;border-radius:6px;opacity:.8"></div><span class="text-mono text-xs fg-primary">r-3 / 6px</span><span class="fg-muted text-xs text-ui">Content cards, stat panels</span></div>
+  </div>
+</section>
+
+<section class="section" id="typography">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Typography</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">Two registers. Titillium Web for UI/display (Solaris/CDE lineage). Inconsolata for all technical output, tag bars, code, and tokens (Plan 9 terminal register).</p>
+  <div class="mb-5">
+    <div class="grid py-4 border-b-lt items-baseline gap-5" style="grid-template-columns:165px 1fr"><span class="text-mono text-xs fg-faint">ui &middot; 52px &middot; 700</span><span class="text-ui fg-head line-snug" style="font-size:3.2500remrem;font-weight:700">Display</span></div>
+    <div class="grid py-4 border-b-lt items-baseline gap-5" style="grid-template-columns:165px 1fr"><span class="text-mono text-xs fg-faint">ui &middot; 36px &middot; 700</span><span class="text-ui fg-head" style="font-size:2.2500remrem;font-weight:700">Section heading</span></div>
+    <div class="grid py-4 border-b-lt items-baseline gap-5" style="grid-template-columns:165px 1fr"><span class="text-mono text-xs fg-faint">ui &middot; 20px &middot; 600</span><span class="text-ui fg-head text-semibold" style="font-size:1.2500remrem">Subsection / card title</span></div>
+    <div class="grid py-4 border-b-lt items-baseline gap-5" style="grid-template-columns:165px 1fr"><span class="text-mono text-xs fg-faint">ui &middot; 16px &middot; 600</span><span class="text-ui fg-head text-semibold text-lg">UI label / component header</span></div>
+    <div class="grid py-4 border-b-lt items-baseline gap-5" style="grid-template-columns:165px 1fr"><span class="text-mono text-xs fg-faint">ui &middot; 14px &middot; 400</span><span class="text-ui fg-body text-md line-loose">Body text &mdash; UI register. Titillium Web for all interface prose, table cells, form labels, descriptions. Clean and efficient at small sizes.</span></div>
+    <div class="grid py-4 border-b-lt items-baseline gap-5" style="grid-template-columns:165px 1fr"><span class="text-mono text-xs fg-faint">mono &middot; 13px &middot; 400</span><span class="text-mono fg-syn-str">/sys/unified/styleguide &mdash; tag bar paths, code, tokens</span></div>
+    <div class="grid py-4 border-b-lt items-baseline gap-5" style="grid-template-columns:165px 1fr"><span class="text-mono text-xs fg-faint">mono &middot; 11px &middot; caps</span><span class="text-mono text-xs text-upper text-tracked fg-faint">Section overline / nav label</span></div>
+    <div class="grid py-4 items-baseline gap-5" style="grid-template-columns:165px 1fr"><span class="text-mono text-xs fg-faint">mono &middot; 10px &middot; caps+</span><span class="text-mono fg-faint" style="font-size:0.6250remrem;text-transform:uppercase;letter-spacing:.14em">Tag bar secondary / badge text</span></div>
+  </div>
+  <div class="acme-win">
+    <div class="tag-bar"><span class="tag-path">/sys/unified/typography</span><span class="tag-cmd">Look</span></div>
+    <div class="acme-body">
+      <span class="fg-syn-cmt">/* Two-font stack &mdash; no third font added for body prose */</span>
+<span class="fg-syn-str">--font-ui</span>:   <span class="fg-syn-str">'Titillium Web'</span>, <span class="fg-syn-str">'Helvetica Neue'</span>, Arial, sans-serif;
+<span class="fg-syn-str">--font-mono</span>: <span class="fg-syn-str">'Inconsolata'</span>, <span class="fg-syn-str">'Courier New'</span>, monospace;
+
+<span class="fg-syn-cmt">/* When Libre Baskerville was removed: */</span>
+<span class="fg-syn-cmt">/* Long-form prose &rarr; .text-ui (Titillium carries it fine) */</span>
+<span class="fg-syn-cmt">/* Docs / manpage register &rarr; .text-mono (terminal heritage) */</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="acme">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Acme patterns &mdash; tag bar &amp; body</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">The Acme window is the primary interface primitive. Most pages and components lead with tag-bar + body. The three classes involved: <code class="text-mono fg-primary">.acme-win</code>, <code class="text-mono fg-primary">.tag-bar</code>, <code class="text-mono fg-primary">.acme-body</code>. Everything else composes from utilities.</p>
+
+  <div class="text-mono text-xs text-upper fg-faint mb-3" style="letter-spacing:.12em">Full window</div>
+  <div class="acme-win mb-5">
+    <div class="tag-bar">
+      <span class="tag-path">/net/tcp/stats</span>
+      <span class="tag-cmd">Get</span><span class="tag-cmd">Put</span><span class="tag-cmd">Look</span>
+      <span class="tag-cmd">|sort</span>
+      <span class="flex-1"></span>
+      <span class="fg-faint">Modified 14:32</span>
+    </div>
+    <div class="acme-body">
+<span class="fg-syn-cmt">/* tag bar: .tag-bar with .tag-path and .tag-cmd children */</span>
+<span class="fg-syn-cmt">/* body:    .acme-body — mono font, worm track, bg-base     */</span>
+<span class="fg-syn-cmt">/* window:  .acme-win — 1px border wrapping both           */</span>
+
+<span class="fg-syn-kw">established</span> <span class="fg-syn-num">42</span>
+<span class="fg-syn-kw">time_wait  </span> <span class="fg-syn-num"> 7</span>
+<span class="fg-syn-kw">listen     </span> <span class="fg-syn-num"> 3</span></div>
+  </div>
+
+  <div class="text-mono text-xs text-upper fg-faint mb-3" style="letter-spacing:.12em">Tag bar only &mdash; sticky section header</div>
+  <div class="tag-bar border mb-5">
+    <span class="tag-path">/etc/liquidsoap/radio.liq</span>
+    <span class="tag-cmd">Put</span><span class="tag-cmd">Undo</span>
+    <span class="flex-1"></span>
+    <span class="badge badge-warning">unsaved</span>
+  </div>
+
+  <div class="text-mono text-xs text-upper fg-faint mb-3" style="letter-spacing:.12em">Nested windows &mdash; column layout</div>
+  <div class="grid grid-2 gap-0 border mb-5">
+    <div class="border-r">
+      <div class="tag-bar"><span class="tag-path">/sys/doc</span><span class="tag-cmd">Look</span></div>
+      <div class="acme-body fg-muted text-base">Left column body. Proportional in this column; could be prose or a file listing.</div>
+    </div>
+    <div>
+      <div class="tag-bar"><span class="tag-path">/sys/doc/README</span><span class="tag-cmd">Get</span></div>
+      <div class="acme-body fg-muted text-base">Right column body. Worm strip on both; the left-edge pip always indicates the column's scroll position.</div>
+    </div>
+  </div>
+
+  <div class="code-block">
+<span class="fg-syn-cmt">&lt;!-- Acme window in HTMX context --&gt;</span>
+&lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"acme-win"</span>&gt;
+  &lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"tag-bar"</span>&gt;
+    &lt;<span class="fg-syn-kw">span</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"tag-path"</span>&gt;/net/status&lt;/<span class="fg-syn-kw">span</span>&gt;
+    &lt;<span class="fg-syn-kw">button</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"tag-cmd"</span>
+      <span class="fg-syn-var">hx-get</span>=<span class="fg-syn-str">"/api/status"</span>
+      <span class="fg-syn-var">hx-target</span>=<span class="fg-syn-str">"#status-body"</span>
+      <span class="fg-syn-var">hx-swap</span>=<span class="fg-syn-str">"innerHTML"</span>&gt;Get&lt;/<span class="fg-syn-kw">button</span>&gt;
+  &lt;/<span class="fg-syn-kw">div</span>&gt;
+  &lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"acme-body"</span> <span class="fg-syn-var">id</span>=<span class="fg-syn-str">"status-body"</span>&gt;
+    &lt;<span class="fg-syn-cmt">!-- HTMX swaps content here --</span>&gt;
+  &lt;/<span class="fg-syn-kw">div</span>&gt;
+&lt;/<span class="fg-syn-kw">div</span>&gt;</div>
+</section>
+
+<section class="section" id="ghost">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Ghost inputs</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">Ghost inputs are the Plan 9 register &mdash; tag-bar-style inline text entry. Two affordance signals prevent misreading as static text: the left-edge pip (3px, --primary, 50% opacity at rest) and the permanent bottom accent line. Hover tints the background; focus makes the pip fully opaque and fills with --bg-sel.</p>
+
+  <div class="bg-surface border-lt p-5 mb-5">
+    <div class="grid grid-2 gap-4 mb-4">
+      <div class="flex flex-col gap-2">
+        <label class="text-ui text-base text-semibold fg-head" for="inp-search">Search</label>
+        <div class="inp-ghost-wrap"><input class="inp-ghost" type="text" placeholder="Look&hellip;" id="inp-search"></div>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label class="text-ui text-base text-semibold fg-head" for="inp-jump">Quick jump</label>
+        <div class="inp-ghost-wrap"><input class="inp-ghost" type="text" placeholder="/sys/doc/&hellip;" id="inp-jump"></div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-2">
+      <label class="text-ui text-base text-semibold fg-head" for="inp-tagcmd">Tag-bar command entry</label>
+      <div class="inp-ghost-wrap"><input class="inp-ghost" type="text" placeholder="Newcol Kill Putall Dump Exit" id="inp-tagcmd" style="width:100%"></div>
+      <span class="text-mono text-xs fg-faint">Ghost inputs belong in tag-bar chrome contexts and search affordances &mdash; not in data-entry forms.</span>
+    </div>
+  </div>
+
+  <div class="code-block">
+<span class="fg-syn-cmt">/* Ghost input anatomy */</span>
+&lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"inp-ghost-wrap"</span>&gt;  <span class="fg-syn-cmt">/* ::before = 3px left pip, --primary 50%&rarr;100% */</span>
+  &lt;<span class="fg-syn-kw">input</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"inp-ghost"</span> <span class="fg-syn-var">placeholder</span>=<span class="fg-syn-str">"Look&hellip;"</span>
+    <span class="fg-syn-var">hx-trigger</span>=<span class="fg-syn-str">"keyup changed delay:300ms"</span>
+    <span class="fg-syn-var">hx-get</span>=<span class="fg-syn-str">"/search"</span>
+    <span class="fg-syn-var">hx-target</span>=<span class="fg-syn-str">"#results"</span>&gt;
+&lt;/<span class="fg-syn-kw">div</span>&gt;
+<span class="fg-syn-cmt">/* bottom border: 1.5px solid --primary, always visible  */</span>
+<span class="fg-syn-cmt">/* hover: color-mix(--primary 5%)                        */</span>
+<span class="fg-syn-cmt">/* focus: background: --bg-sel (Acme sel cyan)            */</span></div>
+</section>
+
+<section class="section" id="buttons">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Buttons</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">Three registers: solid Okabe-Ito semantic, Motif 3D (CDE contexts), ghost/borderless (Plan 9/Acme tag bars). No hover animations &mdash; brightness shift only.</p>
+  <div class="bg-surface border-lt p-5 mb-4">
+    <div class="text-mono text-xs text-upper fg-faint mb-4" style="letter-spacing:.12em">Solid &mdash; Okabe-Ito semantic</div>
+    <div class="flex gap-3 flex-wrap mb-5">
+      <button class="btn btn-primary">Primary</button>
+      <button class="btn btn-success">Success</button>
+      <button class="btn btn-warning">Warning</button>
+      <button class="btn btn-danger">Danger</button>
+      <button class="btn btn-info">Info</button>
+      <button class="btn btn-special">Special</button>
+    </div>
+    <div class="text-mono text-xs text-upper fg-faint mb-4" style="letter-spacing:.12em">Motif (CDE) &amp; Ghost (Plan 9)</div>
+    <div class="flex gap-3 flex-wrap mb-5">
+      <button class="btn btn-motif">Motif action</button>
+      <button class="btn btn-motif">Put</button>
+      <button class="btn btn-motif">Get</button>
+      <button class="btn btn-ghost">Ghost / Plan 9</button>
+      <button class="btn btn-ghost">Look</button>
+    </div>
+    <div class="text-mono text-xs text-upper fg-faint mb-4" style="letter-spacing:.12em">States</div>
+    <div class="flex gap-3 flex-wrap">
+      <button class="btn btn-primary">Default</button>
+      <button class="btn btn-primary" style="filter:brightness(1.08)">Hover</button>
+      <button class="btn btn-primary" style="box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 35%,transparent)">Focus</button>
+      <button class="btn btn-primary" disabled>Disabled</button>
+    </div>
+  </div>
+  <div class="code-block">
+<span class="fg-syn-cmt">/* Compose at call site */</span>
+&lt;<span class="fg-syn-kw">button</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"btn btn-primary"</span>
+  <span class="fg-syn-var">hx-post</span>=<span class="fg-syn-str">"/api/save"</span>
+  <span class="fg-syn-var">hx-target</span>=<span class="fg-syn-str">"#status"</span>&gt;Save&lt;/<span class="fg-syn-kw">button</span>&gt;
+
+&lt;<span class="fg-syn-kw">button</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"btn btn-danger"</span>
+  <span class="fg-syn-var">hx-delete</span>=<span class="fg-syn-str">"/api/zone/12"</span>
+  <span class="fg-syn-var">hx-confirm</span>=<span class="fg-syn-str">"Destroy zone 12?"</span>&gt;Destroy&lt;/<span class="fg-syn-kw">button</span>&gt;
+
+<span class="fg-syn-cmt">/* Motif in a CDE command bar */</span>
+&lt;<span class="fg-syn-kw">button</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"btn btn-motif"</span>&gt;Put&lt;/<span class="fg-syn-kw">button</span>&gt;</div>
+</section>
+
+<section class="section" id="inputs">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Inputs</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">Standard inputs for forms and data entry. Use <code class="text-mono fg-primary">.inp</code> for all types; add <code class="text-mono fg-primary">.state-ok</code> or <code class="text-mono fg-primary">.state-err</code> for validation state.</p>
+  <div class="bg-surface border-lt p-5 mb-4">
+    <div class="grid grid-field gap-4 mb-4">
+      <div class="flex flex-col gap-2"><label class="text-ui text-base text-semibold fg-head" for="inp-hostname">Hostname</label><input class="inp" type="text" placeholder="klaxon.dapla.net" id="inp-hostname"></div>
+      <div class="flex flex-col gap-2"><label class="text-ui text-base text-semibold fg-head" for="inp-username">Username</label><input class="inp" type="text" placeholder="den" id="inp-username"></div>
+      <div class="flex flex-col gap-2"><label class="text-ui text-base text-semibold fg-head" for="inp-validated">Validated</label><input class="inp state-ok" id="inp-validated" type="text" value="gorkon.dapla.net"><span class="text-mono text-xs fg-success">&#10003; Reachable</span></div>
+      <div class="flex flex-col gap-2"><label class="text-ui text-base text-semibold fg-head" for="inp-error">Error</label><input class="inp state-err" id="inp-error" type="text" value="bad@@host"><span class="text-mono text-xs fg-danger">Invalid hostname</span></div>
+      <div class="flex flex-col gap-2"><label class="text-ui text-base text-semibold fg-head" for="inp-pool">ZFS pool</label><select class="inp" id="inp-pool" aria-label="ZFS pool"><option>rpool</option><option>data</option><option>backup</option></select></div>
+      <div class="flex flex-col gap-2"><label class="text-ui text-base text-semibold fg-head" for="inp-password">Password</label><input class="inp" type="password" id="inp-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"></div>
+    </div>
+    <div class="flex flex-col gap-2">
+      <label class="text-ui text-base text-semibold fg-head" for="inp-command">Command</label>
+      <input class="inp" type="text" placeholder="zfs create rpool/containers/odoo" id="inp-command" style="width:100%">
+    </div>
+  </div>
+  <div class="code-block">
+<span class="fg-syn-cmt">&lt;!-- HTMX live validation example --&gt;</span>
+&lt;<span class="fg-syn-kw">input</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"inp"</span> <span class="fg-syn-var">id</span>=<span class="fg-syn-str">"hostname"</span>
+  <span class="fg-syn-var">hx-get</span>=<span class="fg-syn-str">"/validate/hostname"</span>
+  <span class="fg-syn-var">hx-trigger</span>=<span class="fg-syn-str">"blur"</span>
+  <span class="fg-syn-var">hx-target</span>=<span class="fg-syn-str">"#hostname-hint"</span>
+  <span class="fg-syn-var">hx-swap</span>=<span class="fg-syn-str">"outerHTML"</span>&gt;
+<span class="fg-syn-cmt">&lt;!-- Server returns input with class="inp state-ok" or "inp state-err" --&gt;</span></div>
+</section>
+
+<section class="section" id="badges">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Badges</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">Okabe-Ito colors, Plan 9 rectilinear (r-0). Now use <code class="text-mono fg-primary">color-mix()</code> internally so dark-mode rebalancing is automatic.</p>
+  <div class="flex gap-3 flex-wrap py-5 mb-4">
+    <span class="badge badge-primary">primary</span>
+    <span class="badge badge-info">info</span>
+    <span class="badge badge-success">success</span>
+    <span class="badge badge-warning">warning</span>
+    <span class="badge badge-danger">danger</span>
+    <span class="badge badge-special">beta</span>
+    <span class="badge badge-neutral">stable</span>
+  </div>
+  <div class="flex flex-col gap-3 mb-5 bg-surface border-lt p-4">
+    <div class="flex items-center gap-3 text-mono text-base fg-body"><code class="fg-primary text-base">svc:/network/nfs</code><span class="badge badge-danger">fault</span></div>
+    <div class="flex items-center gap-3 text-mono text-base fg-body"><code class="fg-primary text-base">svc:/network/ssh</code><span class="badge badge-success">online</span></div>
+    <div class="flex items-center gap-3 text-mono text-base fg-body"><code class="fg-primary text-base">odoo-mcp-server</code><span class="badge badge-special">v1.2.x</span></div>
+    <div class="flex items-center gap-3 text-mono text-base fg-body"><code class="fg-primary text-base">fts-quadlet-setup</code><span class="badge badge-warning">review</span></div>
+  </div>
+</section>
+
+<section class="section" id="cards">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Cards</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">CDE window chrome for the header. Solarized body tones for the content area. Stat cards carry Okabe-Ito accent top borders.</p>
+  <div class="grid grid-3 gap-4 mb-5">
+    <div class="card"><div class="card-head"><div class="card-head-dot"></div>/net/tcp/0/status</div><div class="card-body">Established. Remote: 9front.org:564. Local: 49201. 14,302 bytes. Protocol: 9P2000.</div></div>
+    <div class="card"><div class="card-head" style="background:var(--oi-vermillion)"><div class="card-head-dot"></div>/svc/ipsec:default</div><div class="card-body">Service entered maintenance. Run <code class="text-mono" style="font-size:0.6875remrem">svcs -x</code> to diagnose.</div></div>
+    <div class="card"><div class="card-head" style="background:var(--oi-green)"><div class="card-head-dot"></div>/proc/1/status</div><div class="card-body">rc &middot; sleeping &middot; 48k text. SMF milestone multi-user-server reached.</div></div>
+  </div>
+  <div class="grid grid-4 gap-4 mb-5">
+    <div class="stat-card"><div class="stat-label">Uptime</div><div class="stat-value fg-primary">847d</div><div class="stat-delta fg-success">&#8593; running</div></div>
+    <div class="stat-card" style="border-top-color:var(--oi-orange)"><div class="stat-label">Zones</div><div class="stat-value" style="color:var(--oi-orange)">12</div><div class="stat-delta fg-success">&#8593; 2 new</div></div>
+    <div class="stat-card" style="border-top-color:var(--oi-green)"><div class="stat-label">ZFS pool</div><div class="stat-value fg-success">14%</div><div class="stat-delta fg-success">&#10003; healthy</div></div>
+    <div class="stat-card" style="border-top-color:var(--oi-vermillion)"><div class="stat-label">SMF faults</div><div class="stat-value fg-danger">003</div><div class="stat-delta fg-danger">&#8593; review</div></div>
+  </div>
+</section>
+
+<section class="section" id="alerts">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Alerts</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">Left-border accent, Okabe-Ito semantic colors. <code class="text-mono fg-primary">color-mix()</code> handles dark-mode opacity shift automatically.</p>
+  <div class="alert alert-info mb-4"><div class="alert-head">System information</div><div class="alert-body">Unified v2: utility-first, Acme-primary, two fonts, no animations. Dark mode fg-body fixed to base1 (5.61:1).</div></div>
+  <div class="alert alert-success mb-4"><div class="alert-head">Deployment complete</div><div class="alert-body">Build 1.4.2 promoted. 12 zones updated, zero downtime. <code class="text-mono text-base">fts-quadlet-setup</code> v2.0.3 active.</div></div>
+  <div class="alert alert-warning mb-4"><div class="alert-head">CVD advisory</div><div class="alert-body">Never encode meaning through color alone. Supplement with shape, label, or pattern redundancy.</div></div>
+  <div class="alert alert-danger mb-4"><div class="alert-head">Token violation</div><div class="alert-body">A raw palette constant was used directly. All references must pass through utility classes backed by semantic tokens.</div></div>
+</section>
+
+<section class="section" id="code">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Code</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">Solarized syntax assignments. Applied over base02. Left worm strip identifies as a Plan 9 window body. Add <code class="text-mono fg-primary">.code-block</code> for preformatted blocks; use <code class="text-mono fg-primary">fg-syn-*</code> utilities for inline token coloring.</p>
+  <div class="code-block mb-4">
+<span class="fg-syn-cmt">/*
+ * unified v2 — token reference
+ * fg-syn-* utilities map directly to Solarized syntax assignments
+ */</span>
+
+<span class="fg-syn-kw">:root</span> {
+  <span class="fg-syn-cmt">/* Backgrounds: Solarized */</span>
+  <span class="fg-syn-var">--bg</span>:          <span class="fg-syn-fn">var</span>(<span class="fg-syn-var">--sol-base3</span>);
+  <span class="fg-syn-var">--bg-tag</span>:      <span class="fg-syn-str">#eafaff</span>;
+  <span class="fg-syn-var">--bg-titlebar</span>: <span class="fg-syn-fn">var</span>(<span class="fg-syn-var">--cde-teal</span>);
+
+  <span class="fg-syn-cmt">/* Foreground: FIXED in v2 */</span>
+  <span class="fg-syn-var">--fg-body</span>: <span class="fg-syn-fn">var</span>(<span class="fg-syn-var">--sol-base01</span>); <span class="fg-syn-cmt">/* light: 4.99:1 */</span>
+}
+<span class="fg-syn-kw">[data-theme="dark"]</span> {
+  <span class="fg-syn-var">--fg-body</span>: <span class="fg-syn-fn">var</span>(<span class="fg-syn-var">--sol-base1</span>);  <span class="fg-syn-cmt">/* dark:  5.61:1  was base0@4.75 */</span>
+  <span class="fg-syn-var">--primary</span>: <span class="fg-syn-fn">var</span>(<span class="fg-syn-var">--oi-skyblue</span>); <span class="fg-syn-cmt">/* #56b4e9 on dark bg             */</span>
+}</div>
+</section>
+
+<section class="section" id="tables">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Tables</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">CDE teal thead. Solarized zebra-stripe. Hover fills with Acme --bg-sel. Add <code class="text-mono fg-primary">.overflow-x</code> on the wrapper for wide tables.</p>
+  <div class="overflow-x mb-5">
+    <table class="data-table">
+      <thead><tr><th>Service</th><th>Status</th><th>Uptime</th><th>Zone</th><th>Protocol</th></tr></thead>
+      <tbody>
+        <tr><td class="text-mono">svc:/network/ssh</td><td><span class="badge badge-success">online</span></td><td>847d</td><td>global</td><td>TCP/22</td></tr>
+        <tr><td class="text-mono">svc:/network/nfs</td><td><span class="badge badge-danger">fault</span></td><td>0d</td><td>zone-nfs</td><td>TCP/2049</td></tr>
+        <tr><td class="text-mono">fts-quadlet:default</td><td><span class="badge badge-success">online</span></td><td>12d</td><td>zone-fts</td><td>TCP/8087</td></tr>
+        <tr><td class="text-mono">odoo-mcp-server</td><td><span class="badge badge-special">v1.2.x</span></td><td>3d</td><td>zone-odoo</td><td>HTTP/8069</td></tr>
+        <tr><td class="text-mono">pbx-quadlet:default</td><td><span class="badge badge-warning">review</span></td><td>1d</td><td>zone-pbx</td><td>SIP/5060</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section" id="htmx">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>HTMX patterns</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">The Acme model maps cleanly onto HTMX. Tag-bar commands (<code class="text-mono fg-primary">Get</code>, <code class="text-mono fg-primary">Put</code>, <code class="text-mono fg-primary">Look</code>) become <code class="text-mono fg-primary">hx-get</code>, <code class="text-mono fg-primary">hx-post</code>, <code class="text-mono fg-primary">hx-trigger</code>. The body is the swap target. No JS beyond what HTMX provides.</p>
+
+  <div class="text-mono text-xs text-upper fg-faint mb-3" style="letter-spacing:.12em">Live-update window</div>
+  <div class="code-block mb-5">
+<span class="fg-syn-cmt">&lt;!-- Acme window with HTMX polling --&gt;</span>
+&lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"acme-win"</span>&gt;
+  &lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"tag-bar"</span>&gt;
+    &lt;<span class="fg-syn-kw">span</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"tag-path"</span>&gt;/net/tcp/stats&lt;/<span class="fg-syn-kw">span</span>&gt;
+    &lt;<span class="fg-syn-kw">button</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"tag-cmd"</span> <span class="fg-syn-var">hx-get</span>=<span class="fg-syn-str">"/stats"</span>
+            <span class="fg-syn-var">hx-target</span>=<span class="fg-syn-str">"#stats-body"</span>&gt;Get&lt;/<span class="fg-syn-kw">button</span>&gt;
+  &lt;/<span class="fg-syn-kw">div</span>&gt;
+  &lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">id</span>=<span class="fg-syn-str">"stats-body"</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"acme-body"</span>
+       <span class="fg-syn-var">hx-get</span>=<span class="fg-syn-str">"/stats"</span> <span class="fg-syn-var">hx-trigger</span>=<span class="fg-syn-str">"every 5s"</span>
+       <span class="fg-syn-var">hx-swap</span>=<span class="fg-syn-str">"innerHTML"</span>&gt;
+    <span class="fg-syn-cmt">&lt;!-- server fragment: plain text or pre-formatted --&gt;</span>
+  &lt;/<span class="fg-syn-kw">div</span>&gt;
+&lt;/<span class="fg-syn-kw">div</span>&gt;</div>
+
+  <div class="text-mono text-xs text-upper fg-faint mb-3" style="letter-spacing:.12em">Out-of-band status badge swap</div>
+  <div class="code-block mb-5">
+<span class="fg-syn-cmt">&lt;!-- Server returns OOB swap alongside primary response --&gt;</span>
+<span class="fg-syn-cmt">&lt;!-- Primary: updated table row --&gt;</span>
+&lt;<span class="fg-syn-kw">tr</span> <span class="fg-syn-var">id</span>=<span class="fg-syn-str">"svc-nfs"</span>&gt;...&lt;/<span class="fg-syn-kw">tr</span>&gt;
+
+<span class="fg-syn-cmt">&lt;!-- OOB: update status badge in sidebar --&gt;</span>
+&lt;<span class="fg-syn-kw">span</span> <span class="fg-syn-var">id</span>=<span class="fg-syn-str">"nfs-badge"</span>
+      <span class="fg-syn-var">hx-swap-oob</span>=<span class="fg-syn-str">"true"</span>
+      <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"badge badge-success"</span>&gt;online&lt;/<span class="fg-syn-kw">span</span>&gt;</div>
+
+  <div class="text-mono text-xs text-upper fg-faint mb-3" style="letter-spacing:.12em">Ghost input search</div>
+  <div class="code-block mb-5">
+<span class="fg-syn-cmt">&lt;!-- Tag-bar ghost search with debounce --&gt;</span>
+&lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"tag-bar border-b"</span>&gt;
+  &lt;<span class="fg-syn-kw">span</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"tag-path"</span>&gt;/search&lt;/<span class="fg-syn-kw">span</span>&gt;
+  &lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"inp-ghost-wrap flex-1"</span>&gt;
+    &lt;<span class="fg-syn-kw">input</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"inp-ghost"</span> <span class="fg-syn-var">name</span>=<span class="fg-syn-str">"q"</span>
+      <span class="fg-syn-var">hx-get</span>=<span class="fg-syn-str">"/search"</span>
+      <span class="fg-syn-var">hx-trigger</span>=<span class="fg-syn-str">"keyup changed delay:300ms"</span>
+      <span class="fg-syn-var">hx-target</span>=<span class="fg-syn-str">"#results"</span>
+      <span class="fg-syn-var">placeholder</span>=<span class="fg-syn-str">"Look&hellip;"</span>&gt;
+  &lt;/<span class="fg-syn-kw">div</span>&gt;
+&lt;/<span class="fg-syn-kw">div</span>&gt;
+&lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">id</span>=<span class="fg-syn-str">"results"</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"acme-body"</span>&gt;&lt;/<span class="fg-syn-kw">div</span>&gt;</div>
+
+  <div class="text-mono text-xs text-upper fg-faint mb-3" style="letter-spacing:.12em">Static document (no HTMX)</div>
+  <div class="code-block">
+<span class="fg-syn-cmt">&lt;!-- For static docs: just tokens.css + utility classes --&gt;</span>
+<span class="fg-syn-cmt">&lt;!-- No JS needed for layout, color, or typography      --&gt;</span>
+&lt;<span class="fg-syn-kw">link</span> <span class="fg-syn-var">rel</span>=<span class="fg-syn-str">"stylesheet"</span> <span class="fg-syn-var">href</span>=<span class="fg-syn-str">"unified-tokens.css"</span>&gt;
+
+&lt;<span class="fg-syn-kw">article</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"bg-base p-7 max-wide"</span>&gt;
+  &lt;<span class="fg-syn-kw">h1</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"text-ui text-4xl text-bold fg-head mb-5"</span>&gt;...&lt;/<span class="fg-syn-kw">h1</span>&gt;
+  &lt;<span class="fg-syn-kw">p</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"text-ui text-md line-loose fg-body max-prose"</span>&gt;...&lt;/<span class="fg-syn-kw">p</span>&gt;
+&lt;/<span class="fg-syn-kw">article</span>&gt;</div>
+</section>
+
+<section class="section" id="usage">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Usage rules</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">These resolve ambiguity. They encode decisions already made so they don't have to be made again.</p>
+  <div class="grid grid-2 gap-4 mb-6">
+    <div class="rule-do"><div class="rule-label">&#10003; Do</div><div class="rule-body">Compose utility classes at the call site. <code class="text-mono text-base">&lt;div class="flex items-center gap-3 p-4 border-lt bg-surface"&gt;</code></div></div>
+    <div class="rule-dont"><div class="rule-label">&#10007; Don't</div><div class="rule-body">Invent semantic class names for one-off layouts. If it's not in the utility sheet, reach for an inline style before making a new class.</div></div>
+    <div class="rule-do"><div class="rule-label">&#10003; Do</div><div class="rule-body">Lead most interfaces with <code class="text-mono text-base">.acme-win</code> / <code class="text-mono text-base">.tag-bar</code> / <code class="text-mono text-base">.acme-body</code>. The CDE bar is for application frames with many top-level actions.</div></div>
+    <div class="rule-dont"><div class="rule-label">&#10007; Don't</div><div class="rule-body">Use the CDE bar on every page. It signals "application with command menu." Most views are content; those get a tag-bar.</div></div>
+    <div class="rule-do"><div class="rule-label">&#10003; Do</div><div class="rule-body">Use <code class="text-mono text-base">.inp-ghost-wrap + .inp-ghost</code> in tag-bar contexts and search affordances. Use <code class="text-mono text-base">.inp</code> in forms and data entry.</div></div>
+    <div class="rule-dont"><div class="rule-label">&#10007; Don't</div><div class="rule-body">Use ghost inputs without a visible <code class="text-mono text-base">&lt;label&gt;</code>. The pip and bottom line alone are not sufficient affordance for unlabeled entry.</div></div>
+    <div class="rule-do"><div class="rule-label">&#10003; Do</div><div class="rule-body">Use <code class="text-mono text-base">r-0</code> for all chrome elements (titlebars, tag bars, badges, Motif buttons, code blocks). Content cards can use <code class="text-mono text-base">r-2</code> or <code class="text-mono text-base">r-3</code>.</div></div>
+    <div class="rule-dont"><div class="rule-label">&#10007; Don't</div><div class="rule-body">Add animation or transition outside of <code class="text-mono text-base">prefers-reduced-motion</code> guarding. Flat state changes only. The heritage is terminal; terminals don't animate.</div></div>
+    <div class="rule-do"><div class="rule-label">&#10003; Do</div><div class="rule-body">For dark mode: lift your text reference from <code class="text-mono text-base">--fg-muted</code> to <code class="text-mono text-base">--fg-body</code> or <code class="text-mono text-base">--fg-head</code> if something reads dim. The system is calibrated; trust it.</div></div>
+    <div class="rule-dont"><div class="rule-label">&#10007; Don't</div><div class="rule-body">Reference raw palette constants (<code class="text-mono text-base">--sol-base1</code>, <code class="text-mono text-base">--oi-blue</code>) in markup. They bypass dark-mode remapping.</div></div>
+  </div>
+
+  <div class="text-mono text-xs text-upper fg-faint mb-3" style="letter-spacing:.12em">Register summary</div>
+  <table class="data-table">
+    <thead><tr><th>Context</th><th>Pattern</th><th>Input type</th><th>Chrome</th></tr></thead>
+    <tbody>
+      <tr><td>Application frame</td><td>CDE bar + sidebar + acme-win content</td><td>Standard <code class="text-mono text-base">.inp</code></td><td>CDE teal bar</td></tr>
+      <tr><td>Content view / document</td><td>tag-bar + acme-body</td><td>Ghost inputs in tag-bar; <code class="text-mono text-base">.inp</code> in forms</td><td>Tag bar only</td></tr>
+      <tr><td>Static HTML document</td><td>Flat utility classes, no chrome</td><td><code class="text-mono text-base">.inp</code></td><td>None required</td></tr>
+      <tr><td>HTMX partial / fragment</td><td>Returns raw acme-body or table rows</td><td>Server-renders validation state</td><td>None</td></tr>
+      <tr><td>Agent / util output</td><td>Semantic HTML, tokens.css for color</td><td>N/A</td><td>N/A</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<section class="section" id="breakpoints">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Breakpoints</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">Three breakpoints, desktop/tablet first. These tokens appear in <code class="text-mono fg-primary">@media (min-width)</code> queries only &#8212; they are not part of the token cascade and must not be used as values in component CSS.</p>
+  <div style="margin-bottom:var(--sp-5)">
+    <div class="flex items-center gap-5 py-3 border-b-lt"><div class="bg-primary" style="width:48px;height:12px;flex-shrink:0"></div><span class="text-mono text-base fg-primary" style="min-width:90px">--bp-sm</span><span class="fg-muted" style="font-size:0.8125rem">768px &#8212; tablet portrait floor. Sidebar may collapse.</span></div>
+    <div class="flex items-center gap-5 py-3 border-b-lt"><div class="bg-primary" style="width:64px;height:12px;flex-shrink:0"></div><span class="text-mono text-base fg-primary" style="min-width:90px">--bp-md</span><span class="fg-muted" style="font-size:0.8125rem">1024px &#8212; tablet landscape / small desktop. Full layout available.</span></div>
+    <div class="flex items-center gap-5 py-3"><div class="bg-primary" style="width:80px;height:12px;flex-shrink:0"></div><span class="text-mono text-base fg-primary" style="min-width:90px">--bp-lg</span><span class="fg-muted" style="font-size:0.8125rem">1280px &#8212; standard desktop. Primary design target.</span></div>
+  </div>
+  <div class="code-block">
+<span class="fg-syn-cmt">/* Breakpoint tokens are for @media only — not for var() in component CSS */</span>
+<span class="fg-syn-cmt">/* Desktop-first: start full, restrict down                               */</span>
+<span class="fg-syn-kw">@media</span> (max-width: <span class="fg-syn-num">1023px</span>) {  <span class="fg-syn-cmt">/* below --bp-md */</span>
+  .page-wrap, .grid-sidebar { grid-template-columns: <span class="fg-syn-str">1fr</span>; }
+  .page-sidebar              { position: static; height: auto; }
+}
+<span class="fg-syn-kw">@media</span> (max-width: <span class="fg-syn-num">767px</span>) {   <span class="fg-syn-cmt">/* below --bp-sm — tablet portrait */</span>
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: <span class="fg-syn-str">1fr</span>; }
+  .cb                        { padding: <span class="fg-syn-fn">var</span>(<span class="fg-syn-var">--sp-4</span>); }
+}</div>
+</section>
+
+<section class="section" id="skeleton">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Skeleton &amp; loading states</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">No animation &#8212; structural placeholders using <code class="text-mono fg-primary">bg-surface</code> tones. For HTMX requests: show loading badge at 500ms. For operations expected to exceed 2s: show skeleton structure so the layout does not shift on content arrival.</p>
+
+  <div class="text-mono text-xs text-upper fg-faint mb-3" style="letter-spacing:.12em">Loading badge (0.5s threshold)</div>
+  <div class="demo mb-5">
+    <div class="tag-bar border">
+      <span class="tag-path">/zones/stats</span>
+      <span class="tag-cmd">Get</span>
+      <span style="flex:1"></span>
+      <span class="badge badge-info" style="font-size:0.625rem">loading</span>
+    </div>
+  </div>
+
+  <div class="text-mono text-xs text-upper fg-faint mb-3" style="letter-spacing:.12em">Skeleton body (2s+ threshold)</div>
+  <div class="demo mb-5">
+    <div class="acme-win">
+      <div class="tag-bar"><span class="tag-path">/report/q2</span><span class="tag-cmd">Get</span><span style="flex:1"></span><span class="badge badge-info" style="font-size:0.625rem">loading</span></div>
+      <div class="acme-body" aria-busy="true" aria-label="Loading content">
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line w-75"></div>
+        <div class="skeleton-line w-50"></div>
+        <div style="margin:var(--sp-4) 0"><div class="skeleton-block"></div></div>
+        <div class="skeleton-line w-75"></div>
+        <div class="skeleton-line w-33"></div>
+      </div>
+    </div>
+  </div>
+  <div class="code-block">
+<span class="fg-syn-cmt">&lt;!-- acme-body with skeleton while loading --&gt;</span>
+&lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"acme-body"</span> <span class="fg-syn-var">aria-busy</span>=<span class="fg-syn-str">"true"</span> <span class="fg-syn-var">aria-label</span>=<span class="fg-syn-str">"Loading content"</span>&gt;
+  &lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"skeleton-line"</span>&gt;&lt;/<span class="fg-syn-kw">div</span>&gt;
+  &lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"skeleton-line w-75"</span>&gt;&lt;/<span class="fg-syn-kw">div</span>&gt;
+  &lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"skeleton-block"</span>&gt;&lt;/<span class="fg-syn-kw">div</span>&gt;
+&lt;/<span class="fg-syn-kw">div</span>&gt;
+<span class="fg-syn-cmt">&lt;!-- HTMX replaces with real content on response --&gt;</span>
+<span class="fg-syn-cmt">&lt;!-- Server sets aria-busy="false" in response fragment --&gt;</span></div>
+</section>
+
+<section class="section" id="disclosure">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Expanded / collapsed state</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">Disclosure pattern for collapsible sections. No animation &#8212; state change is instantaneous. <code class="text-mono fg-primary">aria-expanded</code> drives the visual indicator and the screen reader announcement. <code class="text-mono fg-primary">hidden</code> attribute on the body hides content from both visual and accessibility tree.</p>
+
+  <div class="demo mb-5">
+    <div class="disclosure-trigger" aria-expanded="true" aria-controls="disc-1" onclick="toggleDisc(this,'disc-1')">
+      <span class="disclosure-indicator" aria-hidden="true"></span>
+      <span class="text-mono text-base">/zones/configuration</span>
+      <span style="flex:1"></span>
+      <span class="badge badge-success">3 zones</span>
+    </div>
+    <div class="disclosure-body" id="disc-1" style="padding:var(--sp-4) var(--sp-5)">
+      <div class="text-mono text-base fg-muted">zone-nfs &nbsp; zone-fts &nbsp; zone-odoo</div>
+    </div>
+    <div class="disclosure-trigger" aria-expanded="false" aria-controls="disc-2" onclick="toggleDisc(this,'disc-2')" style="margin-top:0">
+      <span class="disclosure-indicator" aria-hidden="true"></span>
+      <span class="text-mono text-base">/zones/archived</span>
+      <span style="flex:1"></span>
+      <span class="badge badge-neutral">12 zones</span>
+    </div>
+    <div class="disclosure-body" id="disc-2" hidden style="padding:var(--sp-4) var(--sp-5)">
+      <div class="text-mono text-base fg-muted">zone-old-pbx &nbsp; zone-legacy-nfs &nbsp; &#8230;</div>
+    </div>
+  </div>
+  <div class="code-block">
+&lt;<span class="fg-syn-kw">button</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"disclosure-trigger"</span>
+        <span class="fg-syn-var">aria-expanded</span>=<span class="fg-syn-str">"false"</span>
+        <span class="fg-syn-var">aria-controls</span>=<span class="fg-syn-str">"section-body"</span>
+        <span class="fg-syn-var">hx-get</span>=<span class="fg-syn-str">"/zones/archived"</span>
+        <span class="fg-syn-var">hx-target</span>=<span class="fg-syn-str">"#section-body"</span>
+        <span class="fg-syn-var">hx-trigger</span>=<span class="fg-syn-str">"click[this.getAttribute('aria-expanded')==='false']"</span>
+        <span class="fg-syn-var">onclick</span>=<span class="fg-syn-str">"toggleDisc(this,'section-body')"</span>&gt;
+  &lt;<span class="fg-syn-kw">span</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"disclosure-indicator"</span> <span class="fg-syn-var">aria-hidden</span>=<span class="fg-syn-str">"true"</span>&gt;&lt;/<span class="fg-syn-kw">span</span>&gt;
+  /zones/archived
+&lt;/<span class="fg-syn-kw">button</span>&gt;
+&lt;<span class="fg-syn-kw">div</span> <span class="fg-syn-var">class</span>=<span class="fg-syn-str">"disclosure-body"</span> <span class="fg-syn-var">id</span>=<span class="fg-syn-str">"section-body"</span> <span class="fg-syn-var">hidden</span>&gt;...&lt;/<span class="fg-syn-kw">div</span>&gt;</div>
+</section>
+
+<section class="section" id="readonly">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Readonly state</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">A field that is populated but not currently editable. Distinct from disabled (which implies permanently unavailable). Readonly: border softens to <code class="text-mono fg-primary">--border-lt</code>, background shifts to <code class="text-mono fg-primary">--bg-surface</code>, text is <code class="text-mono fg-primary">--fg-muted</code>, cursor is <code class="text-mono fg-primary">default</code>, no focus ring.</p>
+  <div class="demo">
+    <div class="fgrid">
+      <div class="flex flex-col gap-2"><label class="text-ui text-base text-semibold fg-head" for="ro-zone">Zone name</label><input class="inp" id="ro-zone" type="text" value="zone-nfs" readonly><span class="text-mono text-xs fg-faint">Read-only &#8212; set at creation</span></div>
+      <div class="flex flex-col gap-2"><label class="text-ui text-base text-semibold fg-head" for="ro-ip">IP address</label><input class="inp" id="ro-ip" type="text" value="10.0.1.42" readonly><span class="text-mono text-xs fg-faint">Read-only &#8212; assigned by DHCP</span></div>
+      <div class="flex flex-col gap-2"><label class="text-ui text-base text-semibold fg-head" for="rw-desc">Description</label><input class="inp" id="rw-desc" type="text" placeholder="Add a description&#8230;"><span class="text-mono text-xs fg-faint">Editable &#8212; shown for contrast</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="dataviz">
+  <h2 class="flex items-center gap-3 text-mono text-sm text-bold text-upper fg-muted pb-3 border-b mb-6" style="letter-spacing:.14em"><span style="width:16px;height:3px;background:var(--primary);flex-shrink:0" aria-hidden="true"></span>Data visualisation colors</h2>
+  <p class="text-base line-loose fg-body max-prose mb-5">Three scales: categorical (Okabe-Ito 7 colors, already defined), sequential (single-hue ramps from Solarized base tones), and diverging (two-hue around a neutral midpoint). All CVD-checked. Use categorical for nominal data, sequential for ordered/continuous, diverging for delta/variance data.</p>
+
+  <div class="lsm">Categorical &#8212; Okabe-Ito (7 colors, existing)</div>
+  <div style="display:flex;gap:var(--sp-2);margin-bottom:var(--sp-5);flex-wrap:wrap">
+    <div style="text-align:center"><div style="width:48px;height:48px;background:#0072b2"></div><div class="text-mono" style="font-size:0.625rem;color:var(--fg-faint);margin-top:4px">primary</div></div>
+    <div style="text-align:center"><div style="width:48px;height:48px;background:#56b4e9"></div><div class="text-mono" style="font-size:0.625rem;color:var(--fg-faint);margin-top:4px">info</div></div>
+    <div style="text-align:center"><div style="width:48px;height:48px;background:#009e73"></div><div class="text-mono" style="font-size:0.625rem;color:var(--fg-faint);margin-top:4px">success</div></div>
+    <div style="text-align:center"><div style="width:48px;height:48px;background:#e69f00"></div><div class="text-mono" style="font-size:0.625rem;color:var(--fg-faint);margin-top:4px">warning</div></div>
+    <div style="text-align:center"><div style="width:48px;height:48px;background:#d55e00"></div><div class="text-mono" style="font-size:0.625rem;color:var(--fg-faint);margin-top:4px">danger</div></div>
+    <div style="text-align:center"><div style="width:48px;height:48px;background:#cc79a7"></div><div class="text-mono" style="font-size:0.625rem;color:var(--fg-faint);margin-top:4px">special</div></div>
+    <div style="text-align:center"><div style="width:48px;height:48px;background:#f0e442"></div><div class="text-mono" style="font-size:0.625rem;color:var(--fg-faint);margin-top:4px">yellow*</div></div>
+  </div>
+  <p class="text-mono text-xs fg-faint mb-5" style="letter-spacing:.08em">*Yellow (#f0e442) fails contrast on light backgrounds and fails tritanopia. Use only as a supplementary encoding alongside another signal. Never as a primary data color.</p>
+
+  <div class="lsm">Sequential &#8212; teal ramp (9 steps, Solarized cyan anchor)</div>
+  <div style="display:flex;gap:2px;margin-bottom:var(--sp-3)">
+    <div style="flex:1;height:40px;background:#e8f8f7"></div>
+    <div style="flex:1;height:40px;background:#c8f0ee"></div>
+    <div style="flex:1;height:40px;background:#a0e4e0"></div>
+    <div style="flex:1;height:40px;background:#74d4cf"></div>
+    <div style="flex:1;height:40px;background:#2aa198"></div>
+    <div style="flex:1;height:40px;background:#228880"></div>
+    <div style="flex:1;height:40px;background:#1a6e68"></div>
+    <div style="flex:1;height:40px;background:#135450"></div>
+    <div style="flex:1;height:40px;background:#0a3a38"></div>
+  </div>
+  <p class="text-mono text-xs fg-faint mb-5" style="letter-spacing:.08em">Anchor: Solarized cyan (#2aa198, step 5). Steps 1&#8211;4 lighten toward white. Steps 6&#8211;9 darken toward base03. CVD-safe: luminance-only progression.</p>
+
+  <div class="lsm">Diverging &#8212; vermillion/teal around base2 neutral</div>
+  <div style="display:flex;gap:2px;margin-bottom:var(--sp-3)">
+    <div style="flex:1;height:40px;background:#7a2200"></div>
+    <div style="flex:1;height:40px;background:#b54000"></div>
+    <div style="flex:1;height:40px;background:#d55e00"></div>
+    <div style="flex:1;height:40px;background:#e8a080"></div>
+    <div style="flex:1;height:40px;background:#eee8d5"></div>
+    <div style="flex:1;height:40px;background:#a0d8d4"></div>
+    <div style="flex:1;height:40px;background:#2aa198"></div>
+    <div style="flex:1;height:40px;background:#1a6e68"></div>
+    <div style="flex:1;height:40px;background:#0a3a38"></div>
+  </div>
+  <p class="text-mono text-xs fg-faint mb-5" style="letter-spacing:.08em">Neutral midpoint: Solarized base2 (#eee8d5). Negative pole: OI vermillion (#d55e00). Positive pole: Solarized cyan (#2aa198). Both poles are CVD-safe against each other (distinguishable under all CVD types).</p>
+
+  <table class="data-table" style="margin-bottom:var(--sp-5)">
+    <thead><tr><th>Scale</th><th>Use when</th><th>Do not use when</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Categorical</strong></td><td>Data has no inherent order: zone types, service categories, protocol families</td><td>Data has order or magnitude</td></tr>
+      <tr><td><strong>Sequential</strong></td><td>Data has one direction of magnitude: bandwidth usage, uptime %, error count</td><td>Data has meaningful zero midpoint</td></tr>
+      <tr><td><strong>Diverging</strong></td><td>Data varies around a meaningful midpoint: delta from baseline, above/below threshold</td><td>Data is purely positive or purely categorical</td></tr>
+    </tbody>
+  </table>
+</section>
+  </div><!-- /content body -->
+</main>
+</div><!-- /grid -->
+
+<script>
+function toggleDisc(trigger, bodyId) {
+  const expanded = trigger.getAttribute('aria-expanded') === 'true';
+  trigger.setAttribute('aria-expanded', String(!expanded));
+  const body = document.getElementById(bodyId);
+  if (body) { if (expanded) { body.setAttribute('hidden',''); } else { body.removeAttribute('hidden'); } }
+}
+function setTheme(theme, btnId) {
+  document.documentElement.dataset.theme = theme;
+  document.querySelectorAll('.cde-theme button').forEach(b => b.classList.remove('active'));
+  if (btnId) document.getElementById(btnId).classList.add('active');
+}
+// Scrollspy
+const links = document.querySelectorAll('.nav-link');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+    }
+  });
+}, { rootMargin: '-38px 0px -55% 0px', threshold: 0 });
+document.querySelectorAll('section[id]').forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
