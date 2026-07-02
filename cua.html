@@ -49,7 +49,7 @@
   --danger:#f07050;--worm:#3a5a6a;--worm-track:#031820;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{font-size:1.0000remrem}
+html{font-size:1.0000rem}
 body{background:var(--bg-surface);color:var(--fg-body);font-family:var(--font-ui);line-height:1.6}
 a{color:var(--primary)}
 *:focus{outline:none}
@@ -67,11 +67,11 @@ a{color:var(--primary)}
 .skip-link:focus-visible { top: 0; outline: 2px solid #fff; outline-offset: 2px; }
 /* CDE bar */
 .cde-bar{background:var(--bg-titlebar);border-bottom:2px solid var(--border-titlebar);display:flex;align-items:stretch;height:38px;position:sticky;top:0;z-index:30}
-.cde-logo{background:var(--sun-orange);border-right:1px solid rgba(0,0,0,.2);padding:0 var(--sp-5);display:flex;align-items:center;font-family:var(--font-mono);font-size:0.7500remrem;font-weight:700;color:#fff;gap:var(--sp-3);white-space:nowrap}
-.cde-title{padding:0 var(--sp-5);flex:1;display:flex;align-items:center;font-family:var(--font-ui);font-size:0.8750remrem;font-weight:600;color:rgba(255,255,255,.95);letter-spacing:.03em}
+.cde-logo{background:var(--sun-orange);border-right:1px solid rgba(0,0,0,.2);padding:0 var(--sp-5);display:flex;align-items:center;font-family:var(--font-mono);font-size:0.75rem;font-weight:700;color:#fff;gap:var(--sp-3);white-space:nowrap}
+.cde-title{padding:0 var(--sp-5);flex:1;display:flex;align-items:center;font-family:var(--font-ui);font-size:0.8750rem;font-weight:600;color:rgba(255,255,255,.95);letter-spacing:.03em}
 .cde-meta{padding:0 var(--sp-4);display:flex;align-items:center;border-left:1px solid rgba(255,255,255,.1)}
 .cde-theme{display:flex;align-items:center;gap:4px;padding:0 var(--sp-4);border-left:1px solid rgba(255,255,255,.1)}
-.cde-theme button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);font-family:var(--font-mono);font-size:0.6875remrem;padding:3px var(--sp-3);cursor:pointer}
+.cde-theme button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);font-family:var(--font-mono);font-size:0.6875rem;padding:3px var(--sp-3);cursor:pointer}
 .cde-theme button:hover{background:rgba(255,255,255,.22)}
 .cde-theme button.active{background:rgba(255,255,255,.28);color:#fff;font-weight:700}
 
@@ -81,15 +81,15 @@ a{color:var(--primary)}
 .sidebar::after{content:'';position:fixed;left:0;top:38px;bottom:0;width:5px;background:linear-gradient(to bottom,var(--worm) 0%,var(--worm) 28%,var(--worm-track) 28%);z-index:20;pointer-events:none}
 .sb-brand{background:var(--bg-titlebar);padding:var(--sp-5) var(--sp-5) var(--sp-4);border-bottom:2px solid var(--border-titlebar)}
 .nav-group{padding:var(--sp-3) 0;border-bottom:1px solid var(--border-lt)}
-.nav-lbl{font-family:var(--font-mono);font-size:0.6250remrem;text-transform:uppercase;letter-spacing:.12em;color:var(--fg-faint);padding:0 var(--sp-4) var(--sp-2) var(--sp-6)}
-.nav-link{display:flex;align-items:center;gap:var(--sp-3);padding:4px var(--sp-4) 4px var(--sp-6);font-family:var(--font-mono);font-size:0.7500remrem;color:var(--fg-muted);text-decoration:none;border-left:2px solid transparent}
+.nav-lbl{font-family:var(--font-mono);font-size:0.6250rem;text-transform:uppercase;letter-spacing:.12em;color:var(--fg-faint);padding:0 var(--sp-4) var(--sp-2) var(--sp-6)}
+.nav-link{display:flex;align-items:center;gap:var(--sp-3);padding:4px var(--sp-4) 4px var(--sp-6);font-family:var(--font-mono);font-size:0.75rem;color:var(--fg-muted);text-decoration:none;border-left:2px solid transparent}
 .nav-link:hover{background:color-mix(in srgb,var(--primary) 7%,transparent);color:var(--fg-body);text-decoration:none}
 .nav-link.active{color:var(--primary);border-left-color:var(--primary);background:color-mix(in srgb,var(--primary) 9%,transparent);font-weight:700}
 .nav-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 
 /* Main */
 .main{background:var(--bg);overflow-y:auto}
-.ctag{background:var(--bg-tag);border-bottom:1px solid var(--border-tag);padding:4px var(--sp-6) 4px var(--sp-7);font-family:var(--font-mono);font-size:0.7500remrem;color:var(--fg-muted);display:flex;align-items:center;gap:var(--sp-4);position:sticky;top:0;z-index:5}
+.ctag{background:var(--bg-tag);border-bottom:1px solid var(--border-tag);padding:4px var(--sp-6) 4px var(--sp-7);font-family:var(--font-mono);font-size:0.75rem;color:var(--fg-muted);display:flex;align-items:center;gap:var(--sp-4);position:sticky;top:0;z-index:5}
 .ctag strong{color:var(--fg-body)}
 .ctag .tag-cmd{cursor:pointer;padding:1px var(--sp-2)}
 .ctag .tag-cmd:hover{background:var(--bg-sel);color:var(--fg-head)}
@@ -97,68 +97,68 @@ a{color:var(--primary)}
 
 /* Sections */
 .section{margin-bottom:var(--sp-8);scroll-margin-top:calc(38px + var(--sp-7))}
-.sec-title{display:flex;align-items:center;gap:var(--sp-3);font-family:var(--font-mono);font-size:0.6875remrem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--fg-muted);padding-bottom:var(--sp-3);border-bottom:1px solid var(--border);margin-bottom:var(--sp-6)}
+.sec-title{display:flex;align-items:center;gap:var(--sp-3);font-family:var(--font-mono);font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--fg-muted);padding-bottom:var(--sp-3);border-bottom:1px solid var(--border);margin-bottom:var(--sp-6)}
 .sec-title-bar{width:16px;height:3px;background:var(--primary);flex-shrink:0}
-.ssub{font-family:var(--font-ui);font-size:0.9375remrem;font-weight:600;color:var(--fg-head);margin:var(--sp-6) 0 var(--sp-4)}
-.prose{font-family:var(--font-ui);font-size:0.8750remrem;line-height:1.75;color:var(--fg-body);max-width:66ch;margin-bottom:var(--sp-5)}
-.lsm{font-family:var(--font-mono);font-size:0.6250remrem;text-transform:uppercase;letter-spacing:.12em;color:var(--fg-faint);margin-bottom:var(--sp-3)}
+.ssub{font-family:var(--font-ui);font-size:0.9375rem;font-weight:600;color:var(--fg-head);margin:var(--sp-6) 0 var(--sp-4)}
+.prose{font-family:var(--font-ui);font-size:0.8750rem;line-height:1.75;color:var(--fg-body);max-width:66ch;margin-bottom:var(--sp-5)}
+.lsm{font-family:var(--font-mono);font-size:0.6250rem;text-transform:uppercase;letter-spacing:.12em;color:var(--fg-faint);margin-bottom:var(--sp-3)}
 .demo{background:var(--bg-surface);border:1px solid var(--border-lt);padding:var(--sp-5);margin-bottom:var(--sp-5)}
 
 /* Tag bar */
-.tag-bar{background:var(--bg-tag);border-bottom:1px solid var(--border-tag);padding:3px var(--sp-5) 3px 14px;font-family:var(--font-mono);font-size:0.7500remrem;color:var(--fg-body);display:flex;align-items:center;gap:var(--sp-3);position:relative}
+.tag-bar{background:var(--bg-tag);border-bottom:1px solid var(--border-tag);padding:3px var(--sp-5) 3px 14px;font-family:var(--font-mono);font-size:0.75rem;color:var(--fg-body);display:flex;align-items:center;gap:var(--sp-3);position:relative}
 .tag-bar::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--worm);border-right:1px solid var(--border-lt)}
 .tag-path{font-weight:700}
 .tag-cmd{color:var(--fg-faint);cursor:pointer;padding:0 2px}
 .tag-cmd:hover{background:var(--bg-sel);color:var(--fg-head)}
 .acme-win{border:1px solid var(--border);margin-bottom:var(--sp-5)}
-.acme-body{background:var(--bg);padding:var(--sp-5) var(--sp-5) var(--sp-5) var(--sp-7);font-family:var(--font-mono);font-size:0.8125remrem;line-height:1.7;color:var(--fg-body);position:relative}
+.acme-body{background:var(--bg);padding:var(--sp-5) var(--sp-5) var(--sp-5) var(--sp-7);font-family:var(--font-mono);font-size:0.8125rem;line-height:1.7;color:var(--fg-body);position:relative}
 .acme-body::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--worm-track);border-right:1px solid var(--border-lt)}
 
 /* Code block */
-.code-block{background:var(--bg-code);padding:var(--sp-5) var(--sp-5) var(--sp-5) var(--sp-7);font-family:var(--font-mono);font-size:0.8125remrem;line-height:1.7;color:var(--fg-code);overflow-x:auto;position:relative;border:1px solid rgba(0,0,0,.2);margin-bottom:var(--sp-5)}
+.code-block{background:var(--bg-code);padding:var(--sp-5) var(--sp-5) var(--sp-5) var(--sp-7);font-family:var(--font-mono);font-size:0.8125rem;line-height:1.7;color:var(--fg-code);overflow-x:auto;position:relative;border:1px solid rgba(0,0,0,.2);margin-bottom:var(--sp-5)}
 .code-block::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--worm)}
 .tkw{color:var(--sol-green)}.tst{color:var(--sol-cyan)}.tnu{color:var(--sol-magenta)}
 .tcm{color:var(--sol-base01);font-style:italic}.tfn{color:var(--sol-blue)}
 .tva{color:var(--sol-yellow)}.tty{color:var(--sol-orange)}
 
 /* Spec table */
-.spec-table{width:100%;border-collapse:collapse;font-size:0.8125remrem;margin-bottom:var(--sp-5)}
-.spec-table th{background:var(--bg-titlebar);color:var(--fg-on-dark);padding:var(--sp-3) var(--sp-4);text-align:left;font-family:var(--font-mono);font-size:0.6875remrem;text-transform:uppercase;letter-spacing:.08em}
+.spec-table{width:100%;border-collapse:collapse;font-size:0.8125rem;margin-bottom:var(--sp-5)}
+.spec-table th{background:var(--bg-titlebar);color:var(--fg-on-dark);padding:var(--sp-3) var(--sp-4);text-align:left;font-family:var(--font-mono);font-size:0.6875rem;text-transform:uppercase;letter-spacing:.08em}
 .spec-table td{padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--border-lt);color:var(--fg-body);vertical-align:top}
 .spec-table tr:nth-child(even) td{background:var(--bg-surface)}
 .spec-table tr:hover td{background:var(--bg-sel)}
-.spec-table .key{font-family:var(--font-mono);font-size:0.7500remrem;color:var(--primary)}
-.spec-table .note{font-size:0.7500remrem;color:var(--fg-muted);margin-top:3px}
+.spec-table .key{font-family:var(--font-mono);font-size:0.75rem;color:var(--primary)}
+.spec-table .note{font-size:0.75rem;color:var(--fg-muted);margin-top:3px}
 
 /* Key badge */
-.kbd{display:inline-block;font-family:var(--font-mono);font-size:0.6875remrem;font-weight:700;padding:1px 6px;border:1px solid var(--border);background:var(--bg-surface);color:var(--fg-head);border-radius:2px;border-bottom-width:2px;white-space:nowrap}
+.kbd{display:inline-block;font-family:var(--font-mono);font-size:0.6875rem;font-weight:700;padding:1px 6px;border:1px solid var(--border);background:var(--bg-surface);color:var(--fg-head);border-radius:2px;border-bottom-width:2px;white-space:nowrap}
 [data-theme="dark"] .kbd{background:var(--bg-surface);border-color:var(--border-lt)}
 
 /* Decision block */
 .decision{border-left:3px solid var(--primary);padding:var(--sp-4) var(--sp-5);margin-bottom:var(--sp-4);background:color-mix(in srgb,var(--primary) 6%,transparent)}
-.decision-head{font-family:var(--font-mono);font-size:0.6875remrem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--primary);margin-bottom:var(--sp-2)}
-.decision-body{font-size:0.8750remrem;color:var(--fg-body);line-height:1.7}
+.decision-head{font-family:var(--font-mono);font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--primary);margin-bottom:var(--sp-2)}
+.decision-body{font-size:0.8750rem;color:var(--fg-body);line-height:1.7}
 
 /* Do/don't */
 .rule-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin-bottom:var(--sp-5)}
 .rule-do{border:1px solid var(--success);padding:var(--sp-4)}
 .rule-dont{border:1px solid var(--danger);padding:var(--sp-4)}
-.rule-lbl{font-family:var(--font-mono);font-size:0.6875remrem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:var(--sp-3)}
+.rule-lbl{font-family:var(--font-mono);font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:var(--sp-3)}
 .rule-do .rule-lbl{color:var(--success)}
 .rule-dont .rule-lbl{color:var(--danger)}
 [data-theme="dark"] .rule-do .rule-lbl{color:#3dddaa}
 [data-theme="dark"] .rule-dont .rule-lbl{color:#f07060}
-.rule-body{font-size:0.8125remrem;color:var(--fg-body);line-height:1.7}
+.rule-body{font-size:0.8125rem;color:var(--fg-body);line-height:1.7}
 
 /* Context menu demo */
 .ctx-menu{background:var(--bg);border:1px solid var(--border);min-width:180px;display:inline-block}
-.ctx-item{padding:var(--sp-2) var(--sp-5) var(--sp-2) var(--sp-4);font-family:var(--font-mono);font-size:0.8125remrem;color:var(--fg-body);display:flex;justify-content:space-between;align-items:center;gap:var(--sp-5);cursor:pointer;border-bottom:1px solid var(--border-lt)}
+.ctx-item{padding:var(--sp-2) var(--sp-5) var(--sp-2) var(--sp-4);font-family:var(--font-mono);font-size:0.8125rem;color:var(--fg-body);display:flex;justify-content:space-between;align-items:center;gap:var(--sp-5);cursor:pointer;border-bottom:1px solid var(--border-lt)}
 .ctx-item:last-child{border-bottom:none}
 .ctx-item:hover{background:var(--bg-sel);color:var(--fg-head)}
 .ctx-item.ctx-disabled{color:var(--fg-faint);cursor:default}
 .ctx-item.ctx-disabled:hover{background:transparent;color:var(--fg-faint)}
 .ctx-sep{border-bottom:1px solid var(--border);margin:0}
-.ctx-accel{font-size:0.6875remrem;color:var(--fg-faint);font-family:var(--font-mono)}
+.ctx-accel{font-size:0.6875rem;color:var(--fg-faint);font-family:var(--font-mono)}
 .ctx-item:hover .ctx-accel{color:var(--fg-muted)}
 
 /* Interactive worm demo */
@@ -167,7 +167,7 @@ a{color:var(--primary)}
 .worm-thumb{position:absolute;left:0;right:0;background:var(--worm)}
 
 /* Badge */
-.badge{display:inline-block;padding:2px var(--sp-3);font-family:var(--font-mono);font-size:0.6875remrem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:1px solid}
+.badge{display:inline-block;padding:2px var(--sp-3);font-family:var(--font-mono);font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:1px solid}
 .badge-ok{background:color-mix(in srgb,var(--success) 12%,transparent);border-color:color-mix(in srgb,var(--success) 35%,transparent);color:var(--success)}
 .badge-info{background:color-mix(in srgb,var(--primary) 12%,transparent);border-color:color-mix(in srgb,var(--primary) 35%,transparent);color:var(--primary)}
 .badge-warn{background:color-mix(in srgb,var(--warning) 12%,transparent);border-color:color-mix(in srgb,var(--warning) 35%,transparent);color:var(--warning)}
@@ -242,7 +242,7 @@ a{color:var(--primary)}
   </div>
   <div class="cde-title">Common User Access &mdash; Specification v1.0</div>
   <div class="cde-meta">
-    <span style="font-family:var(--font-mono);font-size:0.6250remrem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em">Not IBM CUA &mdash; Acme/CDE/POSIX heritage</span>
+    <span style="font-family:var(--font-mono);font-size:0.6250rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em">Not IBM CUA &mdash; Acme/CDE/POSIX heritage</span>
   </div>
   <div class="cde-theme">
     <button id="btn-light" class="active" onclick="setTheme('light','btn-light')">&#9728; Light</button>
@@ -253,9 +253,9 @@ a{color:var(--primary)}
 <div class="page-wrap">
 <nav class="sidebar" aria-label="CUA specification navigation">
   <div class="sb-brand">
-    <div style="font-family:var(--font-mono);font-size:0.6250remrem;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.5);margin-bottom:var(--sp-2)">CUA Spec</div>
-    <div style="font-family:var(--font-ui);font-size:1.2500remrem;font-weight:700;color:#fff">Unified</div>
-    <div style="font-family:var(--font-mono);font-size:0.6875remrem;color:rgba(255,255,255,.42);margin-top:3px">v1.0 &mdash; 2026</div>
+    <div style="font-family:var(--font-mono);font-size:0.6250rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.5);margin-bottom:var(--sp-2)">CUA Spec</div>
+    <div style="font-family:var(--font-ui);font-size:1.2500rem;font-weight:700;color:#fff">Unified</div>
+    <div style="font-family:var(--font-mono);font-size:0.6875rem;color:rgba(255,255,255,.42);margin-top:3px">v1.0 &mdash; 2026</div>
   </div>
   <div class="nav-group">
     <div class="nav-lbl">Foundations</div>
@@ -325,7 +325,7 @@ a{color:var(--primary)}
     </div>
     <div class="decision">
       <div class="decision-head">Principle 4 &mdash; No animations</div>
-      <div class="decision-body">State changes are instantaneous. No transitions, no fades, no slides. The heritage is terminal &mdash; terminals redraw. The only exception is <code style="font-family:var(--font-mono);font-size:0.7500remrem">prefers-reduced-motion</code>-guarded motion that serves a genuine spatial orientation purpose (e.g., a modal appearing). Even then, default off.</div>
+      <div class="decision-body">State changes are instantaneous. No transitions, no fades, no slides. The heritage is terminal &mdash; terminals redraw. The only exception is <code style="font-family:var(--font-mono);font-size:0.75rem">prefers-reduced-motion</code>-guarded motion that serves a genuine spatial orientation purpose (e.g., a modal appearing). Even then, default off.</div>
     </div>
   </div>
 </section>
@@ -370,7 +370,7 @@ a{color:var(--primary)}
       <strong>Button 1 (left click):</strong> Select text, position cursor, activate focused element.<br>
       <strong>Button 2 (right click):</strong> Open context menu at pointer position.<br>
       <strong>Middle click:</strong> Execute tag-bar command under pointer if present; paste primary selection in text fields. Never required &mdash; always optional.<br><br>
-      Full Acme B2-execute and B3-search are not implemented. Tag-bar commands replace B2-execute. <code style="font-family:var(--font-mono);font-size:0.7500remrem">Look</code> replaces B3-search. Chording is not defined.
+      Full Acme B2-execute and B3-search are not implemented. Tag-bar commands replace B2-execute. <code style="font-family:var(--font-mono);font-size:0.75rem">Look</code> replaces B3-search. Chording is not defined.
     </div>
   </div>
 
@@ -378,7 +378,7 @@ a{color:var(--primary)}
     <div class="decision-head" style="color:var(--cde-teal)">Decision 2 &mdash; Keyboard: CDE-style with Acme mnemonics <span class="badge badge-ok" style="font-size:0.625rem;vertical-align:middle;margin-left:0.5rem">ADR-002 &middot; decided &middot; 2026-Q2</span></div>
     <div class="decision-body">
       Standard POSIX traversal (Tab/Shift+Tab, Enter, Escape, Space) as the baseline.<br>
-      <code style="font-family:var(--font-mono);font-size:0.7500remrem">Alt+key</code> mnemonics derived from tag-bar command names, not from IBM menu structure.<br>
+      <code style="font-family:var(--font-mono);font-size:0.75rem">Alt+key</code> mnemonics derived from tag-bar command names, not from IBM menu structure.<br>
       No modal layers. No vi-style normal/insert split. Keyboard and mouse are always equivalent &mdash; neither is primary.
     </div>
   </div>
@@ -430,7 +430,7 @@ a{color:var(--primary)}
   <p class="prose">Drag and drop is <strong>not specified by the Unified CUA</strong> and is not a force multiplier across the system&#8217;s use cases: Plan&#160;9 has no DnD concept (everything is addressable by path via the plumber), agents do not drag DOM elements, and static documents have no state to reorder. HTMX does not natively support <code style="font-family:var(--font-mono);font-size:0.75rem">hx-trigger=&quot;drop&quot;</code>, requiring JS beyond the system baseline.</p>
   <p class="prose">Implementers <em>may</em> add DnD to specific surfaces (a sortable table, a file upload target) where it provides genuine value. Two requirements apply: (1)&#160;a command-based equivalent must always coexist &#8212; drag-to-reorder&#160;=&#160;<code style="font-family:var(--font-mono);font-size:0.75rem">Move</code>&#160;+ target path; drag-to-upload&#160;=&#160;<code style="font-family:var(--font-mono);font-size:0.75rem">Put</code> with file as body; (2)&#160;visual feedback during drag must use border change and background tint only &#8212; no animation, consistent with the no-motion principle.</p>
   <div class="ssub">Click targets and hit areas</div>
-  <p class="prose">Every interactive element must have a minimum hit area of 24&times;24px. Tag-bar commands are inline text &mdash; their hit area extends to the surrounding whitespace (4px each side, 2px top/bottom). The worm strip minimum interactive width is 8px even if rendered at 5px (CSS <code style="font-family:var(--font-mono);font-size:0.7500remrem">padding</code> or transparent border on the parent achieves this).</p>
+  <p class="prose">Every interactive element must have a minimum hit area of 24&times;24px. Tag-bar commands are inline text &mdash; their hit area extends to the surrounding whitespace (4px each side, 2px top/bottom). The worm strip minimum interactive width is 8px even if rendered at 5px (CSS <code style="font-family:var(--font-mono);font-size:0.75rem">padding</code> or transparent border on the parent achieves this).</p>
 
   <div class="rule-grid">
     <div class="rule-do"><div class="rule-lbl">&#10003; Do</div><div class="rule-body">Make tag-bar command tokens visually distinct from path text. Color: <code style="font-family:var(--font-mono)">fg-faint</code>. Hover: <code style="font-family:var(--font-mono)">bg-sel</code> fill. The visual change is the affordance.</div></div>
@@ -442,7 +442,7 @@ a{color:var(--primary)}
 
 <section class="section" id="keyboard">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Keyboard model</h2>
-  <p class="prose">CDE-style keyboard navigation: standard POSIX traversal as baseline, <code style="font-family:var(--font-mono);font-size:0.7500remrem">Alt+key</code> mnemonics derived from tag-bar command names. No modal layers. No application-global shortcuts that conflict with browser defaults.</p>
+  <p class="prose">CDE-style keyboard navigation: standard POSIX traversal as baseline, <code style="font-family:var(--font-mono);font-size:0.75rem">Alt+key</code> mnemonics derived from tag-bar command names. No modal layers. No application-global shortcuts that conflict with browser defaults.</p>
 
   <div class="ssub">Universal bindings &mdash; all contexts</div>
   <table class="spec-table">
@@ -488,15 +488,15 @@ a{color:var(--primary)}
   </table>
 
   <div class="ssub">Focus ring specification</div>
-  <p class="prose">Focus rings are always visible when navigating by keyboard (<code style="font-family:var(--font-mono);font-size:0.7500remrem">:focus-visible</code>). They use <code style="font-family:var(--font-mono);font-size:0.7500remrem">outline: 2px solid var(--primary)</code> with <code style="font-family:var(--font-mono);font-size:0.7500remrem">outline-offset: 2px</code>. No custom focus styles that reduce visibility. Focus rings on CDE titlebar controls use white outline (<code style="font-family:var(--font-mono);font-size:0.7500remrem">outline-color: rgba(255,255,255,.8)</code>) since they sit on a dark surface.</p>
+  <p class="prose">Focus rings are always visible when navigating by keyboard (<code style="font-family:var(--font-mono);font-size:0.75rem">:focus-visible</code>). They use <code style="font-family:var(--font-mono);font-size:0.75rem">outline: 2px solid var(--primary)</code> with <code style="font-family:var(--font-mono);font-size:0.75rem">outline-offset: 2px</code>. No custom focus styles that reduce visibility. Focus rings on CDE titlebar controls use white outline (<code style="font-family:var(--font-mono);font-size:0.75rem">outline-color: rgba(255,255,255,.8)</code>) since they sit on a dark surface.</p>
 
   <div class="demo">
     <div style="display:flex;gap:var(--sp-5);align-items:center;flex-wrap:wrap">
-      <button style="background:var(--primary);color:#fff;padding:7px var(--sp-5);border:none;font-family:var(--font-ui);font-size:0.8750remrem;font-weight:600;outline:2px solid var(--primary);outline-offset:2px;cursor:pointer">Keyboard focus</button>
-      <input style="background:var(--bg);border:1.5px solid var(--primary);padding:7px var(--sp-4);font-family:var(--font-mono);font-size:0.8125remrem;color:var(--fg-body);outline:2px solid var(--primary);outline-offset:2px;box-shadow:0 0 0 2px color-mix(in srgb,var(--primary) 20%,transparent);width:200px" placeholder="Input focused" value="Focused" aria-label="Focused input demonstration">
+      <button style="background:var(--primary);color:#fff;padding:7px var(--sp-5);border:none;font-family:var(--font-ui);font-size:0.8750rem;font-weight:600;outline:2px solid var(--primary);outline-offset:2px;cursor:pointer">Keyboard focus</button>
+      <input style="background:var(--bg);border:1.5px solid var(--primary);padding:7px var(--sp-4);font-family:var(--font-mono);font-size:0.8125rem;color:var(--fg-body);outline:2px solid var(--primary);outline-offset:2px;box-shadow:0 0 0 2px color-mix(in srgb,var(--primary) 20%,transparent);width:200px" placeholder="Input focused" value="Focused" aria-label="Focused input demonstration">
       <span class="tag-cmd" style="background:var(--bg-sel);color:var(--fg-head);outline:2px solid var(--primary);outline-offset:2px">Look</span>
     </div>
-    <div style="margin-top:var(--sp-3);font-family:var(--font-mono);font-size:0.6875remrem;color:var(--fg-faint)">Focus ring: 2px solid --primary, offset 2px. Input also shows bg-sel fill and primary border.</div>
+    <div style="margin-top:var(--sp-3);font-family:var(--font-mono);font-size:0.6875rem;color:var(--fg-faint)">Focus ring: 2px solid --primary, offset 2px. Input also shows bg-sel fill and primary border.</div>
   </div>
 
 
@@ -572,7 +572,7 @@ a{color:var(--primary)}
   <table class="spec-table">
     <thead><tr><th>Rule</th><th>Specification</th></tr></thead>
     <tbody>
-      <tr><td class="key">Layer order</td><td>1. Clipboard operations (Copy, Cut, Paste). 2. Look (search/plumb). 3. Tag-bar universal commands (Get, Put, Kill, Undo). 4. Application-specific commands. Each layer separated by <code style="font-family:var(--font-mono);font-size:0.7500remrem">&lt;hr class="ctx-sep"&gt;</code>. Omit empty layers entirely.</td></tr>
+      <tr><td class="key">Layer order</td><td>1. Clipboard operations (Copy, Cut, Paste). 2. Look (search/plumb). 3. Tag-bar universal commands (Get, Put, Kill, Undo). 4. Application-specific commands. Each layer separated by <code style="font-family:var(--font-mono);font-size:0.75rem">&lt;hr class="ctx-sep"&gt;</code>. Omit empty layers entirely.</td></tr>
       <tr><td class="key">Disabled items</td><td>Show with <code style="font-family:var(--font-mono)">fg-faint</code> color and <code style="font-family:var(--font-mono)">cursor: default</code>. Do not hide disabled items &mdash; their presence tells the user the action exists but isn't available now. Reason for disabled state shown as tooltip on hover.</td></tr>
       <tr><td class="key">Accelerators</td><td>Always show <code style="font-family:var(--font-mono)">Alt+key</code> accelerator for any item that has one. Right-aligned, <code style="font-family:var(--font-mono)">fg-faint</code>. This is how users discover keyboard shortcuts.</td></tr>
       <tr><td class="key">Underline</td><td>Underline the mnemonic letter in each item label. Use <code style="font-family:var(--font-mono)">&lt;u&gt;</code>, not CSS text-decoration-line. This is the CDE convention for Alt+key activation of menu items.</td></tr>
@@ -608,22 +608,22 @@ a{color:var(--primary)}
     <tbody>
       <tr>
         <td class="key">Worm strip</td>
-        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">::before</code> pseudo, 5px wide, <code style="font-family:var(--font-mono)">var(--worm)</code> fill</td>
+        <td><code style="font-family:var(--font-mono);font-size:0.75rem">::before</code> pseudo, 5px wide, <code style="font-family:var(--font-mono)">var(--worm)</code> fill</td>
         <td>Decorative in the tag bar itself. Interactive on the window body's left edge. See Worm Strip section.</td>
       </tr>
       <tr>
         <td class="key">Path</td>
-        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">font-weight:700</code>, <code style="font-family:var(--font-mono)">fg-body</code></td>
+        <td><code style="font-family:var(--font-mono);font-size:0.75rem">font-weight:700</code>, <code style="font-family:var(--font-mono)">fg-body</code></td>
         <td>Not interactive unless the application defines path-click navigation. If clickable, apply standard link underline on hover. Never make path interactive without a visible affordance.</td>
       </tr>
       <tr>
         <td class="key">Command token</td>
-        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">fg-faint</code> at rest, <code style="font-family:var(--font-mono)">bg-sel</code> on hover, <code style="font-family:var(--font-mono)">fg-head</code> on hover</td>
+        <td><code style="font-family:var(--font-mono);font-size:0.75rem">fg-faint</code> at rest, <code style="font-family:var(--font-mono)">bg-sel</code> on hover, <code style="font-family:var(--font-mono)">fg-head</code> on hover</td>
         <td>Click activates. Keyboard: F10 focuses tag bar, Tab moves between tokens, Enter activates. Right-click opens context menu with Look and Get/Put.</td>
       </tr>
       <tr>
         <td class="key">Pipe command</td>
-        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">fg-faint</code>, pipe character in <code style="font-family:var(--font-mono)">fg-faint</code></td>
+        <td><code style="font-family:var(--font-mono);font-size:0.75rem">fg-faint</code>, pipe character in <code style="font-family:var(--font-mono)">fg-faint</code></td>
         <td>Pipes current window selection through the named filter. If no selection, applies to entire window content. Server-side: receives text via POST body, returns replacement text.</td>
       </tr>
       <tr>
@@ -633,7 +633,7 @@ a{color:var(--primary)}
       </tr>
       <tr>
         <td class="key">Meta / status</td>
-        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">fg-faint</code>, right-aligned via <code style="font-family:var(--font-mono)">margin-left:auto</code></td>
+        <td><code style="font-family:var(--font-mono);font-size:0.75rem">fg-faint</code>, right-aligned via <code style="font-family:var(--font-mono)">margin-left:auto</code></td>
         <td>Read-only. Communicates modification state, last-updated time, record count. Use a badge for state (modified, saving, error). Use plain text for counts and timestamps.</td>
       </tr>
     </tbody>
@@ -647,9 +647,9 @@ a{color:var(--primary)}
       <span class="tag-cmd">Undo</span>
       <span class="tag-cmd">|fmt</span>
       <span style="flex:1"></span>
-      <span style="font-family:var(--font-mono);font-size:0.6875remrem;color:var(--fg-faint)"><span class="badge badge-warn" style="padding:1px 6px">unsaved</span></span>
+      <span style="font-family:var(--font-mono);font-size:0.6875rem;color:var(--fg-faint)"><span class="badge badge-warn" style="padding:1px 6px">unsaved</span></span>
     </div>
-    <div class="acme-body" style="padding:var(--sp-4) var(--sp-5) var(--sp-4) var(--sp-7);min-height:40px;color:var(--fg-muted);font-size:0.8125remrem">Window body &mdash; content swapped here by HTMX or static render.</div>
+    <div class="acme-body" style="padding:var(--sp-4) var(--sp-5) var(--sp-4) var(--sp-7);min-height:40px;color:var(--fg-muted);font-size:0.8125rem">Window body &mdash; content swapped here by HTMX or static render.</div>
   </div>
   <div class="acme-win">
     <div class="tag-bar">
@@ -657,9 +657,9 @@ a{color:var(--primary)}
       <span class="tag-cmd" title="Alt+G">Get</span>
       <span class="tag-cmd">Kill</span>
       <span style="flex:1"></span>
-      <span style="font-family:var(--font-mono);font-size:0.6875remrem;color:var(--fg-faint)">every 5s</span>
+      <span style="font-family:var(--font-mono);font-size:0.6875rem;color:var(--fg-faint)">every 5s</span>
     </div>
-    <div class="acme-body" style="padding:var(--sp-4) var(--sp-5) var(--sp-4) var(--sp-7);min-height:40px;font-size:0.8125remrem"><span class="tkw">established</span> <span class="tnu">42</span> &nbsp; <span class="tkw">time_wait</span> <span class="tnu">7</span> &nbsp; <span class="tkw">listen</span> <span class="tnu">3</span></div>
+    <div class="acme-body" style="padding:var(--sp-4) var(--sp-5) var(--sp-4) var(--sp-7);min-height:40px;font-size:0.8125rem"><span class="tkw">established</span> <span class="tnu">42</span> &nbsp; <span class="tkw">time_wait</span> <span class="tnu">7</span> &nbsp; <span class="tkw">listen</span> <span class="tnu">3</span></div>
   </div>
   <div class="acme-win">
     <div class="tag-bar">
@@ -667,31 +667,31 @@ a{color:var(--primary)}
       <span class="tag-cmd">Look</span>
       <div style="flex:1;margin-left:var(--sp-3);position:relative">
         <div style="position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--primary);opacity:.5;pointer-events:none"></div>
-        <input style="background:transparent;border:none;border-bottom:1.5px solid var(--primary);padding:2px 2px 3px var(--sp-4);font-family:var(--font-mono);font-size:0.7500remrem;color:var(--fg-body);outline:none;width:100%" placeholder="Look&hellip;" aria-label="Ghost input demonstration">
+        <input style="background:transparent;border:none;border-bottom:1.5px solid var(--primary);padding:2px 2px 3px var(--sp-4);font-family:var(--font-mono);font-size:0.75rem;color:var(--fg-body);outline:none;width:100%" placeholder="Look&hellip;" aria-label="Ghost input demonstration">
       </div>
       <span class="tag-cmd">Clear</span>
     </div>
-    <div class="acme-body" style="padding:var(--sp-4) var(--sp-5) var(--sp-4) var(--sp-7);min-height:40px;color:var(--fg-muted);font-size:0.8125remrem">Search results appear here.</div>
+    <div class="acme-body" style="padding:var(--sp-4) var(--sp-5) var(--sp-4) var(--sp-7);min-height:40px;color:var(--fg-muted);font-size:0.8125rem">Search results appear here.</div>
   </div>
 </section>
 
 <section class="section" id="commands">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Command registry</h2>
-  <p class="prose">Reserved command names and their defined semantics. Applications may add commands but must not redefine reserved ones. Command names are Title-cased single words. Multi-word commands are concatenated (<code style="font-family:var(--font-mono);font-size:0.7500remrem">Newcol</code>, <code style="font-family:var(--font-mono);font-size:0.7500remrem">Putall</code>).</p>
+  <p class="prose">Reserved command names and their defined semantics. Applications may add commands but must not redefine reserved ones. Command names are Title-cased single words. Multi-word commands are concatenated (<code style="font-family:var(--font-mono);font-size:0.75rem">Newcol</code>, <code style="font-family:var(--font-mono);font-size:0.75rem">Putall</code>).</p>
 
   <table class="spec-table">
     <thead><tr><th>Command</th><th>Key</th><th>Semantics</th><th>HTTP verb (HTMX)</th></tr></thead>
     <tbody>
-      <tr><td class="key">Get</td><td><span class="kbd">Alt+G</span></td><td>Fetch / refresh content of this window from its source. Idempotent. Does not modify state. Replaces body content.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-get</code></td></tr>
-      <tr><td class="key">Put</td><td><span class="kbd">Alt+P</span></td><td>Save / write current window content to its source. May modify state. Server returns updated content or acknowledgement.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-post / hx-put</code></td></tr>
-      <tr><td class="key">Look</td><td><span class="kbd">Alt+L</span></td><td>Search for current selection (or prompt if no selection). Opens search results in place or in a new window. Read-only.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-get</code> with <code style="font-family:var(--font-mono);font-size:0.7500remrem">q=</code></td></tr>
-      <tr><td class="key">Kill</td><td><span class="kbd">Alt+K</span></td><td>Stop a running process or live-update associated with this window. Does not close the window. Server terminates polling or SSE stream.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-delete</code></td></tr>
-      <tr><td class="key">Undo</td><td><span class="kbd">Alt+U</span></td><td>Revert window content to last-saved state. Server returns original content. Does not affect clipboard or browser history.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-get</code> (re-fetches)</td></tr>
-      <tr><td class="key">Dump</td><td><span class="kbd">Alt+D</span></td><td>Export / download window content as a file. Opens browser download dialog or triggers server-side export job.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-get</code> with <code style="font-family:var(--font-mono);font-size:0.7500remrem">Accept: text/plain</code></td></tr>
-      <tr><td class="key">Newcol</td><td><span class="kbd">Alt+N</span></td><td>Open a new column / panel in a column-layout view. Only valid in column-layout contexts.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-post</code> new panel fragment</td></tr>
-      <tr><td class="key">Putall</td><td>&mdash;</td><td>Save all modified windows in the current view. Batch Put.</td><td><code style="font-family:var(--font-mono);font-size:0.7500remrem">hx-post</code> batch endpoint</td></tr>
+      <tr><td class="key">Get</td><td><span class="kbd">Alt+G</span></td><td>Fetch / refresh content of this window from its source. Idempotent. Does not modify state. Replaces body content.</td><td><code style="font-family:var(--font-mono);font-size:0.75rem">hx-get</code></td></tr>
+      <tr><td class="key">Put</td><td><span class="kbd">Alt+P</span></td><td>Save / write current window content to its source. May modify state. Server returns updated content or acknowledgement.</td><td><code style="font-family:var(--font-mono);font-size:0.75rem">hx-post / hx-put</code></td></tr>
+      <tr><td class="key">Look</td><td><span class="kbd">Alt+L</span></td><td>Search for current selection (or prompt if no selection). Opens search results in place or in a new window. Read-only.</td><td><code style="font-family:var(--font-mono);font-size:0.75rem">hx-get</code> with <code style="font-family:var(--font-mono);font-size:0.75rem">q=</code></td></tr>
+      <tr><td class="key">Kill</td><td><span class="kbd">Alt+K</span></td><td>Stop a running process or live-update associated with this window. Does not close the window. Server terminates polling or SSE stream.</td><td><code style="font-family:var(--font-mono);font-size:0.75rem">hx-delete</code></td></tr>
+      <tr><td class="key">Revert</td><td><span class="kbd">Alt+R</span></td><td>Discard local changes and re-fetch window content from its source. Equivalent to a Get with discard-first semantic. <strong>This is not keystroke-level undo</strong> &#8212; browser-native Ctrl+Z handles field-level undo within inputs. Revert operates at the server round-trip layer.</td><td><code style="font-family:var(--font-mono);font-size:0.75rem">hx-get</code> (discard then re-fetch)</td></tr>
+      <tr><td class="key">Dump</td><td><span class="kbd">Alt+D</span></td><td>Export / download window content as a file. Opens browser download dialog or triggers server-side export job.</td><td><code style="font-family:var(--font-mono);font-size:0.75rem">hx-get</code> with <code style="font-family:var(--font-mono);font-size:0.75rem">Accept: text/plain</code></td></tr>
+      <tr><td class="key">Newcol</td><td><span class="kbd">Alt+N</span></td><td>Open a new column / panel in a column-layout view. Only valid in column-layout contexts.</td><td><code style="font-family:var(--font-mono);font-size:0.75rem">hx-post</code> new panel fragment</td></tr>
+      <tr><td class="key">Putall</td><td>&mdash;</td><td>Save all modified windows in the current view. Batch Put.</td><td><code style="font-family:var(--font-mono);font-size:0.75rem">hx-post</code> batch endpoint</td></tr>
       <tr><td class="key">Del</td><td>&mdash;</td><td>Close / remove this window from the layout. Does not delete the underlying resource. Opposite of Get.</td><td>Client-side only: remove DOM element</td></tr>
-      <tr><td class="key">Exit</td><td>&mdash;</td><td>Terminate the application session. Prompts if unsaved changes exist.</td><td>Navigation: <code style="font-family:var(--font-mono);font-size:0.7500remrem">window.location</code></td></tr>
+      <tr><td class="key">Exit</td><td>&mdash;</td><td>Terminate the application session. Prompts if unsaved changes exist.</td><td>Navigation: <code style="font-family:var(--font-mono);font-size:0.75rem">window.location</code></td></tr>
     </tbody>
   </table>
 
@@ -747,7 +747,7 @@ a{color:var(--primary)}
   </table>
 
   <div class="ssub">Focus order</div>
-  <p class="prose">Tab order follows DOM source order. Do not use <code style="font-family:var(--font-mono);font-size:0.7500remrem">tabindex</code> values greater than 0. The only valid <code style="font-family:var(--font-mono);font-size:0.7500remrem">tabindex</code> values are <code style="font-family:var(--font-mono);font-size:0.7500remrem">0</code> (in flow) and <code style="font-family:var(--font-mono);font-size:0.7500remrem">-1</code> (reachable by JS only, e.g. modal trap). Layout that looks logical visually but has illogical DOM order must have its DOM order corrected &mdash; not patched with tabindex.</p>
+  <p class="prose">Tab order follows DOM source order. Do not use <code style="font-family:var(--font-mono);font-size:0.75rem">tabindex</code> values greater than 0. The only valid <code style="font-family:var(--font-mono);font-size:0.75rem">tabindex</code> values are <code style="font-family:var(--font-mono);font-size:0.75rem">0</code> (in flow) and <code style="font-family:var(--font-mono);font-size:0.75rem">-1</code> (reachable by JS only, e.g. modal trap). Layout that looks logical visually but has illogical DOM order must have its DOM order corrected &mdash; not patched with tabindex.</p>
 
   <div class="ssub">HTMX focus implementation</div>
   <div class="code-block">
@@ -774,7 +774,7 @@ document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<sp
 
 <section class="section" id="selection">
   <h2 class="sec-title"><span class="sec-title-bar" aria-hidden="true"></span>Selection model</h2>
-  <p class="prose">Text selection is the primary operand for tag-bar commands. <code style="font-family:var(--font-mono);font-size:0.7500remrem">Look</code>, pipe commands, and application-specific commands operate on the current selection. If there is no selection, they operate on the entire window body or prompt for input.</p>
+  <p class="prose">Text selection is the primary operand for tag-bar commands. <code style="font-family:var(--font-mono);font-size:0.75rem">Look</code>, pipe commands, and application-specific commands operate on the current selection. If there is no selection, they operate on the entire window body or prompt for input.</p>
 
   <table class="spec-table">
     <thead><tr><th>Gesture</th><th>Result</th></tr></thead>
@@ -792,7 +792,7 @@ document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<sp
 
   <div class="ssub">Selection and tag-bar commands</div>
   <p class="prose">When a tag-bar command is invoked and a text selection exists in the window body or any focused input: the command operates on the selection. When no selection exists: the command operates on the full content of the current window body, or prompts if the command requires explicit input (e.g. Look without a search term).</p>
-  <p class="prose">Selection color: <code style="font-family:var(--font-mono);font-size:0.7500remrem">var(--bg-sel)</code> (#9eeeee light / #1a4050 dark). Native browser <code style="font-family:var(--font-mono);font-size:0.7500remrem">::selection</code> pseudo-element. The teal-green is the Acme selection color &mdash; it should be recognizable to Plan 9 users and is CVD-safe.</p>
+  <p class="prose">Selection color: <code style="font-family:var(--font-mono);font-size:0.75rem">var(--bg-sel)</code> (#9eeeee light / #1a4050 dark). Native browser <code style="font-family:var(--font-mono);font-size:0.75rem">::selection</code> pseudo-element. The teal-green is the Acme selection color &mdash; it should be recognizable to Plan 9 users and is CVD-safe.</p>
 
   <div class="code-block">
 <span class="tcm">/* Selection colour via CSS */</span>
@@ -822,8 +822,8 @@ document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<sp
     <thead><tr><th>Location</th><th>Role</th><th>Width</th><th>Interaction</th></tr></thead>
     <tbody>
       <tr><td class="key">Global sidebar</td><td>Decorative position indicator for the sidebar's scroll state. Fixed to left viewport edge.</td><td>5px rendered, extends to full sidebar height</td><td>None. The sidebar's native scrollbar handles scrolling.</td></tr>
-      <tr><td class="key">Tag-bar leading edge</td><td>Decorative. Visually connects tag bar to the window body below it.</td><td>5px via <code style="font-family:var(--font-mono);font-size:0.7500remrem">::before</code></td><td>None.</td></tr>
-      <tr><td class="key">Acme-win body left edge</td><td>Interactive scrollbar. Thumb position reflects visible portion of body content. Click scrolls.</td><td>5px rendered, 8px touch target (use transparent padding or wrapper)</td><td>Click at position Y within strip: scroll body to <code style="font-family:var(--font-mono);font-size:0.7500remrem">Y/H * scrollHeight</code>.</td></tr>
+      <tr><td class="key">Tag-bar leading edge</td><td>Decorative. Visually connects tag bar to the window body below it.</td><td>5px via <code style="font-family:var(--font-mono);font-size:0.75rem">::before</code></td><td>None.</td></tr>
+      <tr><td class="key">Acme-win body left edge</td><td>Interactive scrollbar. Thumb position reflects visible portion of body content. Click scrolls.</td><td>5px rendered, 8px touch target (use transparent padding or wrapper)</td><td>Click at position Y within strip: scroll body to <code style="font-family:var(--font-mono);font-size:0.75rem">Y/H * scrollHeight</code>.</td></tr>
     </tbody>
   </table>
 
@@ -892,21 +892,21 @@ document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<sp
       <tr>
         <td class="key">Solid button</td>
         <td>Filled background (semantic color), white text. Shape communicates clickability.</td>
-        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">brightness(1.08)</code>. No size change.</td>
+        <td><code style="font-family:var(--font-mono);font-size:0.75rem">brightness(1.08)</code>. No size change.</td>
         <td>2px primary outline, offset 2px.</td>
         <td>opacity: 0.4. cursor: not-allowed.</td>
       </tr>
       <tr>
         <td class="key">Ghost button</td>
         <td>1px solid border, transparent bg. Border communicates containment.</td>
-        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">bg-sel</code> fill.</td>
+        <td><code style="font-family:var(--font-mono);font-size:0.75rem">bg-sel</code> fill.</td>
         <td>2px primary outline, offset 2px.</td>
         <td>opacity: 0.4. cursor: not-allowed.</td>
       </tr>
       <tr>
         <td class="key">Tag-bar command</td>
-        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">fg-faint</code> color — dimmer than path text. Separation from static text is the affordance.</td>
-        <td><code style="font-family:var(--font-mono);font-size:0.7500remrem">bg-sel</code> fill + <code style="font-family:var(--font-mono)">fg-head</code> text. cursor: pointer.</td>
+        <td><code style="font-family:var(--font-mono);font-size:0.75rem">fg-faint</code> color — dimmer than path text. Separation from static text is the affordance.</td>
+        <td><code style="font-family:var(--font-mono);font-size:0.75rem">bg-sel</code> fill + <code style="font-family:var(--font-mono)">fg-head</code> text. cursor: pointer.</td>
         <td>2px primary outline, offset 1px.</td>
         <td>Not applicable. Remove the command from the tag bar rather than disabling it.</td>
       </tr>
@@ -949,7 +949,7 @@ document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<sp
       <tr><td class="key">pointer</td><td>Buttons. Tag-bar commands. Links. Interactive worm strips. Context menu items.</td></tr>
       <tr><td class="key">text</td><td>Input fields. Ghost input wrapper. Editable text areas. Acme body (text is selectable).</td></tr>
       <tr><td class="key">not-allowed</td><td>Disabled buttons and inputs.</td></tr>
-      <tr><td class="key">wait / progress</td><td>Permitted during HTMX requests only if the request takes &gt;500ms. Use <code style="font-family:var(--font-mono);font-size:0.7500remrem">htmx:beforeRequest</code> / <code style="font-family:var(--font-mono)">htmx:afterRequest</code> events. Prefer inline loading indicators over cursor change.</td></tr>
+      <tr><td class="key">wait / progress</td><td>Permitted during HTMX requests only if the request takes &gt;500ms. Use <code style="font-family:var(--font-mono);font-size:0.75rem">htmx:beforeRequest</code> / <code style="font-family:var(--font-mono)">htmx:afterRequest</code> events. Prefer inline loading indicators over cursor change.</td></tr>
     </tbody>
   </table>
 </section>
@@ -962,10 +962,10 @@ document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<sp
   <table class="spec-table">
     <thead><tr><th>Event</th><th>Feedback mechanism</th><th>Duration</th><th>Location</th></tr></thead>
     <tbody>
-      <tr><td class="key">Form validation error</td><td>Input border → danger color. Error text adjacent below field. Badge in tag bar meta if multiple errors.</td><td>Until corrected.</td><td>Adjacent to field. Server returns <code style="font-family:var(--font-mono);font-size:0.7500remrem">inp state-err</code> class and error text via HTMX OOB.</td></tr>
-      <tr><td class="key">Save / Put success</td><td>Tag bar meta badge: <span class="badge badge-ok" style="font-size:0.6250remrem;padding:0 4px">saved</span> replaces <span class="badge badge-warn" style="font-size:0.6250remrem;padding:0 4px">unsaved</span>.</td><td>Persistent until next modification.</td><td>Tag bar meta area, right-aligned.</td></tr>
+      <tr><td class="key">Form validation error</td><td>Input border → danger color. Error text adjacent below field. Badge in tag bar meta if multiple errors.</td><td>Until corrected.</td><td>Adjacent to field. Server returns <code style="font-family:var(--font-mono);font-size:0.75rem">inp state-err</code> class and error text via HTMX OOB.</td></tr>
+      <tr><td class="key">Save / Put success</td><td>Tag bar meta badge: <span class="badge badge-ok" style="font-size:0.6250rem;padding:0 4px">saved</span> replaces <span class="badge badge-warn" style="font-size:0.6250rem;padding:0 4px">unsaved</span>.</td><td>Persistent until next modification.</td><td>Tag bar meta area, right-aligned.</td></tr>
       <tr><td class="key">Get / refresh</td><td>Body content replaces. No loading indicator unless &gt;500ms.</td><td>Instant.</td><td>Acme window body (hx-target).</td></tr>
-      <tr><td class="key">Loading &gt;500ms</td><td>Tag bar meta: <span class="badge badge-info" style="font-size:0.6250remrem;padding:0 4px">loading</span> badge. <code style="font-family:var(--font-mono);font-size:0.7500remrem">htmx:beforeRequest</code> adds it; <code style="font-family:var(--font-mono)">htmx:afterRequest</code> removes it.</td><td>Until response.</td><td>Tag bar meta area.</td></tr>
+      <tr><td class="key">Loading &gt;500ms</td><td>Tag bar meta: <span class="badge badge-info" style="font-size:0.6250rem;padding:0 4px">loading</span> badge. <code style="font-family:var(--font-mono);font-size:0.75rem">htmx:beforeRequest</code> adds it; <code style="font-family:var(--font-mono)">htmx:afterRequest</code> removes it.</td><td>Until response.</td><td>Tag bar meta area.</td></tr>
       <tr><td class="key">Server error (5xx)</td><td>Alert block (alert-danger) swapped into the body. Error message from server. aria-live=assertive on the target.</td><td>Until dismissed or next Get.</td><td>Acme window body.</td></tr>
       <tr><td class="key">Destructive action confirmation</td><td>Inline confirmation: replace the trigger button with "Confirm?" + confirm/cancel buttons in place. No modal. No dialog. The button becomes its own confirmation surface.</td><td>Until confirmed or cancelled. Escape cancels.</td><td>In-place at trigger button location.</td></tr>
       <tr><td class="key">Kill / process stop</td><td>Tag bar meta: polling badge removed. Body retains last content.</td><td>Persistent.</td><td>Tag bar meta.</td></tr>
@@ -973,7 +973,7 @@ document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<sp
   </table>
 
   <div class="ssub">Aria-live regions</div>
-  <p class="prose">One <code style="font-family:var(--font-mono);font-size:0.7500remrem">aria-live="polite"</code> region per page for non-urgent status updates (save confirmation, refresh complete). One <code style="font-family:var(--font-mono);font-size:0.7500remrem">aria-live="assertive"</code> region for errors. Both are visually hidden but present in DOM. Server-sent HTMX fragments update these regions as OOB swaps alongside primary content updates.</p>
+  <p class="prose">One <code style="font-family:var(--font-mono);font-size:0.75rem">aria-live="polite"</code> region per page for non-urgent status updates (save confirmation, refresh complete). One <code style="font-family:var(--font-mono);font-size:0.75rem">aria-live="assertive"</code> region for errors. Both are visually hidden but present in DOM. Server-sent HTMX fragments update these regions as OOB swaps alongside primary content updates.</p>
 
   <div class="code-block">
 <span class="tcm">&lt;!-- Place in page shell, never moved, always present --&gt;</span>
@@ -990,8 +990,8 @@ document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<sp
   <div class="ssub">Inline confirmation pattern</div>
   <div class="demo">
     <div style="display:flex;gap:var(--sp-3);align-items:center">
-      <button style="background:var(--oi-vermillion);color:#fff;padding:7px var(--sp-5);border:none;font-family:var(--font-ui);font-size:0.8750remrem;font-weight:600;cursor:pointer" onclick="this.outerHTML='<span style=\'display:flex;gap:8px;align-items:center\'><span style=\'font-family:var(--font-mono);font-size:0.8125remrem;color:var(--fg-muted)\'>Destroy zone 12?</span><button style=\'background:var(--oi-vermillion);color:#fff;padding:5px 16px;border:none;font-family:var(--font-ui);font-size:0.8125remrem;font-weight:600;cursor:pointer\' onclick=\'alert(\'Destroyed\')\'>Confirm</button><button style=\'background:transparent;border:1px solid var(--border);color:var(--fg-head);padding:5px 16px;font-family:var(--font-ui);font-size:0.8125remrem;cursor:pointer\' onclick=\'this.parentElement.outerHTML=\'<button style=\\"background:var(--oi-vermillion);color:#fff;padding:7px 24px;border:none;font-family:var(--font-ui);font-size:0.8750remrem;font-weight:600;cursor:pointer\\" onclick=\\"this.outerHTML=this.outerHTML\\">Destroy zone</button>\'\'>Cancel</button></span>'">Destroy zone</button>
-      <span style="font-family:var(--font-mono);font-size:0.7500remrem;color:var(--fg-faint)">&#8592; click to see inline confirmation</span>
+      <button style="background:var(--oi-vermillion);color:#fff;padding:7px var(--sp-5);border:none;font-family:var(--font-ui);font-size:0.8750rem;font-weight:600;cursor:pointer" onclick="this.outerHTML='<span style=\'display:flex;gap:8px;align-items:center\'><span style=\'font-family:var(--font-mono);font-size:0.8125rem;color:var(--fg-muted)\'>Destroy zone 12?</span><button style=\'background:var(--oi-vermillion);color:#fff;padding:5px 16px;border:none;font-family:var(--font-ui);font-size:0.8125rem;font-weight:600;cursor:pointer\' onclick=\'alert(\'Destroyed\')\'>Confirm</button><button style=\'background:transparent;border:1px solid var(--border);color:var(--fg-head);padding:5px 16px;font-family:var(--font-ui);font-size:0.8125rem;cursor:pointer\' onclick=\'this.parentElement.outerHTML=\'<button style=\\"background:var(--oi-vermillion);color:#fff;padding:7px 24px;border:none;font-family:var(--font-ui);font-size:0.8750rem;font-weight:600;cursor:pointer\\" onclick=\\"this.outerHTML=this.outerHTML\\">Destroy zone</button>\'\'>Cancel</button></span>'">Destroy zone</button>
+      <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--fg-faint)">&#8592; click to see inline confirmation</span>
     </div>
   </div>
 
@@ -1061,7 +1061,7 @@ document.querySelector(<span class="tst">'#new-btn'</span>).addEventListener(<sp
     <thead><tr><th>Tag command</th><th>hx-verb</th><th>hx-target</th><th>Server returns</th></tr></thead>
     <tbody>
       <tr><td class="key">Get</td><td><code style="font-family:var(--font-mono)">hx-get</code></td><td><code style="font-family:var(--font-mono)">#window-body</code></td><td>HTML fragment: new body content. OOB: updated meta badge.</td></tr>
-      <tr><td class="key">Put</td><td><code style="font-family:var(--font-mono)">hx-post / hx-put</code></td><td><code style="font-family:var(--font-mono)">#window-body</code></td><td>HTML fragment: confirmed content. OOB: meta badge → <span class="badge badge-ok" style="font-size:0.6250remrem;padding:0 4px">saved</span>, aria-live status.</td></tr>
+      <tr><td class="key">Put</td><td><code style="font-family:var(--font-mono)">hx-post / hx-put</code></td><td><code style="font-family:var(--font-mono)">#window-body</code></td><td>HTML fragment: confirmed content. OOB: meta badge → <span class="badge badge-ok" style="font-size:0.6250rem;padding:0 4px">saved</span>, aria-live status.</td></tr>
       <tr><td class="key">Look</td><td><code style="font-family:var(--font-mono)">hx-get</code> + <code style="font-family:var(--font-mono)">hx-include</code> (selection)</td><td><code style="font-family:var(--font-mono)">#window-body</code></td><td>HTML fragment: search results.</td></tr>
       <tr><td class="key">Kill</td><td><code style="font-family:var(--font-mono)">hx-delete</code></td><td><code style="font-family:var(--font-mono)">#window-body</code></td><td>Empty 200. OOB: remove polling badge. Body retains last content.</td></tr>
       <tr><td class="key">Pipe (|fmt)</td><td><code style="font-family:var(--font-mono)">hx-post</code> (body = selection)</td><td><code style="font-family:var(--font-mono)">#window-body</code></td><td>HTML fragment: reformatted content.</td></tr>
